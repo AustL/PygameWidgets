@@ -1,13 +1,11 @@
 import pygame
 
+from pygame_widgets.widget import WidgetBase
 
-class Button:
+
+class Button(WidgetBase):
     def __init__(self, win, x, y, width, height, **kwargs):
-        self.win = win
-        self.x = x
-        self.y = y
-        self.width = width
-        self.height = height
+        super().__init__(win, x, y, width, height)
 
         # Colour
         self.inactiveColour = kwargs.get('inactiveColour', (150, 150, 150))
@@ -75,63 +73,62 @@ class Button:
         elif self.textVAlign == 'bottom':
             self.textRect.bottom = self.y + self.height - self.margin
 
-    def listen(self):
-        pressed = pygame.mouse.get_pressed()[0]
-        x, y = pygame.mouse.get_pos()
-        onTarget = False
-        if self.x < x < self.x + self.width and self.y < y < self.y + self.height:
-            onTarget = True
+    def listen(self, events):
+        if not self.hidden:
+            pressed = pygame.mouse.get_pressed()[0]
+            x, y = pygame.mouse.get_pos()
 
-        if onTarget:
-            if pressed:
-                self.colour = self.pressedColour
-                if not self.clicked:
-                    self.clicked = True
-                    self.onClick(*self.onClickParams)
-            elif self.clicked:
+            if self.contains(x, y):
+                if pressed:
+                    self.colour = self.pressedColour
+                    if not self.clicked:
+                        self.clicked = True
+                        self.onClick(*self.onClickParams)
+                elif self.clicked:
+                    self.clicked = False
+                    self.onRelease(*self.onReleaseParams)
+                else:
+                    self.colour = self.hoverColour
+            elif not pressed:
                 self.clicked = False
-                self.onRelease(*self.onReleaseParams)
-            else:
-                self.colour = self.hoverColour
-        elif not pressed:
-            self.clicked = False
-            self.colour = self.inactiveColour
+                self.colour = self.inactiveColour
 
     def draw(self):
-        rects = [
-            (self.x + self.radius, self.y, self.width - self.radius * 2, self.height),
-            (self.x, self.y + self.radius, self.width, self.height - self.radius * 2)
-        ]
+        if not self.hidden:
+            rects = [
+                (self.x + self.radius, self.y, self.width - self.radius * 2, self.height),
+                (self.x, self.y + self.radius, self.width, self.height - self.radius * 2)
+            ]
 
-        circles = [
-            (self.x + self.radius, self.y + self.radius),
-            (self.x + self.radius, self.y + self.height - self.radius),
-            (self.x + self.width - self.radius, self.y + self.radius),
-            (self.x + self.width - self.radius, self.y + self.height - self.radius)
-        ]
+            circles = [
+                (self.x + self.radius, self.y + self.radius),
+                (self.x + self.radius, self.y + self.height - self.radius),
+                (self.x + self.width - self.radius, self.y + self.radius),
+                (self.x + self.width - self.radius, self.y + self.height - self.radius)
+            ]
 
-        for rect in rects:
-            x, y, width, height = rect
-            pygame.draw.rect(
-                self.win, self.shadowColour, (x + self.shadowDistance, y + self.shadowDistance, width, height)
-            )
+            for rect in rects:
+                x, y, width, height = rect
+                pygame.draw.rect(
+                    self.win, self.shadowColour, (x + self.shadowDistance, y + self.shadowDistance, width, height)
+                )
 
-        for circle in circles:
-            x, y = circle
-            pygame.draw.circle(
-                self.win, self.shadowColour, (x + self.shadowDistance, y + self.shadowDistance), self.radius
-            )
+            for circle in circles:
+                x, y = circle
+                pygame.draw.circle(
+                    self.win, self.shadowColour, (x + self.shadowDistance, y + self.shadowDistance), self.radius
+                )
 
-        for rect in rects:
-            pygame.draw.rect(self.win, self.colour, rect)
+            for rect in rects:
+                pygame.draw.rect(self.win, self.colour, rect)
 
-        for circle in circles:
-            pygame.draw.circle(self.win, self.colour, circle, self.radius)
+            for circle in circles:
+                pygame.draw.circle(self.win, self.colour, circle, self.radius)
 
-        if self.image:
-            self.win.blit(self.image, self.imageRect)
+            if self.image:
+                self.win.blit(self.image, self.imageRect)
 
-        self.win.blit(self.text, self.textRect)
+            self.win.blit(self.text, self.textRect)
 
     def setImage(self, image):
         self.image = image
@@ -156,13 +153,10 @@ class Button:
         self.hoverColour = colour
 
 
-class ButtonArray:
+class ButtonArray(WidgetBase):
     def __init__(self, win, x, y, width, height, shape, **kwargs):
-        self.win = win
-        self.x = x
-        self.y = y
-        self.width = width
-        self.height = height
+        super().__init__(win, x, y, width, height)
+
         self.shape = shape
         self.numButtons = shape[0] * shape[1]
 
@@ -227,31 +221,33 @@ class ButtonArray:
                                     )
                 count += 1
 
-    def listen(self, ):
-        for button in self.buttons:
-            button.listen()
+    def listen(self, events):
+        if not self.hidden:
+            for button in self.buttons:
+                button.listen()
 
     def draw(self):
-        rects = [
-            (self.x + self.borderRadius, self.y, self.width - self.borderRadius * 2, self.height),
-            (self.x, self.y + self.borderRadius, self.width, self.height - self.borderRadius * 2)
-        ]
+        if not self.hidden:
+            rects = [
+                (self.x + self.borderRadius, self.y, self.width - self.borderRadius * 2, self.height),
+                (self.x, self.y + self.borderRadius, self.width, self.height - self.borderRadius * 2)
+            ]
 
-        circles = [
-            (self.x + self.borderRadius, self.y + self.borderRadius),
-            (self.x + self.borderRadius, self.y + self.height - self.borderRadius),
-            (self.x + self.width - self.borderRadius, self.y + self.borderRadius),
-            (self.x + self.width - self.borderRadius, self.y + self.height - self.borderRadius)
-        ]
+            circles = [
+                (self.x + self.borderRadius, self.y + self.borderRadius),
+                (self.x + self.borderRadius, self.y + self.height - self.borderRadius),
+                (self.x + self.width - self.borderRadius, self.y + self.borderRadius),
+                (self.x + self.width - self.borderRadius, self.y + self.height - self.borderRadius)
+            ]
 
-        for rect in rects:
-            pygame.draw.rect(self.win, self.colour, rect)
+            for rect in rects:
+                pygame.draw.rect(self.win, self.colour, rect)
 
-        for circle in circles:
-            pygame.draw.circle(self.win, self.colour, circle, self.borderRadius)
+            for circle in circles:
+                pygame.draw.circle(self.win, self.colour, circle, self.borderRadius)
 
-        for button in self.buttons:
-            button.draw()
+            for button in self.buttons:
+                button.draw()
 
     def getButtons(self):
         return self.buttons
@@ -271,14 +267,16 @@ if __name__ == '__main__':
 
     run = True
     while run:
-        for event in pygame.event.get():
+        events = pygame.event.get()
+        for event in events:
             if event.type == pygame.QUIT:
                 pygame.quit()
                 run = False
                 quit()
+
         win.fill((255, 255, 255))
 
-        buttonArray.listen()
+        buttonArray.listen(events)
         buttonArray.draw()
 
         pygame.display.update()
