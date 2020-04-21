@@ -109,6 +109,9 @@ class TextBox(WidgetBase):
                             self.selected = False
                             self.showCursor = False
                             self.escape = True
+                            self.repeatKey = None
+                            self.keyDown = None
+                            self.firstRepeat = True
 
                     elif not self.maxLengthReached:
                         if len(event.unicode) > 0:
@@ -119,7 +122,6 @@ class TextBox(WidgetBase):
                     self.repeatKey = None
                     self.keyDown = None
                     self.firstRepeat = True
-                    self.repeatTime = time.time()
                     self.escape = False
 
     def draw(self):
@@ -157,6 +159,7 @@ class TextBox(WidgetBase):
 
     def updateCursor(self):
         now = time.time()
+
         if now - self.cursorTime >= self.CURSOR_INTERVAL / 1000:
             self.showCursor = not self.showCursor
             self.cursorTime = now
@@ -165,17 +168,18 @@ class TextBox(WidgetBase):
         now = time.time()
 
         if self.firstRepeat:
-            if now - self.cursorTime >= self.REPEAT_DELAY / 1000:
+            if now - self.repeatTime >= self.REPEAT_DELAY / 1000:
                 self.firstRepeat = False
-                self.cursorTime = now
+                self.repeatTime = now
                 pygame.event.post(
                     pygame.event.Event(
                         pygame.KEYDOWN,
                         {'key': self.repeatKey.key, 'unicode': self.repeatKey.unicode}
                     )
                 )
-        elif now - self.cursorTime >= self.REPEAT_INTERVAL / 1000:
-            self.cursorTime = now
+
+        elif now - self.repeatTime >= self.REPEAT_INTERVAL / 1000:
+            self.repeatTime = now
             pygame.event.post(
                 pygame.event.Event(
                     pygame.KEYDOWN,
