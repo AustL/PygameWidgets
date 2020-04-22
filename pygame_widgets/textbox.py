@@ -168,16 +168,16 @@ class TextBox(WidgetBase):
             ]
 
             for rect in borderRects:
-                pygame.draw.rect(win, self.borderColour, rect)
+                pygame.draw.rect(self.win, self.borderColour, rect)
 
             for circle in borderCircles:
-                pygame.draw.circle(win, self.borderColour, circle, self.radius)
+                pygame.draw.circle(self.win, self.borderColour, circle, self.radius)
 
             for rect in backgroundRects:
-                pygame.draw.rect(win, self.colour, rect)
+                pygame.draw.rect(self.win, self.colour, rect)
 
             for circle in backgroundCircles:
-                pygame.draw.circle(win, self.colour, circle, self.radius)
+                pygame.draw.circle(self.win, self.colour, circle, self.radius)
 
             x = [self.x + self.textOffsetLeft]
             for c in self.text:
