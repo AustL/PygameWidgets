@@ -125,37 +125,76 @@ class TextBox(WidgetBase):
                     self.escape = False
 
     def draw(self):
-        if self.selected:
-            self.updateCursor()
+        if not self.hidden:
+            if self.selected:
+                self.updateCursor()
 
-        pygame.draw.rect(
-            self.win, self.borderColour, (self.x, self.y, self.width, self.height)
-        )
-        pygame.draw.rect(
-            self.win, self.colour, (
-                self.x + self.borderThickness,
-                self.y + self.borderThickness,
-                self.width - 2 * self.borderThickness,
-                self.height - 2 * self.borderThickness
-            )
-        )
+            borderRects = [
+                (self.x + self.radius, self.y, self.width - self.radius * 2, self.height),
+                (self.x, self.y + self.radius, self.width, self.height - self.radius * 2),
+            ]
 
-        x = [self.x + self.textOffsetLeft]
-        for c in self.text:
-            text = self.font.render(c, True, self.textColour)
-            textRect = text.get_rect(bottomleft=(x[-1], self.y + self.height - self.textOffsetBottom))
-            self.win.blit(text, textRect)
-            x.append(x[-1] + text.get_width())
+            borderCircles = [
+                (self.x + self.radius, self.y + self.radius),
+                (self.x + self.radius, self.y + self.height - self.radius),
+                (self.x + self.width - self.radius, self.y + self.radius),
+                (self.x + self.width - self.radius, self.y + self.height - self.radius)
+            ]
 
-        if self.showCursor:
-            pygame.draw.line(
-                self.win, (0, 0, 0),
-                (x[self.cursorPosition], self.y + self.cursorOffsetTop),
-                (x[self.cursorPosition], self.y + self.height - self.cursorOffsetTop)
-            )
+            backgroundRects = [
+                (
+                    self.x + self.borderThickness + self.radius,
+                    self.y + self.borderThickness,
+                    self.width - 2 * (self.borderThickness + self.radius),
+                    self.height - 2 * self.borderThickness
+                ),
+                (
+                    self.x + self.borderThickness,
+                    self.y + self.borderThickness + self.radius,
+                    self.width - 2 * self.borderThickness,
+                    self.height - 2 * (self.borderThickness + self.radius)
+                )
+            ]
 
-        if x[self.cursorPosition] > self.x + self.width - self.textOffsetRight:
-            self.maxLengthReached = True
+            backgroundCircles = [
+                (self.x + self.radius + self.borderThickness,
+                 self.y + self.radius + self.borderThickness),
+                (self.x + self.radius + self.borderThickness,
+                 self.y + self.height - self.radius - self.borderThickness),
+                (self.x + self.width - self.radius - self.borderThickness,
+                 self.y + self.radius + self.borderThickness),
+                (self.x + self.width - self.radius - self.borderThickness,
+                 self.y + self.height - self.radius - self.borderThickness)
+            ]
+
+            for rect in borderRects:
+                pygame.draw.rect(win, self.borderColour, rect)
+
+            for circle in borderCircles:
+                pygame.draw.circle(win, self.borderColour, circle, self.radius)
+
+            for rect in backgroundRects:
+                pygame.draw.rect(win, self.colour, rect)
+
+            for circle in backgroundCircles:
+                pygame.draw.circle(win, self.colour, circle, self.radius)
+
+            x = [self.x + self.textOffsetLeft]
+            for c in self.text:
+                text = self.font.render(c, True, self.textColour)
+                textRect = text.get_rect(bottomleft=(x[-1], self.y + self.height - self.textOffsetBottom))
+                self.win.blit(text, textRect)
+                x.append(x[-1] + text.get_width())
+
+            if self.showCursor:
+                pygame.draw.line(
+                    self.win, (0, 0, 0),
+                    (x[self.cursorPosition], self.y + self.cursorOffsetTop),
+                    (x[self.cursorPosition], self.y + self.height - self.cursorOffsetTop)
+                )
+
+            if x[self.cursorPosition] > self.x + self.width - self.textOffsetRight:
+                self.maxLengthReached = True
 
     def updateCursor(self):
         now = time.time()
@@ -200,7 +239,8 @@ if __name__ == '__main__':
     win = pygame.display.set_mode((1000, 600))
 
     textbox = TextBox(win, 100, 100, 800, 80, fontSize=50, borderColour=(255, 0, 0),
-                      textColour=(0, 200, 0), onSubmit=output)
+                      textColour=(0, 200, 0), onSubmit=output, radius=10,
+                      borderThickness=5)
 
     run = True
     while run:
