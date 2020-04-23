@@ -67,7 +67,7 @@ When clicked, the button will change colour from red to green and 'Click' will b
 _Note: Mandatory parameters must be supplied in order._
 
 | Parameter | Description | Type |
-| :---: | :--- | :---: |
+| :---: | --- | :---: |
 | win | Surface to be displayed on. | pygame.Surface |
 | x | X-coordinate of top left. | int |
 | y | Y-coordinate of top left. | int |
@@ -76,7 +76,7 @@ _Note: Mandatory parameters must be supplied in order._
 
 #### Optional Parameters
 | Parameter | Description | Type | Default |
-| :---: | :--- | :---: | :---: |
+| :---: | --- | :---: | :---: |
 | inactiveColour | Default colour when not pressed or hovered over. | (int, int, int) | (150, 150, 150) |
 | pressedColour | Colour when pressed. | (int, int, int) | (100, 100, 100) |
 | hoverColour | Colour when hovered over. | (int, int, int) | (125, 125, 125) |
@@ -138,7 +138,7 @@ while run:
 _Note: Mandatory parameters must be supplied in order._
 
 | Parameter | Description | Type |
-| :---: | :--- | :---: |
+| :---: | --- | :---: |
 | win | Surface to be displayed on. | pygame.Surface |
 | x | X-coordinate of top left. | int |
 | y | Y-coordinate of top left. | int |
@@ -151,7 +151,7 @@ _Note: Mandatory parameters must be supplied in order._
 _Note: Optional parameters of ButtonArray are similar to those of Button._
 
 | Parameter | Description | Type | Default |
-| :---: | :--- | :---: | :---: |
+| :---: | --- | :---: | :---: |
 | colour | Background colour of array. | (int, int, int) | (210, 210, 180) |
 | border | Thickness between buttons and between the edges of array and buttons. | int | 10 |
 | topBorder | Thickness between top of array and top of button. Overrides border. | int | border |
@@ -203,7 +203,7 @@ while run:
 _Note: Mandatory parameters must be supplied in order._
 
 | Parameter | Description | Type |
-| :---: | :--- | :---: |
+| :---: | --- | :---: |
 | win | Surface to be displayed on. | pygame.Surface |
 | x | X-coordinate of top left. | int |
 | y | Y-coordinate of top left. | int |
@@ -213,7 +213,7 @@ _Note: Mandatory parameters must be supplied in order._
 #### Optional Parameters
 
 | Parameter | Description | Type | Default |
-| :---: | :--- | :---: | :---: |
+| :---: | --- | :---: | :---: |
 | colour | Background colour, | (int, int, int) | (220, 220, 220) |
 | textColour | Colour of text. | (int, int, int) | (0, 0, 0) |
 | borderColour | Colour of border. | (int, int, int) | (0, 0, 0) |
