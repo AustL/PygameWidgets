@@ -5,6 +5,20 @@ from pygame_widgets.widget import WidgetBase
 
 class Button(WidgetBase):
     def __init__(self, win, x, y, width, height, **kwargs):
+        """ A customisable button for Pygame
+
+        :param win: Surface on which to draw
+        :type win: pygame.Surface
+        :param x: X-coordinate of top left
+        :type x: int
+        :param y: Y-coordinate of top left
+        :type y: int
+        :param width: Width of button
+        :type width: int
+        :param height: Height of button
+        :type height: int
+        :param kwargs: Optional parameters
+        """
         super().__init__(win, x, y, width, height)
 
         # Colour
@@ -74,6 +88,11 @@ class Button(WidgetBase):
             self.textRect.bottom = self.y + self.height - self.margin
 
     def listen(self, events):
+        """ Wait for inputs
+
+        :param events: Use pygame.event.get()
+        :type events: list of pygame.event.Event
+        """
         if not self.hidden:
             pressed = pygame.mouse.get_pressed()[0]
             x, y = pygame.mouse.get_pos()
@@ -94,6 +113,7 @@ class Button(WidgetBase):
                 self.colour = self.inactiveColour
 
     def draw(self):
+        """ Display to surface """
         if not self.hidden:
             rects = [
                 (self.x + self.radius, self.y, self.width - self.radius * 2, self.height),
@@ -155,6 +175,22 @@ class Button(WidgetBase):
 
 class ButtonArray(WidgetBase):
     def __init__(self, win, x, y, width, height, shape, **kwargs):
+        """ A collection of buttons
+
+        :param win: Surface on which to draw
+        :type win: pygame.Surface
+        :param x: X-coordinate of top left
+        :type x: int
+        :param y: Y-coordinate of top left
+        :type y: int
+        :param width: Width of button
+        :type width: int
+        :param height: Height of button
+        :type height: int
+        :param shape: The 2d shape of the array (columns, rows)
+        :type shape: tuple of int
+        :param kwargs: Optional parameters
+        """
         super().__init__(win, x, y, width, height)
 
         self.shape = shape
@@ -222,11 +258,17 @@ class ButtonArray(WidgetBase):
                 count += 1
 
     def listen(self, events):
+        """ Wait for inputs
+
+        :param events: Use pygame.event.get()
+        :type events: list of pygame.event.Event
+        """
         if not self.hidden:
             for button in self.buttons:
                 button.listen()
 
     def draw(self):
+        """ Display to surface """
         if not self.hidden:
             rects = [
                 (self.x + self.borderRadius, self.y, self.width - self.borderRadius * 2, self.height),
