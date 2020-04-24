@@ -246,6 +246,9 @@ class TextBox(WidgetBase):
                 )
             )
 
+    def setText(self, text):
+        self.text = [c for c in str(text)]
+
     def getText(self):
         return ''.join(self.text)
 

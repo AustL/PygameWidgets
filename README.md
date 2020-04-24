@@ -21,6 +21,22 @@ If you receive no error the installation was successful.
 
 ## Usage
 
+### Common
+
+Functionality common to all widgets
+
+#### Mandatory Parameters
+
+_Note: Mandatory parameters must be supplied in order._
+
+| Parameter | Description | Type |
+| :---: | --- | :---: |
+| win | Surface to be displayed on. | pygame.Surface |
+| x | X-coordinate of top left. | int |
+| y | Y-coordinate of top left. | int |
+| width | Width of button in pixels. | int |
+| height | Height of button in pixels. | int |
+
 ### Button
 
 A customisable button
@@ -61,18 +77,6 @@ while run:
 This button will be placed at (100, 100) with a width of 300 and a height of 150,
 display the text 'Hello' with font size 50, leaving a margin of 20 and a radius of 20.
 When clicked, the button will change colour from red to green and 'Click' will be printed to the console.
-
-#### Mandatory Parameters
-
-_Note: Mandatory parameters must be supplied in order._
-
-| Parameter | Description | Type |
-| :---: | --- | :---: |
-| win | Surface to be displayed on. | pygame.Surface |
-| x | X-coordinate of top left. | int |
-| y | Y-coordinate of top left. | int |
-| width | Width of button in pixels. | int |
-| height | Height of button in pixels. | int |
 
 #### Optional Parameters
 | Parameter | Description | Type | Default |
@@ -139,11 +143,6 @@ _Note: Mandatory parameters must be supplied in order._
 
 | Parameter | Description | Type |
 | :---: | --- | :---: |
-| win | Surface to be displayed on. | pygame.Surface |
-| x | X-coordinate of top left. | int |
-| y | Y-coordinate of top left. | int |
-| width | Width of button in pixels. | int |
-| height | Height of button in pixels. | int |
 | shape | Number of columns and rows of buttons (columns, rows). | (int, int) |
 
 #### Optional Parameters
@@ -198,18 +197,6 @@ while run:
     pygame.display.update()
 ```
 
-#### Mandatory Parameters
-
-_Note: Mandatory parameters must be supplied in order._
-
-| Parameter | Description | Type |
-| :---: | --- | :---: |
-| win | Surface to be displayed on. | pygame.Surface |
-| x | X-coordinate of top left. | int |
-| y | Y-coordinate of top left. | int |
-| width | Width of button in pixels. | int |
-| height | Height of button in pixels. | int |
-
 #### Optional Parameters
 
 | Parameter | Description | Type | Default |
@@ -224,3 +211,53 @@ _Note: Mandatory parameters must be supplied in order._
 | placeholderText | Text to be displayed when empty. | str | '' |
 | fontSize | Size of text. | int | 20 |
 | font | Font of text. | pygame.font.Font | Calibri
+
+
+### Slider
+
+A slider for discrete numeric value selection
+
+#### Example Usage
+
+```
+pygame.init()
+win = pygame.display.set_mode((1000, 600))
+
+slider = Slider(win, 100, 100, 800, 40, min=0, max=99, step=1)
+output = TextBox(win, 475, 200, 50, 50, fontSize=30)
+
+run = True
+while run:
+    events = pygame.event.get()
+    for event in events:
+        if event.type == pygame.QUIT:
+            pygame.quit()
+            run = False
+            quit()
+
+    win.fill((255, 255, 255))
+
+    slider.listen(events)
+    slider.draw()
+
+    output.setText(slider.getValue())
+
+    output.draw()
+
+    pygame.display.update()
+```
+
+As you can see, TextBox can be used to display text as well,
+by not calling its listen method.
+
+#### Optional Parameters
+| Parameter | Description | Type | Default |
+| :---: | --- | :---: | :---: |
+| min | Minimum value of the slider (left). | int or float | 0 |
+| max | Maximum value of the slider (right). | int or float | 99 |
+| step | Value to increment by. | int or float | 1 |
+| colour | Colour of slider. | (int, int, int) | (200, 200, 200) |
+| handleColour | Colour of handle. | (int, int, int) | (0, 0, 0) |
+| initial | Initial value of the slider. | int or float | Average of min and max |
+| handleRadius | Radius of handle. | int | height / 1.3 |
+| curved | Add curved ends to the slider. | bool | True |

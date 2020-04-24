@@ -3,6 +3,7 @@ from pygame import gfxdraw
 import math
 
 from pygame_widgets.widget import WidgetBase
+from pygame_widgets import TextBox
 
 
 class Slider(WidgetBase):
@@ -12,7 +13,7 @@ class Slider(WidgetBase):
         self.selected = False
 
         self.min = kwargs.get('min', 0)
-        self.max = kwargs.get('max', 100)
+        self.max = kwargs.get('max', 99)
         self.step = kwargs.get('step', 1)
 
         self.colour = kwargs.get('colour', (200, 200, 200))
@@ -21,7 +22,7 @@ class Slider(WidgetBase):
         self.borderThickness = kwargs.get('borderThickness', 3)
         self.borderColour = kwargs.get('borderColour', (0, 0, 0))
 
-        self.value = kwargs.get('initial', self.round((self.max + self.min) / 2))
+        self.value = self.round(kwargs.get('initial', (self.max + self.min) / 2))
         self.value = max(min(self.value, self.max), self.min)
 
         self.handleRadius = kwargs.get('handleRadius', int(self.height / 1.3))
@@ -76,7 +77,8 @@ if __name__ == '__main__':
     pygame.init()
     win = pygame.display.set_mode((1000, 600))
 
-    slider = Slider(win, 100, 100, 800, 40, min=0, max=10, step=2)
+    slider = Slider(win, 100, 100, 800, 40, min=0, max=99, step=1)
+    output = TextBox(win, 475, 200, 50, 50, fontSize=30)
 
     run = True
     while run:
@@ -91,5 +93,9 @@ if __name__ == '__main__':
 
         slider.listen(events)
         slider.draw()
+
+        output.setText(slider.getValue())
+
+        output.draw()
 
         pygame.display.update()
