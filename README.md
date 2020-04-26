@@ -9,7 +9,7 @@ It supports fully customisable buttons, collections of buttons and textboxes.
 
 ## Installation
 
-Ensure that Python 3 and pip are installed and added the PATH.
+Ensure that Python 3 and pip are installed and added to your environment PATH.
 
 ```python -m pip install pygame-widgets```
 
