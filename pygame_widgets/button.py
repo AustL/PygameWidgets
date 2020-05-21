@@ -265,7 +265,7 @@ class ButtonArray(WidgetBase):
         """
         if not self.hidden:
             for button in self.buttons:
-                button.listen()
+                button.listen(events)
 
     def draw(self):
         """ Display to surface """
