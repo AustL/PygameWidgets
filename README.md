@@ -2,6 +2,7 @@
 
 A helper module for common widgets that may be required in developing applications with Pygame.
 It supports fully customisable buttons, collections of buttons, textboxes and sliders.
+If there are any widgets that you would like to see added, please create an issue!
 
 ## Prerequisites
 
