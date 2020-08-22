@@ -103,11 +103,14 @@ class Button(WidgetBase):
                     if not self.clicked:
                         self.clicked = True
                         self.onClick(*self.onClickParams)
+
                 elif self.clicked:
                     self.clicked = False
                     self.onRelease(*self.onReleaseParams)
+
                 else:
                     self.colour = self.hoverColour
+
             elif not pressed:
                 self.clicked = False
                 self.colour = self.inactiveColour

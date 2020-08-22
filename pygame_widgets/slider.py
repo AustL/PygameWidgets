@@ -55,6 +55,7 @@ class Slider(WidgetBase):
                 else:
                     self.value = self.round((x - self.x) / self.width * self.max + self.min)
                     self.value = max(min(self.value, self.max), self.min)
+
         else:
             self.selected = False
 
