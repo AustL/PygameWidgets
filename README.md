@@ -2,6 +2,7 @@
 
 A helper module for common widgets that may be required in developing applications with Pygame.
 It supports fully customisable buttons, collections of buttons, textboxes and sliders.
+If there are any widgets that you would like to see added, please create an issue!
 
 ## Prerequisites
 
@@ -201,7 +202,7 @@ while run:
 
 | Parameter | Description | Type | Default |
 | :---: | --- | :---: | :---: |
-| colour | Background colour, | (int, int, int) | (220, 220, 220) |
+| colour | Background colour. | (int, int, int) | (220, 220, 220) |
 | textColour | Colour of text. | (int, int, int) | (0, 0, 0) |
 | borderColour | Colour of border. | (int, int, int) | (0, 0, 0) |
 | borderThickness | Thickness of border. | int | 3 |
