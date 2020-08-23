@@ -118,35 +118,16 @@ class Button(WidgetBase):
     def draw(self):
         """ Display to surface """
         if not self.hidden:
-            rects = [
-                (self.x + self.radius, self.y, self.width - self.radius * 2, self.height),
-                (self.x, self.y + self.radius, self.width, self.height - self.radius * 2)
-            ]
+            pygame.draw.rect(
+                self.win, self.shadowColour,
+                (self.x + self.shadowDistance, self.y + self.shadowDistance, self.width, self.height),
+                border_radius=self.radius
+            )
 
-            circles = [
-                (self.x + self.radius, self.y + self.radius),
-                (self.x + self.radius, self.y + self.height - self.radius),
-                (self.x + self.width - self.radius, self.y + self.radius),
-                (self.x + self.width - self.radius, self.y + self.height - self.radius)
-            ]
-
-            for rect in rects:
-                x, y, width, height = rect
-                pygame.draw.rect(
-                    self.win, self.shadowColour, (x + self.shadowDistance, y + self.shadowDistance, width, height)
-                )
-
-            for circle in circles:
-                x, y = circle
-                pygame.draw.circle(
-                    self.win, self.shadowColour, (x + self.shadowDistance, y + self.shadowDistance), self.radius
-                )
-
-            for rect in rects:
-                pygame.draw.rect(self.win, self.colour, rect)
-
-            for circle in circles:
-                pygame.draw.circle(self.win, self.colour, circle, self.radius)
+            pygame.draw.rect(
+                self.win, self.colour, (self.x, self.y, self.width, self.height),
+                border_radius=self.radius
+            )
 
             if self.image:
                 self.win.blit(self.image, self.imageRect)
@@ -321,7 +302,7 @@ if __name__ == '__main__':
 
         win.fill((255, 255, 255))
 
-        buttonArray.listen(events)
-        buttonArray.draw()
+        button.listen(events)
+        button.draw()
 
         pygame.display.update()
