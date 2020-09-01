@@ -4,6 +4,9 @@ A helper module for common widgets that may be required in developing applicatio
 It supports fully customisable buttons, collections of buttons, textboxes and sliders.
 If there are any widgets that you would like to see added, please create an issue!
 
+## NEW FEATURES
+* Animations: Create an animation that changes a widgets attributes over some time, running on a separate thread
+
 ## Prerequisites
 
 * [Python 3](https://www.python.org/downloads)
@@ -262,3 +265,40 @@ by not calling its listen method.
 | initial | Initial value of the slider. | int or float | Average of min and max |
 | handleRadius | Radius of handle. | int | height / 1.3 |
 | curved | Add curved ends to the slider. | bool | True |
+
+### Animations
+
+Create an animation by using the default Translate or Resize,
+inheriting from AnimationBase, or using AnimationBase directly.
+
+#### Example Usage
+
+```
+pygame.init()
+win = pygame.display.set_mode((600, 600))
+
+button = Button(win, 100, 100, 300, 150)
+
+animation = Resize(button, 3, 200, 200)
+animation.start()
+
+run = True
+while run:
+    events = pygame.event.get()
+    for event in events:
+        if event.type == pygame.QUIT:
+            pygame.quit()
+            run = False
+            quit()
+
+    win.fill((255, 255, 255))
+
+    button.listen(events)
+    button.draw()
+
+    pygame.display.update()
+```
+
+Over 3 seconds, the width of the button was changed from 300 to 200 and
+its height from 150 to 200. Since it is performed on a separate thread,
+the button is still able to function during the animation.
