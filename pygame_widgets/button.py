@@ -139,11 +139,11 @@ class Button(WidgetBase):
         self.imageRect = self.image.get_rect()
         self.alignImageRect()
 
-    def setOnClick(self, onClick, params):
+    def setOnClick(self, onClick, params=()):
         self.onClick = onClick
         self.onClickParams = params
 
-    def setOnRelease(self, onRelease, params):
+    def setOnRelease(self, onRelease, params=()):
         self.onRelease = onRelease
         self.onReleaseParams = params
 

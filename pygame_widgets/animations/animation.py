@@ -6,7 +6,7 @@ from pygame_widgets import Button
 
 
 class AnimationBase:
-    def __init__(self, widget, timeout, **kwargs):
+    def __init__(self, widget, timeout, allowMultiple=False, **kwargs):
         """Base for animations
 
         :param widget: The widget that the animation targets
@@ -15,13 +15,21 @@ class AnimationBase:
         """
         self.widget = widget
         self.timeout = timeout
+        self.allowMultiple = allowMultiple
         self.params = kwargs
-        self.thread = Thread(target=self.loop)
+        self.thread = Thread()
+
+        self.started = False
+        self.runOnce = False
 
     def start(self):
-        self.thread.start()
+        if not self.started and not (self.runOnce and not self.allowMultiple):
+            self.thread = Thread(target=self.loop)
+            self.thread.start()
 
     def loop(self):
+        self.started = self.runOnce = True
+
         start = time.time()
 
         initialParams = {}
@@ -39,6 +47,8 @@ class AnimationBase:
         for param, target in self.params.items():
             self.widget.set(param, target)
 
+        self.started = False
+
 
 class Translate(AnimationBase):
     def __init__(self, widget, timeout, x, y):
@@ -51,13 +61,18 @@ class Resize(AnimationBase):
 
 
 if __name__ == '__main__':
+    def animate():
+        resize.start()
+        translate.start()
+
     pygame.init()
     win = pygame.display.set_mode((600, 600))
 
     button = Button(win, 100, 100, 300, 150)
 
-    animation = Resize(button, 3, 200, 200)
-    animation.start()
+    resize = Resize(button, 3, 200, 200)
+    translate = Translate(button, 3, 200, 200)
+    button.setOnClick(animate)
 
     run = True
     while run:
