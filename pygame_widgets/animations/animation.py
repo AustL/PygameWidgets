@@ -3,6 +3,7 @@ import time
 import pygame
 
 from pygame_widgets import Button
+from pygame_widgets.exceptions.exceptions import InvalidParameter, InvalidParameterType
 
 
 class AnimationBase:
@@ -10,8 +11,8 @@ class AnimationBase:
         """Base for animations
 
         :param widget: The widget that the animation targets
-        :param time: The time of the animation in seconds
-        :param kwargs:
+        :param timeout: The time of the animation in seconds
+        :param kwargs: The target of the animation, e.g. x=10 changes x position to 10
         """
         self.widget = widget
         self.timeout = timeout
@@ -21,6 +22,20 @@ class AnimationBase:
 
         self.started = False
         self.runOnce = False
+
+        self.checkValidParams()
+
+    def checkValidParams(self):
+        for param, target in self.params.items():
+            value = self.widget.get(param)
+            if value is None:
+                raise InvalidParameter(
+                    f'The parameter <{param}> is not a valid attribute of type {type(self.widget)}'
+                )
+            elif type(value) != type(target):
+                raise InvalidParameterType(
+                    f'Expected parameter <{param}> to be of type {type(value)} but found type {type(target)}'
+                )
 
     def start(self):
         if not self.started and not (self.runOnce and not self.allowMultiple):
@@ -32,15 +47,29 @@ class AnimationBase:
 
         start = time.time()
 
-        initialParams = {}
+        initialNumberParams = {}
+        initialTupleParams = {}
         for param, target in self.params.items():
-            initialParams[param] = self.widget.get(param)
+            initialValue = self.widget.get(param)
+            if isinstance(initialValue, (int, float)):
+                initialNumberParams[param] = initialValue
+            elif isinstance(initialValue, (tuple, list)):
+                initialTupleParams[param] = tuple(initialValue)
 
         # Animate
         while time.time() - start < self.timeout:
             step = (time.time() - start) / self.timeout
-            for param, target in self.params.items():
-                newValue = initialParams[param] + step * (target - initialParams[param])
+
+            # Numeric animation
+            for param, initialValue in initialNumberParams.items():
+                target = self.params[param]
+                newValue = initialValue + step * (target - initialValue)
+                self.widget.set(param, newValue)
+
+            # Tuple animation
+            for param, initialTuple in initialTupleParams.items():
+                target = self.params[param]
+                newValue = tuple(initialTuple[i] + step * (target[i] - initialTuple[i]) for i in range(len(initialTuple)))
                 self.widget.set(param, newValue)
 
         # Ensure value is exactly correct at end
@@ -60,18 +89,24 @@ class Resize(AnimationBase):
         super().__init__(widget, timeout, width=width, height=height)
 
 
+class Recolour(AnimationBase):
+    def __init__(self, widget, timeout, colour):
+        super().__init__(widget, timeout, colour=colour)
+
+
 if __name__ == '__main__':
     def animate():
         resize.start()
         translate.start()
 
+
     pygame.init()
     win = pygame.display.set_mode((600, 600))
 
-    button = Button(win, 100, 100, 300, 150)
+    button = Button(win, 100, 100, 300, 150, inactiveColour=(0, 200, 0), hoverColour=(0, 200, 0))
 
     resize = Resize(button, 3, 200, 200)
-    translate = Translate(button, 3, 200, 200)
+    translate = Recolour(button, 3, (0, 100, 100))
     button.setOnClick(animate)
 
     run = True

@@ -156,6 +156,19 @@ class Button(WidgetBase):
     def setHoverColour(self, colour):
         self.hoverColour = colour
 
+    def get(self, attr):
+        if (parent := super().get(attr)) is not None:
+            return parent
+
+        if attr == 'colour':
+            return self.colour
+
+    def set(self, attr, value):
+        super().set(attr, value)
+
+        if attr == 'colour':
+            self.inactiveColour = value
+
 
 class ButtonArray(WidgetBase):
     def __init__(self, win, x, y, width, height, shape, **kwargs):
