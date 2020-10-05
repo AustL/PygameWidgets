@@ -10,6 +10,7 @@ If there are any widgets that you would like to see added, please create an issu
 ## Prerequisites
 
 * [Python 3](https://www.python.org/downloads)
+* [Pygame 2.0.0](https://www.pygame.org/wiki/GettingStarted)
 
 ## Installation
 
