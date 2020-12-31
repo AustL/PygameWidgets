@@ -47,10 +47,9 @@ _Note: Mandatory parameters must be supplied in order._
 A customisable button
 
 #### Example Usage
-```
+```Python
 import pygame
 from pygame_widgets import Button
-
 pygame.init()
 win = pygame.display.set_mode((600, 600))
 
@@ -114,7 +113,7 @@ A collection of similar buttons
 
 #### Example Usage
 
-```
+```Python
 import pygame
 from pygame_widgets import ButtonArray
 
@@ -170,7 +169,7 @@ A box for text input or display
 
 #### Example Usage
 
-```
+```Python
 import pygame
 from pygame_widgets import TextBox
 
@@ -224,7 +223,7 @@ A slider for discrete numeric value selection
 
 #### Example Usage
 
-```
+```Python
 pygame.init()
 win = pygame.display.set_mode((1000, 600))
 
@@ -274,7 +273,7 @@ inheriting from AnimationBase, or using AnimationBase directly.
 
 #### Example Usage
 
-```
+```Python
 pygame.init()
 win = pygame.display.set_mode((600, 600))
 
