@@ -17,12 +17,12 @@ class WidgetBase(ABC):
         :type height: int
         """
         self.win = win
-        self.x = x
-        self.y = y
-        self.width = width
-        self.height = height
+        self._x = x
+        self._y = y
+        self._width = width
+        self._height = height
 
-        self.hidden = False
+        self._hidden = False
 
     @abstractmethod
     def listen(self, events):
@@ -33,19 +33,19 @@ class WidgetBase(ABC):
         pass
 
     def contains(self, x, y):
-        return self.x < x < self.x + self.width and self.y < y < self.y + self.height
+        return self._x < x < self._x + self._width and self._y < y < self._y + self._height
 
     def hide(self):
-        self.hidden = True
+        self._hidden = True
 
     def show(self):
-        self.hidden = False
+        self._hidden = False
 
     def moveX(self, x):
-        self.x += x
+        self._x += x
 
     def moveY(self, y):
-        self.y += y
+        self._y += y
 
     def get(self, attr):
         """Default setter for any attributes. Call super if overriding
@@ -54,28 +54,28 @@ class WidgetBase(ABC):
         :return: Value of the attribute
         """
         if attr == 'x':
-            return self.x
+            return self._x
 
         if attr == 'y':
-            return self.y
+            return self._y
 
         if attr == 'width':
-            return self.width
+            return self._width
 
         if attr == 'height':
-            return self.height
+            return self._height
 
     def getX(self):
-        return self.x
+        return self._x
 
     def getY(self):
-        return self.y
+        return self._y
 
     def getWidth(self):
-        return self.width
+        return self._width
 
     def getHeight(self):
-        return self.height
+        return self._height
 
     def set(self, attr, value):
         """Default setter for any attributes. Call super if overriding
@@ -84,25 +84,25 @@ class WidgetBase(ABC):
         :param value: Value to set
         """
         if attr == 'x':
-            self.x = value
+            self._x = value
 
         if attr == 'y':
-            self.y = value
+            self._y = value
 
         if attr == 'width':
-            self.width = value
+            self._width = value
 
         if attr == 'height':
-            self.height = value
+            self._height = value
 
     def setX(self, x):
-        self.x = x
+        self._x = x
 
     def setY(self, y):
-        self.y = y
+        self._y = y
 
     def setWidth(self, width):
-        self.width = width
+        self._width = width
 
     def setHeight(self, height):
-        self.height = height
+        self._height = height
