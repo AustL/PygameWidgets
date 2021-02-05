@@ -26,7 +26,7 @@ class Checkbox(WidgetBase):
 
         self.items = items
         self.rows = len(items)
-        self.rowHeight = self.height // self.rows
+        self.rowHeight = self._height // self.rows
         self.selected = [False for _ in range(self.rows)]
 
         # Border
@@ -35,7 +35,7 @@ class Checkbox(WidgetBase):
         self.radius = kwargs.get('radius', 0)
 
         # Checkbox
-        self.boxSize = int(kwargs.get('boxSize', self.height / self.rows // 3))
+        self.boxSize = int(kwargs.get('boxSize', self._height / self.rows // 3))
         self.boxThickness = kwargs.get('boxThickness', 3)
         self.boxColour = kwargs.get('boxColour', (0, 0, 0))
         # TODO: selected image (tick) / colour
@@ -64,8 +64,8 @@ class Checkbox(WidgetBase):
             textRects.append(
                 self.texts[row].get_rect(
                     center=(
-                        self.x + self.boxSize * 2 + (self.width - self.boxSize * 2) // 2,
-                        self.y + self.rowHeight * row + self.rowHeight // 2
+                        self._x + self.boxSize * 2 + (self._width - self.boxSize * 2) // 2,
+                        self._y + self.rowHeight * row + self.rowHeight // 2
                     )
                 )
             )
@@ -76,8 +76,8 @@ class Checkbox(WidgetBase):
         boxes = []
         for row in range(self.rows):
             boxes.append(pygame.Rect(
-                self.x + self.boxSize,
-                self.y + self.rowHeight * row + self.boxSize,
+                self._x + self.boxSize,
+                self._y + self.rowHeight * row + self.boxSize,
                 self.boxSize, self.boxSize
             ))
         return boxes
@@ -88,7 +88,7 @@ class Checkbox(WidgetBase):
         :param events: Use pygame.event.get()
         :type events: list of pygame.event.Event
         """
-        if not self.hidden:
+        if not self._hidden:
             pressed = pygame.mouse.get_pressed()[0]
             x, y = pygame.mouse.get_pos()
 
@@ -108,29 +108,29 @@ class Checkbox(WidgetBase):
 
     def draw(self):
         """ Display to surface """
-        if not self.hidden:
+        if not self._hidden:
             for row in range(self.rows):
                 colour = self.colour1 if not row % 2 else self.colour2
                 if pygame.version.vernum[0] < 2:
                     pygame.draw.rect(
-                        self.win, colour, (self.x, self.y + self.rowHeight * row, self.width, self.rowHeight)
+                        self.win, colour, (self._x, self._y + self.rowHeight * row, self._width, self.rowHeight)
                     )
                 else:
                     if row == 0:
                         pygame.draw.rect(
-                            self.win, colour, (self.x, self.y + self.rowHeight * row, self.width, self.rowHeight),
+                            self.win, colour, (self._x, self._y + self.rowHeight * row, self._width, self.rowHeight),
                             border_top_left_radius=self.radius, border_top_right_radius=self.radius
                         )
 
                     elif row == self.rows - 1:
                         pygame.draw.rect(
-                            self.win, colour, (self.x, self.y + self.rowHeight * row, self.width, self.rowHeight),
+                            self.win, colour, (self._x, self._y + self.rowHeight * row, self._width, self.rowHeight),
                             border_bottom_left_radius=self.radius, border_bottom_right_radius=self.radius
                         )
 
                     else:
                         pygame.draw.rect(
-                            self.win, colour, (self.x, self.y + self.rowHeight * row, self.width, self.rowHeight)
+                            self.win, colour, (self._x, self._y + self.rowHeight * row, self._width, self.rowHeight)
                         )
 
                 width = 0 if self.selected[row] else self.boxThickness
@@ -168,7 +168,7 @@ class Radio(WidgetBase):
 
         self.items = items
         self.rows = len(items)
-        self.rowHeight = self.height // self.rows
+        self.rowHeight = self._height // self.rows
         self.selected = kwargs.get('default', 0)
 
         # Border
@@ -177,7 +177,7 @@ class Radio(WidgetBase):
         self.radius = kwargs.get('radius', 0)
 
         # Radio
-        self.circleRadius = int(kwargs.get('circleRadius', self.height / self.rows // 6))
+        self.circleRadius = int(kwargs.get('circleRadius', self._height / self.rows // 6))
         self.circleThickness = kwargs.get('circleThickness', 3)
         self.circleColour = kwargs.get('circleColour', (0, 0, 0))
 
@@ -205,8 +205,8 @@ class Radio(WidgetBase):
             textRects.append(
                 self.texts[row].get_rect(
                     center=(
-                        self.x + self.circleRadius * 6 + (self.width - self.circleRadius * 6) // 2,
-                        self.y + self.rowHeight * row + self.rowHeight // 2
+                        self._x + self.circleRadius * 6 + (self._width - self.circleRadius * 6) // 2,
+                        self._y + self.rowHeight * row + self.rowHeight // 2
                     )
                 )
             )
@@ -217,8 +217,8 @@ class Radio(WidgetBase):
         circles = []
         for row in range(self.rows):
             circles.append((
-                self.x + self.circleRadius * 3,
-                self.y + self.rowHeight * row + self.rowHeight // 2,
+                self._x + self.circleRadius * 3,
+                self._y + self.rowHeight * row + self.rowHeight // 2,
             ))
         return circles
 
@@ -228,7 +228,7 @@ class Radio(WidgetBase):
         :param events: Use pygame.event.get()
         :type events: list of pygame.event.Event
         """
-        if not self.hidden:
+        if not self._hidden:
             pressed = pygame.mouse.get_pressed()[0]
             x, y = pygame.mouse.get_pos()
 
@@ -249,30 +249,30 @@ class Radio(WidgetBase):
 
     def draw(self):
         """ Display to surface """
-        if not self.hidden:
+        if not self._hidden:
             for row in range(self.rows):
                 colour = self.colour1 if not row % 2 else self.colour2
                 if pygame.version.vernum[0] < 2:
                     pygame.draw.rect(
-                        self.win, colour, (self.x, self.y + self.rowHeight * row, self.width, self.rowHeight)
+                        self.win, colour, (self._x, self._y + self.rowHeight * row, self._width, self.rowHeight)
                     )
 
                 else:
                     if row == 0:
                         pygame.draw.rect(
-                            self.win, colour, (self.x, self.y + self.rowHeight * row, self.width, self.rowHeight),
+                            self.win, colour, (self._x, self._y + self.rowHeight * row, self._width, self.rowHeight),
                             border_top_left_radius=self.radius, border_top_right_radius=self.radius
                         )
 
                     elif row == self.rows - 1:
                         pygame.draw.rect(
-                            self.win, colour, (self.x, self.y + self.rowHeight * row, self.width, self.rowHeight),
+                            self.win, colour, (self._x, self._y + self.rowHeight * row, self._width, self.rowHeight),
                             border_bottom_left_radius=self.radius, border_bottom_right_radius=self.radius
                         )
 
                     else:
                         pygame.draw.rect(
-                            self.win, colour, (self.x, self.y + self.rowHeight * row, self.width, self.rowHeight)
+                            self.win, colour, (self._x, self._y + self.rowHeight * row, self._width, self.rowHeight)
                         )
 
                 width = 0 if row == self.selected else self.circleThickness
