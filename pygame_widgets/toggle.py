@@ -29,7 +29,7 @@ class Toggle(WidgetBase):
 
     def listen(self, events):
         if not self._hidden:
-            pressed = pygame.mouse.get_pressed(3)[0]
+            pressed = pygame.mouse.get_pressed()[0]
             x, y = pygame.mouse.get_pos()
 
             if self.contains(x, y):
