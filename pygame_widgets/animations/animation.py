@@ -2,7 +2,6 @@ from threading import Thread
 import time
 import pygame
 
-from pygame_widgets import Button
 from pygame_widgets.exceptions.exceptions import InvalidParameter, InvalidParameterType
 
 
@@ -95,6 +94,7 @@ class Recolour(AnimationBase):
 
 
 if __name__ == '__main__':
+    from pygame_widgets import Button
     def animate():
         resize.start()
         translate.start()
@@ -106,7 +106,7 @@ if __name__ == '__main__':
     button = Button(win, 100, 100, 300, 150, inactiveColour=(0, 200, 0), hoverColour=(0, 200, 0))
 
     resize = Resize(button, 3, 200, 200)
-    translate = Recolour(button, 3, (0, 100, 100))
+    translate = Recolour(button, 5, (0, 100, 100))
     button.setOnClick(animate)
 
     run = True

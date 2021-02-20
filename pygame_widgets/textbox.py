@@ -60,7 +60,7 @@ class TextBox(WidgetBase):
         self.textOffsetBottom = self.fontSize // 3
         self.textOffsetLeft = self.fontSize // 3
         self.textOffsetRight = self.fontSize // 2
-        self.cursorOffsetTop = self.height // 6
+        self.cursorOffsetTop = self._height // 6
 
         # Function
         self.onSubmit = kwargs.get('onSubmit', lambda *args: None)
@@ -145,46 +145,46 @@ class TextBox(WidgetBase):
 
     def draw(self):
         """ Display to surface """
-        if not self.hidden:
+        if not self._hidden:
             if self.selected:
                 self.updateCursor()
 
             borderRects = [
-                (self.x + self.radius, self.y, self.width - self.radius * 2, self.height),
-                (self.x, self.y + self.radius, self.width, self.height - self.radius * 2),
+                (self._x + self.radius, self._y, self._width - self.radius * 2, self._height),
+                (self._x, self._y + self.radius, self._width, self._height - self.radius * 2),
             ]
 
             borderCircles = [
-                (self.x + self.radius, self.y + self.radius),
-                (self.x + self.radius, self.y + self.height - self.radius),
-                (self.x + self.width - self.radius, self.y + self.radius),
-                (self.x + self.width - self.radius, self.y + self.height - self.radius)
+                (self._x + self.radius, self._y + self.radius),
+                (self._x + self.radius, self._y + self._height - self.radius),
+                (self._x + self._width - self.radius, self._y + self.radius),
+                (self._x + self._width - self.radius, self._y + self._height - self.radius)
             ]
 
             backgroundRects = [
                 (
-                    self.x + self.borderThickness + self.radius,
-                    self.y + self.borderThickness,
-                    self.width - 2 * (self.borderThickness + self.radius),
-                    self.height - 2 * self.borderThickness
+                    self._x + self.borderThickness + self.radius,
+                    self._y + self.borderThickness,
+                    self._width - 2 * (self.borderThickness + self.radius),
+                    self._height - 2 * self.borderThickness
                 ),
                 (
-                    self.x + self.borderThickness,
-                    self.y + self.borderThickness + self.radius,
-                    self.width - 2 * self.borderThickness,
-                    self.height - 2 * (self.borderThickness + self.radius)
+                    self._x + self.borderThickness,
+                    self._y + self.borderThickness + self.radius,
+                    self._width - 2 * self.borderThickness,
+                    self._height - 2 * (self.borderThickness + self.radius)
                 )
             ]
 
             backgroundCircles = [
-                (self.x + self.radius + self.borderThickness,
-                 self.y + self.radius + self.borderThickness),
-                (self.x + self.radius + self.borderThickness,
-                 self.y + self.height - self.radius - self.borderThickness),
-                (self.x + self.width - self.radius - self.borderThickness,
-                 self.y + self.radius + self.borderThickness),
-                (self.x + self.width - self.radius - self.borderThickness,
-                 self.y + self.height - self.radius - self.borderThickness)
+                (self._x + self.radius + self.borderThickness,
+                 self._y + self.radius + self.borderThickness),
+                (self._x + self.radius + self.borderThickness,
+                 self._y + self._height - self.radius - self.borderThickness),
+                (self._x + self._width - self.radius - self.borderThickness,
+                 self._y + self.radius + self.borderThickness),
+                (self._x + self._width - self.radius - self.borderThickness,
+                 self._y + self._height - self.radius - self.borderThickness)
             ]
 
             for rect in borderRects:
@@ -199,21 +199,21 @@ class TextBox(WidgetBase):
             for circle in backgroundCircles:
                 pygame.draw.circle(self.win, self.colour, circle, self.radius)
 
-            x = [self.x + self.textOffsetLeft]
+            x = [self._x + self.textOffsetLeft]
             for c in self.text:
                 text = self.font.render(c, True, self.textColour)
-                textRect = text.get_rect(bottomleft=(x[-1], self.y + self.height - self.textOffsetBottom))
+                textRect = text.get_rect(bottomleft=(x[-1], self._y + self._height - self.textOffsetBottom))
                 self.win.blit(text, textRect)
                 x.append(x[-1] + text.get_width())
 
             if self.showCursor:
                 pygame.draw.line(
                     self.win, (0, 0, 0),
-                    (x[self.cursorPosition], self.y + self.cursorOffsetTop),
-                    (x[self.cursorPosition], self.y + self.height - self.cursorOffsetTop)
+                    (x[self.cursorPosition], self._y + self.cursorOffsetTop),
+                    (x[self.cursorPosition], self._y + self._height - self.cursorOffsetTop)
                 )
 
-            if x[self.cursorPosition] > self.x + self.width - self.textOffsetRight:
+            if x[self.cursorPosition] > self._x + self._width - self.textOffsetRight:
                 self.maxLengthReached = True
 
     def updateCursor(self):

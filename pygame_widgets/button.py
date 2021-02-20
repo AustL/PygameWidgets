@@ -62,30 +62,30 @@ class Button(WidgetBase):
         self.radius = kwargs.get('radius', 0)
 
     def alignImageRect(self):
-        self.imageRect.center = (self.x + self.width // 2, self.y + self.height // 2)
+        self.imageRect.center = (self._x + self._width // 2, self._y + self._height // 2)
 
         if self.imageHAlign == 'left':
-            self.imageRect.left = self.x + self.margin
+            self.imageRect.left = self._x + self.margin
         elif self.imageHAlign == 'right':
-            self.imageRect.right = self.x + self.width - self.margin
+            self.imageRect.right = self._x + self._width - self.margin
 
         if self.imageVAlign == 'top':
-            self.imageRect.top = self.y + self.margin
+            self.imageRect.top = self._y + self.margin
         elif self.imageVAlign == 'bottom':
-            self.imageRect.bottom = self.y + self.height - self.margin
+            self.imageRect.bottom = self._y + self._height - self.margin
 
     def alignTextRect(self):
-        self.textRect.center = (self.x + self.width // 2, self.y + self.height // 2)
+        self.textRect.center = (self._x + self._width // 2, self._y + self._height // 2)
 
         if self.textHAlign == 'left':
-            self.textRect.left = self.x + self.margin
+            self.textRect.left = self._x + self.margin
         elif self.textHAlign == 'right':
-            self.textRect.right = self.x + self.width - self.margin
+            self.textRect.right = self._x + self._width - self.margin
 
         if self.textVAlign == 'top':
-            self.textRect.top = self.y + self.margin
+            self.textRect.top = self._y + self.margin
         elif self.textVAlign == 'bottom':
-            self.textRect.bottom = self.y + self.height - self.margin
+            self.textRect.bottom = self._y + self._height - self.margin
 
     def listen(self, events):
         """ Wait for inputs
@@ -93,7 +93,7 @@ class Button(WidgetBase):
         :param events: Use pygame.event.get()
         :type events: list of pygame.event.Event
         """
-        if not self.hidden:
+        if not self._hidden:
             pressed = pygame.mouse.get_pressed()[0]
             x, y = pygame.mouse.get_pos()
 
@@ -117,18 +117,18 @@ class Button(WidgetBase):
 
     def draw(self):
         """ Display to surface """
-        if not self.hidden:
+        if not self._hidden:
             if pygame.version.vernum[0] < 2:
                 rects = [
-                    (self.x + self.radius, self.y, self.width - self.radius * 2, self.height),
-                    (self.x, self.y + self.radius, self.width, self.height - self.radius * 2)
+                    (self._x + self.radius, self._y, self._width - self.radius * 2, self._height),
+                    (self._x, self._y + self.radius, self._width, self._height - self.radius * 2)
                 ]
 
                 circles = [
-                    (self.x + self.radius, self.y + self.radius),
-                    (self.x + self.radius, self.y + self.height - self.radius),
-                    (self.x + self.width - self.radius, self.y + self.radius),
-                    (self.x + self.width - self.radius, self.y + self.height - self.radius)
+                    (self._x + self.radius, self._y + self.radius),
+                    (self._x + self.radius, self._y + self._height - self.radius),
+                    (self._x + self._width - self.radius, self._y + self.radius),
+                    (self._x + self._width - self.radius, self._y + self._height - self.radius)
                 ]
 
                 for rect in rects:
@@ -151,12 +151,12 @@ class Button(WidgetBase):
             else:
                 pygame.draw.rect(
                     self.win, self.shadowColour,
-                    (self.x + self.shadowDistance, self.y + self.shadowDistance, self.width, self.height),
+                    (self._x + self.shadowDistance, self._y + self.shadowDistance, self._width, self._height),
                     border_radius=self.radius
                 )
 
                 pygame.draw.rect(
-                    self.win, self.colour, (self.x, self.y, self.width, self.height),
+                    self.win, self.colour, (self._x, self._y, self._width, self._height),
                     border_radius=self.radius
                 )
 
@@ -273,14 +273,14 @@ class ButtonArray(WidgetBase):
 
     def createButtons(self):
         across, down = self.shape
-        width = (self.width - self.separationThickness * (across - 1) - self.leftBorder - self.rightBorder) // across
-        height = (self.height - self.separationThickness * (down - 1) - self.topBorder - self.bottomBorder) // down
+        width = (self._width - self.separationThickness * (across - 1) - self.leftBorder - self.rightBorder) // across
+        height = (self._height - self.separationThickness * (down - 1) - self.topBorder - self.bottomBorder) // down
 
         count = 0
         for i in range(across):
             for j in range(down):
-                x = self.x + i * (width + self.separationThickness) + self.leftBorder
-                y = self.y + j * (height + self.separationThickness) + self.topBorder
+                x = self._x + i * (width + self.separationThickness) + self.leftBorder
+                y = self._y + j * (height + self.separationThickness) + self.topBorder
                 self.buttons.append(Button(self.win, x, y, width, height,
                                            **{k: v[count] for k, v in self.buttonAttributes.items() if v is not None})
                                     )
@@ -292,23 +292,23 @@ class ButtonArray(WidgetBase):
         :param events: Use pygame.event.get()
         :type events: list of pygame.event.Event
         """
-        if not self.hidden:
+        if not self._hidden:
             for button in self.buttons:
                 button.listen(events)
 
     def draw(self):
         """ Display to surface """
-        if not self.hidden:
+        if not self._hidden:
             rects = [
-                (self.x + self.borderRadius, self.y, self.width - self.borderRadius * 2, self.height),
-                (self.x, self.y + self.borderRadius, self.width, self.height - self.borderRadius * 2)
+                (self._x + self.borderRadius, self._y, self._width - self.borderRadius * 2, self._height),
+                (self._x, self._y + self.borderRadius, self._width, self._height - self.borderRadius * 2)
             ]
 
             circles = [
-                (self.x + self.borderRadius, self.y + self.borderRadius),
-                (self.x + self.borderRadius, self.y + self.height - self.borderRadius),
-                (self.x + self.width - self.borderRadius, self.y + self.borderRadius),
-                (self.x + self.width - self.borderRadius, self.y + self.height - self.borderRadius)
+                (self._x + self.borderRadius, self._y + self.borderRadius),
+                (self._x + self.borderRadius, self._y + self._height - self.borderRadius),
+                (self._x + self._width - self.borderRadius, self._y + self.borderRadius),
+                (self._x + self._width - self.borderRadius, self._y + self._height - self.borderRadius)
             ]
 
             for rect in rects:
