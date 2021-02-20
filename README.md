@@ -5,6 +5,7 @@ It supports fully customisable buttons, collections of buttons, textboxes and sl
 If there are any widgets that you would like to see added, please create an issue!
 
 ## NEW FEATURES
+* Progress Bar: Shows a percentage of completeness, great for loading screens and health bars
 * Toggle: Allows switching between two values, great for settings
 * Animations: Create an animation that changes a widgets attributes over some time, running on a separate thread
 
