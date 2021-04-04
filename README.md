@@ -24,7 +24,7 @@ Open a Python console and run the following command.
 
 ```import pygame_widgets```
 
-If you receive no error the installation was successful.
+If you receive no error, the installation was successful.
 
 ## Usage
 
@@ -169,6 +169,8 @@ _Note: Optional parameters of ButtonArray are similar to those of Button._
 
 A box for text input or display
 
+![textbox.png](images/textbox.png)
+
 #### Example Usage
 
 ```Python
@@ -223,9 +225,14 @@ while run:
 
 A slider for discrete numeric value selection
 
+![slider.png](images/slider.png)
+
 #### Example Usage
 
 ```Python
+import pygame
+from pygame_widgets import Slider, TextBox
+
 pygame.init()
 win = pygame.display.set_mode((1000, 600))
 
@@ -276,6 +283,9 @@ inheriting from AnimationBase, or using AnimationBase directly.
 #### Example Usage
 
 ```Python
+import pygame
+from pygame_widgets import Button, Resize
+
 pygame.init()
 win = pygame.display.set_mode((600, 600))
 
