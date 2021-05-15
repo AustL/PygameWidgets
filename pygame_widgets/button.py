@@ -161,8 +161,12 @@ class Button(WidgetBase):
                 )
 
             if self.image:
+                self.imageRect = self.image.get_rect()
+                self.alignImageRect()
                 self.win.blit(self.image, self.imageRect)
 
+            self.textRect = self.text.get_rect()
+            self.alignTextRect()
             self.win.blit(self.text, self.textRect)
 
     def setImage(self, image):
