@@ -55,7 +55,7 @@ class TextBox(WidgetBase):
         self.placeholderText = kwargs.get('placeholderText', '')
         self.textColour = kwargs.get('textColour', (0, 0, 0))
         self.fontSize = kwargs.get('fontSize', 20)
-        self.font = pygame.font.SysFont(kwargs.get('font', 'sans-serif'), self.fontSize)
+        self.font = kwargs.get('font', pygame.font.SysFont('sans-serif', self.fontSize))
 
         self.textOffsetBottom = self.fontSize // 3
         self.textOffsetLeft = self.fontSize // 3
@@ -207,11 +207,14 @@ class TextBox(WidgetBase):
                 x.append(x[-1] + text.get_width())
 
             if self.showCursor:
-                pygame.draw.line(
-                    self.win, (0, 0, 0),
-                    (x[self.cursorPosition], self._y + self.cursorOffsetTop),
-                    (x[self.cursorPosition], self._y + self._height - self.cursorOffsetTop)
-                )
+                try:
+                    pygame.draw.line(
+                        self.win, (0, 0, 0),
+                        (x[self.cursorPosition], self._y + self.cursorOffsetTop),
+                        (x[self.cursorPosition], self._y + self._height - self.cursorOffsetTop)
+                    )
+                except IndexError:
+                    self.cursorPosition -= 1
 
             if x[self.cursorPosition] > self._x + self._width - self.textOffsetRight:
                 self.maxLengthReached = True
