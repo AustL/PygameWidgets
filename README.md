@@ -1,10 +1,11 @@
 # Pygame Widgets
 
-A helper module for common widgets that may be required in developing applications with Pygame.
-It supports fully customisable buttons, collections of buttons, textboxes and sliders.
-If there are any widgets that you would like to see added, please create an issue!
+A helper module for common widgets that may be required in developing applications with Pygame. It supports fully
+customisable buttons, collections of buttons, textboxes and sliders. If there are any widgets that you would like to see
+added, please create an issue!
 
 ## NEW FEATURES
+
 * Dropdown: Select options from a list that appears when hovered over
 * Progress Bar: Shows a percentage of completeness, great for loading screens and health bars
 * Toggle: Allows switching between two values, great for settings
@@ -28,6 +29,7 @@ Open a Python console and run the following command.
 If you receive no error, the installation was successful.
 
 ## Usage
+
 * [Common](#common)
 * [Button](#button)
 * [ButtonArray](#buttonarray)
@@ -57,19 +59,21 @@ _Note: Mandatory parameters must be supplied in order._
 A customisable button
 
 #### Example Usage
+
 ```Python
 import pygame
 from pygame_widgets import Button
+
 pygame.init()
 win = pygame.display.set_mode((600, 600))
 
 button = Button(
-            win, 100, 100, 300, 150, text='Hello',
-            fontSize=50, margin=20,
-            inactiveColour=(255, 0, 0),
-            pressedColour=(0, 255, 0), radius=20,
-            onClick=lambda: print('Click')
-         )
+    win, 100, 100, 300, 150, text='Hello',
+    fontSize=50, margin=20,
+    inactiveColour=(255, 0, 0),
+    pressedColour=(0, 255, 0), radius=20,
+    onClick=lambda: print('Click')
+)
 
 run = True
 while run:
@@ -88,11 +92,12 @@ while run:
     pygame.display.update()
 ```
 
-This button will be placed at (100, 100) with a width of 300 and a height of 150,
-display the text 'Hello' with font size 50, leaving a margin of 20 and a radius of 20.
-When clicked, the button will change colour from red to green and 'Click' will be printed to the console.
+This button will be placed at (100, 100) with a width of 300 and a height of 150, display the text 'Hello' with font
+size 50, leaving a margin of 20 and a radius of 20. When clicked, the button will change colour from red to green and '
+Click' will be printed to the console.
 
 #### Optional Parameters
+
 | Parameter | Description | Type | Default |
 | :---: | --- | :---: | :---: |
 | inactiveColour | Default colour when not pressed or hovered over. | (int, int, int) | (150, 150, 150) |
@@ -116,7 +121,6 @@ When clicked, the button will change colour from red to green and 'Click' will b
 | imageVAlign | Vertical alignment of image. Can be 'centre', 'top' or 'bottom'. | str | 'centre' |
 | radius | Border radius. Set to half of width for circular button. Set to 0 for no radius. | int | 0 |
 
-
 ### ButtonArray
 
 A collection of similar buttons
@@ -132,7 +136,7 @@ win = pygame.display.set_mode((600, 600))
 
 buttonArray = ButtonArray(win, 50, 50, 500, 500, (2, 2),
                           border=100, texts=('1', '2', '3', '4')
-                         )
+                          )
 
 run = True
 while run:
@@ -185,9 +189,11 @@ A box for text input or display
 import pygame
 from pygame_widgets import TextBox
 
+
 def output():
     # Get text in the textbox
     print(textbox.getText())
+
 
 pygame.init()
 win = pygame.display.set_mode((1000, 600))
@@ -228,7 +234,6 @@ while run:
 | fontSize | Size of text. | int | 20 |
 | font | Font of text. | pygame.font.Font | Calibri
 
-
 ### Slider
 
 A slider for discrete numeric value selection
@@ -268,10 +273,10 @@ while run:
     pygame.display.update()
 ```
 
-As you can see, TextBox can be used to display text as well,
-by not calling its listen method.
+As you can see, TextBox can be used to display text as well, by not calling its listen method.
 
 #### Optional Parameters
+
 | Parameter | Description | Type | Default |
 | :---: | --- | :---: | :---: |
 | min | Minimum value of the slider (left). | int or float | 0 |
@@ -286,52 +291,32 @@ by not calling its listen method.
 ### Dropdown
 
 ```Python
-
-from pygame_widgets import Dropdown, Button
-
 import pygame
+from pygame_widgets import Button, Dropdown
 
 pygame.init()
 win = pygame.display.set_mode((400, 280))
-width, height = pygame.display.get_window_size()
 
 dropdown = Dropdown(
-    win,
-    120,
-    10,
-    100,
-    50,
-    name="*color*",
+    win, 120, 10, 100, 50, name='Select Color',
     choices=[
-        "Red",
-        "Blue",
-        "Yellow",
+        'Red',
+        'Blue',
+        'Yellow',
     ],
-    borderRadius=3,
-    colour=pygame.Color("green"),
-    values=[1, 2, 3],
-    direction="down",
-    textHAlign='left'
+    borderRadius=3, colour=pygame.Color('green'), values=[1, 2, 'true'], direction='down', textHAlign='left'
 )
+
 
 def print_value():
     print(dropdown.getSelected())
 
+
 button = Button(
-    win,
-    10,
-    10,
-    100,
-    50,
-    text="Print Value",
-    fontSize=30,
-    margin=20,
-    inactiveColour=(255, 0, 0),
-    pressedColour=(0, 255, 0),
-    radius=5,
-    onClick=print_value,
-    font=pygame.font.SysFont("calibri", 10),
-    textVAlign="bottom",
+    win, 10, 10, 100, 50, text='Print Value', fontSize=30,
+    margin=20, inactiveColour=(255, 0, 0), pressedColour=(0, 255, 0),
+    radius=5, onClick=print_value, font=pygame.font.SysFont('calibri', 10),
+    textVAlign='bottom'
 )
 
 run = True
@@ -352,36 +337,42 @@ while run:
 
     pygame.display.update()
 ```
-This is a classic dropdown, but with a twist : if you right click on the top, it reset itself.
-To get the current value of the dropdown, we use the `getSelected()` methods. 
+
+This is a classic dropdown, but with a twist: if you right-click on the top, it reset itself. To get the current value
+of the dropdown, we use the `getSelected()` methods.
 
 It returns:
--  `None` if nothing is selected
--  A string with the choice you selected if the optional arg `value` is not set
-- if the optional arg `value` is set, we return the value corresponding to the choice.
 
-For the exemple above : 
+- `None` if nothing is selected
+- A string with the choice you selected if the optional arg `value` is not set
+- If the optional arg `value` is set, we return the value corresponding to the choice.
+
+For the example above:
 
 | Choice | Value |
 | :---: | :---: |
-|Red|1|
-|Blue|2|
-|Yellow|3|
+| Red | 1 |
+| Blue | 2 |
+| Yellow | 3 |
 
-#### Exemple
+#### Example
 
 ![](images/dropdown.gif)
 
-#### Positional Parameters
+#### Mandatory Parameters
+
+_Note: Mandatory parameters must be supplied in order._
+
 | Parameter | Description | Type |
 | :---: | --- | :---: |
 | name | Main name of the dropdown | str | 
 | choices | Choices to display | list of str | 
 
 #### Optional Parameters
+
 | Parameter | Description | Type | Default |
 | :---: | --- | :---: | :---: |
-| direction | Expension direction. Can be 'down', 'up', 'left' or 'right'. | str | down |
+| direction | Expansion direction. Can be 'down', 'up', 'left' or 'right'. | str | down |
 | values | optional return value corresponding to the choices. Must be the same length as `choices` |list|a copy of choices|
 | inactiveColour | Default colour when not pressed or hovered over. | (int, int, int) | (150, 150, 150) |
 | pressedColour | Colour when pressed. | (int, int, int) | (100, 100, 100) |
@@ -400,8 +391,8 @@ For the exemple above :
 
 ### Animations
 
-Create an animation by using the default Translate or Resize,
-inheriting from AnimationBase, or using AnimationBase directly.
+Create an animation by using the default Translate or Resize, inheriting from AnimationBase, or using AnimationBase
+directly.
 
 #### Example Usage
 
@@ -434,7 +425,6 @@ while run:
     pygame.display.update()
 ```
 
-Over 3 seconds, the width of the button was changed from 300 to 200 and
-its height from 150 to 200. Since it is performed on a separate thread,
-the button is still able to function during the animation.
+Over 3 seconds, the width of the button was changed from 300 to 200 and its height from 150 to 200. Since it is
+performed on a separate thread, the button is still able to function during the animation.
 
