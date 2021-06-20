@@ -95,6 +95,7 @@ class Recolour(AnimationBase):
 
 if __name__ == '__main__':
     from pygame_widgets import Button
+
     def animate():
         resize.start()
         translate.start()
