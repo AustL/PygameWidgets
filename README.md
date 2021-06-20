@@ -27,6 +27,13 @@ Open a Python console and run the following command.
 If you receive no error, the installation was successful.
 
 ## Usage
+* [Common](#common)
+* [Button](#button)
+* [ButtonArray](#buttonarray)
+* [TextBox](#textbox)
+* [Slider](#slider)
+* [Dropdown](#dropdown)
+* [Animations](#animations)
 
 ### Common
 
