@@ -35,5 +35,7 @@ If you receive no errors, the installation was successful.
 * [ButtonArray](docs/buttonarray.md)
 * [TextBox](docs/textbox.md)
 * [Slider](docs/slider.md)
+* [Toggle](docs/toggle.md)
+* [ProgressBar](docs/progressbar.md)
 * [Dropdown](docs/dropdown.md)
 * [Animations](docs/animations.md)
