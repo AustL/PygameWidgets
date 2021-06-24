@@ -4,19 +4,34 @@ A button that allows fully customisable text, images, colours and functions.
 
 ## Example Usage
 
+_Note: See [example](../examples/button_example.py)_
+
 ```Python
 import pygame
 from pygame_widgets import Button
 
+# Set up Pygame
 pygame.init()
 win = pygame.display.set_mode((600, 600))
 
+# Creates the button with optional parameters
 button = Button(
-    win, 100, 100, 300, 150, text='Hello',
-    fontSize=50, margin=20,
-    inactiveColour=(255, 0, 0),
-    pressedColour=(0, 255, 0), radius=20,
-    onClick=lambda: print('Click')
+    # Mandatory Parameters
+    win,  # Surface to place button on
+    100,  # X-coordinate of top left corner
+    100,  # Y-coordinate of top left corner
+    300,  # Width
+    150,  # Height
+
+    # Optional Parameters
+    text='Hello',  # Text to display
+    fontSize=50,  # Size of font
+    margin=20,  # Minimum distance between text/image and edge of button
+    inactiveColour=(255, 0, 0),  # Colour of button when not being interacted with
+    hoverColour=(200, 0, 0),  # Colour of button when being hovered over
+    pressedColour=(0, 255, 0),  # Colour of button when being clicked
+    radius=20,  # Radius of border corners (leave empty for not curved)
+    onClick=lambda: print('Click')  # Function to call when clicked on
 )
 
 run = True
@@ -30,15 +45,18 @@ while run:
 
     win.fill((255, 255, 255))
 
+    # Allows button to check for clicks/events
     button.listen(events)
+
+    # Renders button to screen
     button.draw()
 
     pygame.display.update()
 ```
 
 This button will be placed at (100, 100) with a width of 300 and a height of 150, display the text 'Hello' with font
-size 50, leaving a margin of 20 and a radius of 20. When clicked, the button will change colour from red to green and '
-Click' will be printed to the console.
+size 50, leaving a margin of 20 and a radius of 20. When hovered over, the button changes to a darker red.
+When clicked, the button will change colour from red to green and 'Click' will be printed to the console.
 
 ## Optional Parameters
 
