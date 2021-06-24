@@ -4,6 +4,8 @@ A collection of buttons with similar properties.
 
 ## Example Usage
 
+_Note: See [example](../examples/button_array_example.py)_
+
 ```Python
 import pygame
 from pygame_widgets import ButtonArray
