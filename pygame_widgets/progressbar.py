@@ -4,7 +4,7 @@ import pygame
 from pygame_widgets.widget import WidgetBase
 
 
-class ProgessBar(WidgetBase):
+class ProgressBar(WidgetBase):
     def __init__(self, win, x, y, width, height, progress: Callable[[], float], **kwargs):
         super().__init__(win, x, y, width, height)
         self.progress = progress
@@ -61,7 +61,7 @@ if __name__ == '__main__':
     pygame.init()
     win = pygame.display.set_mode((1000, 600))
 
-    progressBar = ProgessBar(win, 100, 100, 500, 40, lambda: 1 - (time.time() - startTime) / 10, curved=True)
+    progressBar = ProgressBar(win, 100, 100, 500, 40, lambda: 1 - (time.time() - startTime) / 10, curved=True)
 
     run = True
     while run:

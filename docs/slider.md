@@ -39,7 +39,7 @@ while run:
 
 As you can see, TextBox can be used to display text as well, by not calling its listen method.
 
-#### Optional Parameters
+## Optional Parameters
 
 | Parameter | Description | Type | Default |
 | :---: | --- | :---: | :---: |
