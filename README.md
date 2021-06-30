@@ -14,7 +14,7 @@ added, please create an issue!
 ## Prerequisites
 
 * [Python 3](https://www.python.org/downloads)
-* [Pygame 2.0.0](https://www.pygame.org/wiki/GettingStarted)
+* [Pygame](https://www.pygame.org/wiki/GettingStarted)`>=2.0.0`
 
 ## Installation
 
