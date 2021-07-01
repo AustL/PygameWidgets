@@ -251,6 +251,7 @@ class TextBox(WidgetBase):
 
     def setText(self, text):
         self.text = [c for c in str(text)]
+        self.cursorPosition = len(self.text)
 
     def getText(self):
         return ''.join(self.text)
@@ -259,6 +260,7 @@ class TextBox(WidgetBase):
 if __name__ == '__main__':
     def output():
         print(textbox.getText())
+        textbox.setText('')
 
 
     pygame.init()
