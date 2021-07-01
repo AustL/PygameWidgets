@@ -13,8 +13,8 @@ added, please create an issue!
 
 ## Prerequisites
 
-* [Python 3](https://www.python.org/downloads)
-* [Pygame](https://www.pygame.org/wiki/GettingStarted)`>=2.0.0`
+* [Python 3](https://www.python.org/downloads) `>= 3.7`
+* [Pygame](https://www.pygame.org/wiki/GettingStarted) `>= 2.0.0`
 
 ## Installation
 
