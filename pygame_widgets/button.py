@@ -25,7 +25,8 @@ class Button(WidgetBase):
         self.inactiveColour = kwargs.get('inactiveColour', (150, 150, 150))
         self.hoverColour = kwargs.get('hoverColour', (125, 125, 125))
         self.pressedColour = kwargs.get('pressedColour', (100, 100, 100))
-        self.colour = self.inactiveColour
+        self.colour = kwargs.get('colour', self.inactiveColour)  # Allows colour to override inactiveColour
+        self.inactiveColour = self.colour
         self.shadowDistance = kwargs.get('shadowDistance', 0)
         self.shadowColour = kwargs.get('shadowColour', (210, 210, 180))
 
@@ -58,7 +59,13 @@ class Button(WidgetBase):
             self.imageRect = self.image.get_rect()
             self.alignImageRect()
 
-        # Shape
+        # Border
+        self.borderThickness = kwargs.get('borderThickness', 0)
+        self.inactiveBorderColour = kwargs.get('inactiveBorderColour', (0, 0, 0))
+        self.hoverBorderColour = kwargs.get('hoverBorderColour', (80, 80, 80))
+        self.pressedBorderColour = kwargs.get('pressedBorderColour', (100, 100, 100))
+        self.borderColour = kwargs.get('borderColour', self.inactiveBorderColour)
+        self.inactiveBorderColour = self.borderColour
         self.radius = kwargs.get('radius', 0)
 
     def alignImageRect(self):
@@ -100,6 +107,7 @@ class Button(WidgetBase):
             if self.contains(x, y):
                 if pressed:
                     self.colour = self.pressedColour
+                    self.borderColour = self.pressedBorderColour
                     if not self.clicked:
                         self.clicked = True
                         self.onClick(*self.onClickParams)
@@ -110,43 +118,65 @@ class Button(WidgetBase):
 
                 else:
                     self.colour = self.hoverColour
+                    self.borderColour = self.hoverBorderColour
 
             elif not pressed:
                 self.clicked = False
                 self.colour = self.inactiveColour
+                self.borderColour = self.inactiveBorderColour
 
     def draw(self):
         """ Display to surface """
         if not self._hidden:
             if pygame.version.vernum[0] < 2:
-                rects = [
+                borderRects = [
                     (self._x + self.radius, self._y, self._width - self.radius * 2, self._height),
-                    (self._x, self._y + self.radius, self._width, self._height - self.radius * 2)
+                    (self._x, self._y + self.radius, self._width, self._height - self.radius * 2),
                 ]
 
-                circles = [
+                borderCircles = [
                     (self._x + self.radius, self._y + self.radius),
                     (self._x + self.radius, self._y + self._height - self.radius),
                     (self._x + self._width - self.radius, self._y + self.radius),
                     (self._x + self._width - self.radius, self._y + self._height - self.radius)
                 ]
 
-                for rect in rects:
-                    x, y, width, height = rect
-                    pygame.draw.rect(
-                        self.win, self.shadowColour, (x + self.shadowDistance, y + self.shadowDistance, width, height)
+                backgroundRects = [
+                    (
+                        self._x + self.borderThickness + self.radius,
+                        self._y + self.borderThickness,
+                        self._width - 2 * (self.borderThickness + self.radius),
+                        self._height - 2 * self.borderThickness
+                    ),
+                    (
+                        self._x + self.borderThickness,
+                        self._y + self.borderThickness + self.radius,
+                        self._width - 2 * self.borderThickness,
+                        self._height - 2 * (self.borderThickness + self.radius)
                     )
+                ]
 
-                for circle in circles:
-                    x, y = circle
-                    pygame.draw.circle(
-                        self.win, self.shadowColour, (x + self.shadowDistance, y + self.shadowDistance), self.radius
-                    )
+                backgroundCircles = [
+                    (self._x + self.radius + self.borderThickness,
+                     self._y + self.radius + self.borderThickness),
+                    (self._x + self.radius + self.borderThickness,
+                     self._y + self._height - self.radius - self.borderThickness),
+                    (self._x + self._width - self.radius - self.borderThickness,
+                     self._y + self.radius + self.borderThickness),
+                    (self._x + self._width - self.radius - self.borderThickness,
+                     self._y + self._height - self.radius - self.borderThickness)
+                ]
 
-                for rect in rects:
+                for rect in borderRects:
+                    pygame.draw.rect(self.win, self.borderColour, rect)
+
+                for circle in borderCircles:
+                    pygame.draw.circle(self.win, self.borderColour, circle, self.radius)
+
+                for rect in backgroundRects:
                     pygame.draw.rect(self.win, self.colour, rect)
 
-                for circle in circles:
+                for circle in backgroundCircles:
                     pygame.draw.circle(self.win, self.colour, circle, self.radius)
             else:
                 pygame.draw.rect(
@@ -156,7 +186,14 @@ class Button(WidgetBase):
                 )
 
                 pygame.draw.rect(
-                    self.win, self.colour, (self._x, self._y, self._width, self._height),
+                    self.win, self.borderColour, (self._x, self._y, self._width, self._height),
+                    border_radius=self.radius
+                )
+
+                pygame.draw.rect(
+                    self.win, self.colour, (self._x + self.borderThickness, self._y + self.borderThickness,
+                                            self._width - self.borderThickness * 2,
+                                            self._height - self.borderThickness * 2),
                     border_radius=self.radius
                 )
 
@@ -335,8 +372,8 @@ if __name__ == '__main__':
     button = Button(win, 100, 100, 300, 150, text='Hello', fontSize=50, margin=20,
                     inactiveColour=(255, 0, 0), pressedColour=(0, 255, 0), radius=20,
                     onClick=lambda: print('Click'), font=pygame.font.SysFont('calibri', 10),
-                    textVAlign='bottom', imageHAlign='centre', imageVAlign='centre',
-                    onRelease=lambda: print('Release'), shadowDistance=5)
+                    textVAlign='bottom', imageHAlign='centre', imageVAlign='centre', borderThickness=3,
+                    onRelease=lambda: print('Release'), shadowDistance=5, borderColour=(0, 0, 0))
 
     buttonArray = ButtonArray(win, 50, 50, 500, 500, (2, 2), border=100, texts=('1', '2', '3', '4'))
 
