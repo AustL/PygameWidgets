@@ -62,9 +62,11 @@ class TextBox(WidgetBase):
         self.textOffsetRight = self.fontSize // 2
         self.cursorOffsetTop = self._height // 6
 
-        # Function
+        # Functions
         self.onSubmit = kwargs.get('onSubmit', lambda *args: None)
         self.onSubmitParams = kwargs.get('onSubmitParams', ())
+        self.onTextChanged = kwargs.get('onTextChanged', lambda *args: None)
+        self.onTextChangedParams = kwargs.get('onTextChangedParams', ())
 
     def listen(self, events):
         """ Wait for inputs
@@ -103,6 +105,7 @@ class TextBox(WidgetBase):
                         if self.cursorPosition != 0:
                             self.maxLengthReached = False
                             self.text.pop(self.cursorPosition - 1)
+                            self.onTextChanged(*self.onTextChangedParams)
 
                         self.cursorPosition = max(self.cursorPosition - 1, 0)
 
@@ -110,6 +113,7 @@ class TextBox(WidgetBase):
                         if not self.cursorPosition >= len(self.text):
                             self.maxLengthReached = False
                             self.text.pop(self.cursorPosition)
+                            self.onTextChanged(*self.onTextChangedParams)
 
                     elif event.key == pygame.K_RETURN:
                         self.onSubmit(*self.onSubmitParams)
@@ -136,6 +140,7 @@ class TextBox(WidgetBase):
                         if len(event.unicode) > 0:
                             self.text.insert(self.cursorPosition, event.unicode)
                             self.cursorPosition += 1
+                            self.onTextChanged(*self.onTextChangedParams)
 
                 elif event.type == pygame.KEYUP:
                     self.repeatKey = None
