@@ -1,7 +1,7 @@
 import pygame
 import time
 
-from pygame_widgets.widget import WidgetBase
+from .widget import WidgetBase
 
 
 class TextBox(WidgetBase):

@@ -1,7 +1,7 @@
 import pygame
 import math
 
-from pygame_widgets.widget import WidgetBase
+from .widget import WidgetBase
 
 
 class Checkbox(WidgetBase):

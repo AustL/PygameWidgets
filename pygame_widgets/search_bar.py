@@ -1,7 +1,7 @@
 
-from pygame_widgets.widget import WidgetBase
-from pygame_widgets.textbox import TextBox
-from pygame_widgets.dropdown import Dropdown, DropdownChoice
+from .widget import WidgetBase
+from .textbox import TextBox
+from .dropdown import Dropdown, DropdownChoice
 
 
 class SearchBar(Dropdown):
