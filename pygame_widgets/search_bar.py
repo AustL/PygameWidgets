@@ -36,6 +36,8 @@ class SearchBar(Dropdown):
         self.choices = choices
         self.suggestions = choices  # Stores the current suggestions
 
+        self._search_algo = kwargs.get('search_algo', self._default_search)
+
         self.text_bar = TextBox(
             win, x, y, width, height,
             onTextChanged=self.update_search_results,
@@ -113,12 +115,13 @@ class SearchBar(Dropdown):
             if not previously_selected and self.text_bar.selected:
                 self.onStartSearch(*self.onStartSearchParams)
 
-            for dropdown_choice in self.__choice_widgets:
-                previously_clicked = dropdown_choice.clicked
-                dropdown_choice.listen(events)
-                if previously_clicked and not dropdown_choice.clicked:
-                    # The choice was clicked by user
-                    self.text_bar.setText(dropdown_choice.text)
+            if self.dropped:
+                for dropdown_choice in self.__choice_widgets:
+                    previously_clicked = dropdown_choice.clicked
+                    dropdown_choice.listen(events)
+                    if previously_clicked and not dropdown_choice.clicked:
+                        # The choice was clicked by user
+                        self.text_bar.setText(dropdown_choice.text)
 
 
     def draw(self):
@@ -146,13 +149,30 @@ class SearchBar(Dropdown):
         """
 
         text = self.text_bar.getText()
+        # Fist the starts width should come
 
         # Finds all the texts that start with the same text
-        self.suggestions = [
-            choice for choice in self.choices
-            if text in choice
-        ]
+        self.suggestions = self._search_algo(text, self.choices)
         self.dropped = True
+
+    def _search_algo(self, text, choices):
+        """Return the suggestions of text in choices."""
+        raise NotImplementedError('A search method must override this.')
+
+    def _default_search(self, text, choices):
+        """Return the suggestions of text in choices."""
+
+        # First add the ones that perfectly match case
+        suggestions = [
+            choice for choice in choices
+            if choice.startswith(text)
+        ]
+        # Then add the ones that include text
+        suggestions += [
+            choice for choice in choices
+            if text in choice and choice not in suggestions
+        ]
+        return suggestions
 
 
 
