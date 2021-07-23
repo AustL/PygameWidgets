@@ -244,11 +244,10 @@ class DropdownChoice(WidgetBase):
                     if not self.clicked:
                         self.clicked = True
 
-                        self._drop.dropped = False
-                        self._drop.chosen = self
-
                 elif self.clicked:
                     self.clicked = False
+                    self._drop.dropped = False
+                    self._drop.chosen = self
 
                 else:
                     self.colour = self.hoverColour
