@@ -108,8 +108,9 @@ class Dropdown(WidgetBase):
 
             # Then we handle the DropdownChoices
             self.__main.listen(events)
-            for c in self.__choices:
-                c.listen(events)
+            if self.dropped:
+                for c in self.__choices:
+                    c.listen(events)
 
     def draw(self):
         if not self._hidden:
