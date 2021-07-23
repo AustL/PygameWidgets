@@ -32,6 +32,8 @@ class SearchBar(Dropdown):
         :type max_results: int
         :param kwargs: Optional parameters
         """
+        # Don't use DropDown.__init__ as we do not want
+        # all the same.
         WidgetBase.__init__(self, win, x, y, width, height)
         self._dropped = False
 
@@ -39,6 +41,11 @@ class SearchBar(Dropdown):
         self.suggestions = choices  # Stores the current suggestions
 
         self._search_algo = kwargs.get('search_algo', self._default_search)
+
+        # Adds params that are not specified in text box
+        for key, value in kwargs.items():
+            if key not in textbox_kwargs:
+                textbox_kwargs[key] = value
 
         self.text_bar = TextBox(
             win, x, y, width, height,
