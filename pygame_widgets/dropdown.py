@@ -288,6 +288,13 @@ class DropdownChoice(WidgetBase):
     def text(self):
         return self.__text
 
+    @text.setter
+    def text(self, new_text):
+        if isinstance(new_text, str):
+            self.__text = new_text
+        else:
+            raise TypeError('Wrong type for \'text\' property, str is expected')
+
     @property
     def direction(self):
         return self.__direction
