@@ -1,4 +1,3 @@
-
 from .widget import WidgetBase
 from .textbox import TextBox
 from .dropdown import Dropdown, DropdownChoice
@@ -8,6 +7,7 @@ class SearchBar(Dropdown):
     def __init__(
         self, win, x, y, width, height,
         choices,
+        textbox_kwargs={},
         **kwargs
     ):
         """Initialize a customisable search bar for Pygame.
@@ -26,6 +26,8 @@ class SearchBar(Dropdown):
         :type height: int
         :param choices: Possible search values
         :type choices: list(str)
+        :param textbox_kwargs: Kwargs to be passed to the search box
+        :type textbox_kwargs: dict(str: Any)
         :param max_results: The maximum number of results to display
         :type max_results: int
         :param kwargs: Optional parameters
@@ -41,7 +43,7 @@ class SearchBar(Dropdown):
         self.text_bar = TextBox(
             win, x, y, width, height,
             onTextChanged=self.update_search_results,
-            **kwargs
+            **textbox_kwargs
         )
         self.__main = self.text_bar
         # Set the number of choices if not given
@@ -122,6 +124,7 @@ class SearchBar(Dropdown):
                     if previously_clicked and not dropdown_choice.clicked:
                         # The choice was clicked by user
                         self.text_bar.setText(dropdown_choice.text)
+                        self.onSelected(*self.onSelectedParams)
 
 
     def draw(self):
