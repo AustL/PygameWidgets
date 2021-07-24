@@ -1,4 +1,4 @@
-# Searchbar
+# SearchBar
 
 A dropdown menu allowing the selection of various elements using a search bar.
 
