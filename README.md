@@ -38,4 +38,5 @@ If you receive no errors, the installation was successful.
 * [Toggle](docs/toggle.md)
 * [ProgressBar](docs/progressbar.md)
 * [Dropdown](docs/dropdown.md)
+* [SearchBar](docs/searchbar.md)
 * [Animations](docs/animations.md)
