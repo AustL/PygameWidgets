@@ -51,6 +51,8 @@ while run:
 | radius | Border radius. Set to 0 for no radius. | int | 0 |
 | onSubmit | Function to be called when return / enter is pressed. | function | None |
 | onSubmitParams | Parameters to be fed into onSubmit function. | (*any) | () |
+| onTextChanged | Function to be called when the text in the box is changed. | function | None |
+| onTextChangedParams | Parameters to be fed into onTextChanged function. | (*any) | () |
 | placeholderText | Text to be displayed when empty. | str | '' |
 | fontSize | Size of text. | int | 20 |
 | font | Font of text. | pygame.font.Font | Calibri

@@ -2,7 +2,7 @@ from threading import Thread
 import time
 import pygame
 
-from pygame_widgets.exceptions.exceptions import InvalidParameter, InvalidParameterType
+from ..exceptions.exceptions import InvalidParameter, InvalidParameterType
 
 
 class AnimationBase:

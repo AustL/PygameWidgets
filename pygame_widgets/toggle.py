@@ -1,7 +1,7 @@
 import pygame
 from pygame import gfxdraw
 
-from pygame_widgets.widget import WidgetBase
+from .widget import WidgetBase
 
 
 class Toggle(WidgetBase):

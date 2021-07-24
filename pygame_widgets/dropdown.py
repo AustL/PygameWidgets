@@ -1,6 +1,6 @@
 import pygame
 
-from pygame_widgets.widget import WidgetBase
+from .widget import WidgetBase
 
 
 def darker(color):
@@ -108,8 +108,9 @@ class Dropdown(WidgetBase):
 
             # Then we handle the DropdownChoices
             self.__main.listen(events)
-            for c in self.__choices:
-                c.listen(events)
+            if self.dropped:
+                for c in self.__choices:
+                    c.listen(events)
 
     def draw(self):
         if not self._hidden:
@@ -243,11 +244,10 @@ class DropdownChoice(WidgetBase):
                     if not self.clicked:
                         self.clicked = True
 
-                        self._drop.dropped = False
-                        self._drop.chosen = self
-
                 elif self.clicked:
                     self.clicked = False
+                    self._drop.dropped = False
+                    self._drop.chosen = self
 
                 else:
                     self.colour = self.hoverColour
@@ -287,6 +287,13 @@ class DropdownChoice(WidgetBase):
     @property
     def text(self):
         return self.__text
+
+    @text.setter
+    def text(self, new_text):
+        if isinstance(new_text, str):
+            self.__text = new_text
+        else:
+            raise TypeError('Wrong type for \'text\' property, str is expected')
 
     @property
     def direction(self):

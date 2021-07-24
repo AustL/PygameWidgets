@@ -1,6 +1,6 @@
 import pygame
 
-from pygame_widgets.widget import WidgetBase
+from .widget import WidgetBase
 
 
 class Button(WidgetBase):

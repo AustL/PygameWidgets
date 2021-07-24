@@ -1,7 +1,8 @@
-from pygame_widgets.textbox import TextBox
-from pygame_widgets.button import Button, ButtonArray
-from pygame_widgets.slider import Slider
-from pygame_widgets.animations.animation import AnimationBase, Translate, Resize
-from pygame_widgets.dropdown import Dropdown
-from pygame_widgets.toggle import Toggle
-from pygame_widgets.progressbar import ProgressBar
+from .textbox import TextBox
+from .button import Button, ButtonArray
+from .slider import Slider
+from .animations.animation import AnimationBase, Translate, Resize
+from .dropdown import Dropdown
+from .toggle import Toggle
+from .progressbar import ProgressBar
+from .search_bar import SearchBar
