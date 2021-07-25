@@ -2,8 +2,8 @@ import pygame
 from pygame import gfxdraw
 import math
 
-from .widget import WidgetBase
-from .textbox import TextBox
+from pygame_widgets.widget import WidgetBase
+from pygame_widgets.textbox import TextBox
 
 
 class Slider(WidgetBase):
