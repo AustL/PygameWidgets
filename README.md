@@ -54,4 +54,4 @@ This can include:
 If applicable, you should make any changes in a forked repository and then create a pull
 request once the changes are ***complete*** and preferably tested if possible.
 
-_Note: If writing any code, please attempt to follow the [Code Style Guide](docs/styleguide.md)_
+_Note: If writing any code, please attempt to follow the [Code Style Guide](CONTRIBUTION.md)_
