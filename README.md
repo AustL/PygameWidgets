@@ -6,7 +6,7 @@ added, please create an issue!
 
 ## NEW FEATURES
 
-* * Combo Box: Select options from a list that appears when typing into a search bar
+* Combo Box: Select options from a list that appears when typing into a search bar
 * Dropdown: Select options from a list that appears when hovered over
 * Progress Bar: Shows a percentage of completeness, great for loading screens and health bars
 * Toggle: Allows switching between two values, great for settings
