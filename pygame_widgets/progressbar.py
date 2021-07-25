@@ -1,7 +1,7 @@
 from typing import Callable
 import pygame
 
-from .widget import WidgetBase
+from pygame_widgets.widget import WidgetBase
 
 
 class ProgressBar(WidgetBase):

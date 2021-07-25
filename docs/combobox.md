@@ -1,40 +1,40 @@
-# SearchBar
+# ComboBox
 
 A dropdown menu allowing the selection of various elements using a search bar.
 
-It is similar to `DropDown` but the main element is a `TextBox` that allows
-to write selected search text.
+It is similar to `Dropdown` but includes a `TextBox` that allows searching of options.
 
 The parameters of the `TextBox` can be made different
 from the ones of the dropdown if they are specified in
-the `textbox_kwargs` parameter.
+the `textboxKwargs` parameter.
 
-![searchbar.gif](images/searchbox.gif)
+![combobox.gif](images/combobox.gif)
 
 ```Python
 import pygame
-from pygame_widgets import SearchBar, Button
+from pygame_widgets import ComboBox, Button
 
 pygame.init()
-win = pygame.display.set_mode((400, 280))
+win = pygame.display.set_mode((600, 600))
 
-searchbar = SearchBar(
-    win, 120, 10, 100, 50, name='Select Color',
+comboBox = ComboBox(
+    win, 120, 10, 250, 50, name='Select Color',
     choices=pygame.colordict.THECOLORS.keys(),
-    max_results=4,
-    borderRadius=3, colour=pygame.Color('green'), direction='down', textHAlign='left',
-
+    maxResults=4,
+    font=pygame.font.SysFont('calibri', 30),
+    borderRadius=3, colour=(0, 200, 50), direction='down',
+    textHAlign='left'
 )
 
 
-def print_value():
-    searchbar.text_bar.colour = searchbar.getText()
+def output():
+    comboBox.textBar.colour = comboBox.getText()
 
 
 button = Button(
     win, 10, 10, 100, 50, text='Set Color', fontSize=30,
-    margin=20, inactiveColour=(255, 0, 0), pressedColour=(0, 255, 0),
-    radius=5, onClick=print_value, font=pygame.font.SysFont('calibri', 10),
+    margin=15, inactiveColour=(200, 0, 100), pressedColour=(0, 255, 0),
+    radius=5, onClick=output, font=pygame.font.SysFont('calibri', 18),
     textVAlign='bottom'
 )
 
@@ -49,16 +49,16 @@ while run:
 
     win.fill((255, 255, 255))
 
-    searchbar.listen(events)
-    searchbar.draw()
+    comboBox.listen(events)
+    comboBox.draw()
     button.listen(events)
     button.draw()
 
     pygame.display.update()
 ```
 
-This is a classic searchbar. To get the current selected text
-is accessed through the `getText()` methods.
+This is a classic combo box. The current selected text
+can be accessed through the `getText()` methods.
 
 It returns the current text in the search bar.
 
@@ -69,17 +69,18 @@ _Note: Mandatory parameters must be supplied in order._
 
 | Parameter | Description | Type |
 | :---: | --- | :---: |
-| choices | Choices possibility of the search | list of str |
+| choices | Choices to appear in the list | list of str |
 
 ## Optional Parameters
 
 | Parameter | Description | Type | Default |
 | :---: | --- | :---: | :---: |
 | direction | Expansion direction. Can be 'down', 'up', 'left' or 'right'. | str | down |
-| textbox_kwargs | Optional different parameters only for the `TextBox`. | dict | {} |
 | inactiveColour | Default colour when not pressed or hovered over. | (int, int, int) | (150, 150, 150) |
 | pressedColour | Colour when pressed. | (int, int, int) | (100, 100, 100) |
 | hoverColour | Colour when hovered over. | (int, int, int) | (125, 125, 125) |
+| maxChoices | Maximum number of choices to display | int | len(choices) |
+| searchAlgo | Algorithm to be used to search through choices. | function(str, list) -> list | ComboBox._defaultSearch |
 | onSelected | Function to be called when a search choice is selected. | function | None |
 | onSelectedParams | Parameters to be fed into onSelected function. | (*any) | () |
 | onStartSearch | Function to be called when a search is started by user (clicking on the search box). | function | None |
@@ -93,3 +94,4 @@ _Note: Mandatory parameters must be supplied in order._
 | borderColour | Colour of border. | (int, int, int) | (0, 0, 0) |
 | borderThickness | Thickness of border. | int | 3 |
 | borderRadius | Border radius. Set to 0 for no radius. | int | 0 |
+| textboxKwargs | Optional different parameters only for the `TextBox`. | dict | {} |
