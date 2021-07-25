@@ -10,7 +10,7 @@ class ComboBox(Dropdown):
             textboxKwargs=None,
             **kwargs
     ):
-        """Initialize a customisable combo box for Pygame.
+        """Initialise a customisable combo box for Pygame.
 
         The bar can be written on, and displays under it the results.
 

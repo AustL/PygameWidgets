@@ -41,3 +41,17 @@ If you receive no errors, the installation was successful.
 * [Dropdown](docs/dropdown.md)
 * [ComboBox](docs/combobox.md)
 * [Animations](docs/animations.md)
+
+## How to Contribute
+
+Any contribution to this project would be greatly appreciated.
+This can include:
+* Finding errors or bugs and creating a new issue
+* Addressing active issues
+* Adding functionality
+* Improving documentation
+
+If applicable, you should make any changes in a forked repository and then create a pull
+request once the changes are ***complete*** and preferably tested if possible.
+
+_Note: If writing any code, please attempt to follow the [Code Style Guide](docs/styleguide.md)_
