@@ -47,7 +47,6 @@ class Slider(WidgetBase):
             x, y = Mouse.getMousePos()
 
             if self.contains(x, y):
-                print(mouseState)
                 if mouseState == MouseState.CLICK:
                     self.selected = True
 
@@ -116,6 +115,9 @@ if __name__ == '__main__':
 
     v_slider = Slider(win, 900, 200, 40, 300, min=0, max=99, step=1, vertical=True)
     v_output = TextBox(win, 800, 320, 50, 50, fontSize=30)
+
+    output.disable()
+    v_output.disable()
 
     run = True
     while run:
