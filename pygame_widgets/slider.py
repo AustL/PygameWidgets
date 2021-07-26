@@ -42,7 +42,7 @@ class Slider(WidgetBase):
             self.handleRadius = kwargs.get('handleRadius', int(self._height / 1.3))
 
     def listen(self, events):
-        if not self._hidden:
+        if not self._hidden and not self._disabled:
             mouseState = Mouse.getMouseState()
             x, y = Mouse.getMousePos()
 
@@ -63,23 +63,24 @@ class Slider(WidgetBase):
                     self.value = max(min(self.value, self.max), self.min)
 
     def draw(self):
-        pygame.draw.rect(self.win, self.colour, (self._x, self._y, self._width, self._height))
+        if not self._hidden:
+            pygame.draw.rect(self.win, self.colour, (self._x, self._y, self._width, self._height))
 
-        if self.vertical:
-            if self.curved:
-                pygame.draw.circle(self.win, self.colour, (self._x + self._width // 2, self._y), self.radius)
-                pygame.draw.circle(self.win, self.colour, (self._x + self._width // 2, self._y + self._height), self.radius)
-            circle = (self._x + self._width // 2,
-                      int(self._y + (self.max - self.value) / (self.max - self.min) * self._height))
-        else:
-            if self.curved:
-                pygame.draw.circle(self.win, self.colour, (self._x, self._y + self._height // 2), self.radius)
-                pygame.draw.circle(self.win, self.colour, (self._x + self._width, self._y + self._height // 2), self.radius)
-            circle = (int(self._x + (self.value - self.min) / (self.max - self.min) * self._width),
-                      self._y + self._height // 2)
+            if self.vertical:
+                if self.curved:
+                    pygame.draw.circle(self.win, self.colour, (self._x + self._width // 2, self._y), self.radius)
+                    pygame.draw.circle(self.win, self.colour, (self._x + self._width // 2, self._y + self._height), self.radius)
+                circle = (self._x + self._width // 2,
+                          int(self._y + (self.max - self.value) / (self.max - self.min) * self._height))
+            else:
+                if self.curved:
+                    pygame.draw.circle(self.win, self.colour, (self._x, self._y + self._height // 2), self.radius)
+                    pygame.draw.circle(self.win, self.colour, (self._x + self._width, self._y + self._height // 2), self.radius)
+                circle = (int(self._x + (self.value - self.min) / (self.max - self.min) * self._width),
+                          self._y + self._height // 2)
 
-        gfxdraw.filled_circle(self.win, *circle, self.handleRadius, self.handleColour)
-        gfxdraw.aacircle(self.win, *circle, self.handleRadius, self.handleColour)
+            gfxdraw.filled_circle(self.win, *circle, self.handleRadius, self.handleColour)
+            gfxdraw.aacircle(self.win, *circle, self.handleRadius, self.handleColour)
 
     def contains(self, x, y):
         if self.vertical:

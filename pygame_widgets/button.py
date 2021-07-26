@@ -338,7 +338,7 @@ class ButtonArray(WidgetBase):
         :param events: Use pygame.event.get()
         :type events: list of pygame.event.Event
         """
-        if not self._hidden:
+        if not self._hidden and not self._disabled:
             for button in self.buttons:
                 button.listen(events)
 
@@ -383,7 +383,7 @@ if __name__ == '__main__':
     buttonArray = ButtonArray(win, 50, 50, 500, 500, (2, 2), border=100, texts=('1', '2', '3', '4'),
                               onClicks=(lambda: print(1), lambda: print(2), lambda: print(3), lambda: print(4)))
 
-    button.hide()
+    buttonArray.hide()
 
     run = True
     while run:
