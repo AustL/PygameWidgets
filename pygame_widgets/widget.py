@@ -1,4 +1,5 @@
 from abc import abstractmethod, ABC
+from pygame_widgets.mouse import Mouse
 
 
 class WidgetBase(ABC):
@@ -23,6 +24,8 @@ class WidgetBase(ABC):
         self._height = height
 
         self._hidden = False
+
+        WidgetHandler.addWidget(self)
 
     @abstractmethod
     def listen(self, events):
@@ -107,3 +110,15 @@ class WidgetBase(ABC):
 
     def setHeight(self, height):
         self._height = height
+
+
+class WidgetHandler:
+    activeWidgets = []
+
+    @staticmethod
+    def addWidget(widget: WidgetBase):
+        WidgetHandler.activeWidgets.append(widget)
+
+    @staticmethod
+    def getActiveWidgets() -> [WidgetBase]:
+        return WidgetHandler.activeWidgets

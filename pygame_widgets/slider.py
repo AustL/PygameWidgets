@@ -2,8 +2,9 @@ import pygame
 from pygame import gfxdraw
 import math
 
+import pygame_widgets
 from pygame_widgets.widget import WidgetBase
-from pygame_widgets.textbox import TextBox
+from pygame_widgets.mouse import Mouse, MouseState
 
 
 class Slider(WidgetBase):
@@ -41,12 +42,17 @@ class Slider(WidgetBase):
             self.handleRadius = kwargs.get('handleRadius', int(self._height / 1.3))
 
     def listen(self, events):
-        pressed = pygame.mouse.get_pressed()[0]
-        x, y = pygame.mouse.get_pos()
+        if not self._hidden:
+            mouseState = Mouse.getMouseState()
+            x, y = Mouse.getMousePos()
 
-        if pressed:
             if self.contains(x, y):
-                self.selected = True
+                print(mouseState)
+                if mouseState == MouseState.CLICK:
+                    self.selected = True
+
+            if mouseState == MouseState.RELEASE:
+                self.selected = False
 
             if self.selected:
                 if self.vertical:
@@ -55,9 +61,6 @@ class Slider(WidgetBase):
                 else:
                     self.value = self.round((x - self._x) / self._width * self.max + self.min)
                     self.value = max(min(self.value, self.max), self.min)
-
-        else:
-            self.selected = False
 
     def draw(self):
         pygame.draw.rect(self.win, self.colour, (self._x, self._y, self._width, self._height))
@@ -102,6 +105,8 @@ class Slider(WidgetBase):
 
 
 if __name__ == '__main__':
+    from pygame_widgets.textbox import TextBox
+
     pygame.init()
     win = pygame.display.set_mode((1000, 600))
 
@@ -122,16 +127,8 @@ if __name__ == '__main__':
 
         win.fill((255, 255, 255))
 
-        slider.listen(events)
-        v_slider.listen(events)
-
-        slider.draw()
-        v_slider.draw()
-
         output.setText(slider.getValue())
         v_output.setText(v_slider.getValue())
 
-        output.draw()
-        v_output.draw()
-
+        pygame_widgets.update(events)
         pygame.display.update()
