@@ -1,7 +1,6 @@
 from enum import Enum
 import pygame
 import time
-import threading
 
 
 class MouseState(Enum):
@@ -24,11 +23,6 @@ class Mouse:
     rightClickElapsedTime = 0
 
     _mouseState = MouseState.HOVER
-
-    @staticmethod
-    def initialise():
-        thread = threading.Thread(target=Mouse.listen)
-        thread.start()
 
     @staticmethod
     def listen():
@@ -91,8 +85,6 @@ class Mouse:
 if __name__ == '__main__':
     pygame.init()
     win = pygame.display.set_mode((600, 600))
-
-    Mouse.initialise()
 
     run = True
     while run:

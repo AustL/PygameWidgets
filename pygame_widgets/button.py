@@ -1,6 +1,7 @@
 import pygame
 
 from pygame_widgets.widget import WidgetBase
+from pygame_widgets.mouse import Mouse, MouseState
 
 
 class Button(WidgetBase):
@@ -101,26 +102,30 @@ class Button(WidgetBase):
         :type events: list of pygame.event.Event
         """
         if not self._hidden:
-            pressed = pygame.mouse.get_pressed()[0]
-            x, y = pygame.mouse.get_pos()
+            Mouse.updateMouseState()
+            mouseState = Mouse.getMouseState()
+            x, y = Mouse.getMousePos()
 
             if self.contains(x, y):
-                if pressed:
-                    self.colour = self.pressedColour
-                    self.borderColour = self.pressedBorderColour
-                    if not self.clicked:
-                        self.clicked = True
-                        self.onClick(*self.onClickParams)
-
-                elif self.clicked:
+                if mouseState == MouseState.RELEASE and self.clicked:
                     self.clicked = False
                     self.onRelease(*self.onReleaseParams)
 
-                else:
+                elif mouseState == MouseState.CLICK:
+                    self.clicked = True
+                    self.onClick(*self.onClickParams)
+                    self.colour = self.pressedColour
+                    self.borderColour = self.pressedBorderColour
+
+                elif mouseState == MouseState.DRAG and self.clicked:
+                    self.colour = self.pressedColour
+                    self.borderColour = self.pressedBorderColour
+
+                elif mouseState == MouseState.HOVER or mouseState == MouseState.DRAG:
                     self.colour = self.hoverColour
                     self.borderColour = self.hoverBorderColour
 
-            elif not pressed:
+            else:
                 self.clicked = False
                 self.colour = self.inactiveColour
                 self.borderColour = self.inactiveBorderColour
