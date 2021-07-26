@@ -1,5 +1,7 @@
 # Pygame Widgets
 
+![](https://img.shields.io/pypi/dm/pygame-widgets)
+
 A helper module for common widgets that may be required in developing applications with Pygame. It supports fully
 customisable buttons, collections of buttons, textboxes, sliders and many more! If there are any widgets that you would like to see
 added, please create an issue!
