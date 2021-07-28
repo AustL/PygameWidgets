@@ -1,7 +1,9 @@
 import pygame
 import math
 
+import pygame_widgets
 from pygame_widgets.widget import WidgetBase
+from pygame_widgets.mouse import Mouse, MouseState
 
 
 class Checkbox(WidgetBase):
@@ -88,23 +90,15 @@ class Checkbox(WidgetBase):
         :param events: Use pygame.event.get()
         :type events: list of pygame.event.Event
         """
-        if not self._hidden:
-            pressed = pygame.mouse.get_pressed()[0]
-            x, y = pygame.mouse.get_pos()
+        if not self._hidden and not self._disabled:
+            mouseState = Mouse.getMouseState()
+            x, y = Mouse.getMousePos()
 
             if self.contains(x, y):
-                if pressed:
-                    if not self.clicked:
-                        self.clicked = True
-                        for row in range(self.rows):
-                            if self.boxes[row].collidepoint(x, y):
-                                self.selected[row] = not self.selected[row]
-
-                elif self.clicked:
-                    self.clicked = False
-
-            elif not pressed:
-                self.clicked = False
+                if mouseState == MouseState.CLICK:
+                    for row in range(self.rows):
+                        if self.boxes[row].collidepoint(x, y):
+                            self.selected[row] = not self.selected[row]
 
     def draw(self):
         """ Display to surface """
@@ -228,24 +222,16 @@ class Radio(WidgetBase):
         :param events: Use pygame.event.get()
         :type events: list of pygame.event.Event
         """
-        if not self._hidden:
-            pressed = pygame.mouse.get_pressed()[0]
-            x, y = pygame.mouse.get_pos()
+        if not self._hidden and not self._disabled:
+            mouseState = Mouse.getMouseState()
+            x, y = Mouse.getMousePos()
 
             if self.contains(x, y):
-                if pressed:
-                    if not self.clicked:
-                        self.clicked = True
-                        for row in range(self.rows):
-                            if math.sqrt((self.circles[row][0] - x) ** 2 +
-                                         (self.circles[row][1] - y) ** 2) <= self.circleRadius:
-                                self.selected = row
-
-                elif self.clicked:
-                    self.clicked = False
-
-            elif not pressed:
-                self.clicked = False
+                if mouseState == MouseState.CLICK:
+                    for row in range(self.rows):
+                        if math.sqrt((self.circles[row][0] - x) ** 2 +
+                                     (self.circles[row][1] - y) ** 2) <= self.circleRadius:
+                            self.selected = row
 
     def draw(self):
         """ Display to surface """
@@ -305,10 +291,5 @@ if __name__ == '__main__':
 
         win.fill((255, 255, 255))
 
-        checkbox.listen(events)
-        checkbox.draw()
-
-        radio.listen(events)
-        radio.draw()
-
+        pygame_widgets.update(events)
         pygame.display.update()

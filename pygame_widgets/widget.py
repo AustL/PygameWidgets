@@ -2,7 +2,7 @@ from abc import abstractmethod, ABC
 
 
 class WidgetBase(ABC):
-    def __init__(self, win, x, y, width, height):
+    def __init__(self, win, x, y, width, height, isSubWidget=False):
         """ Base for all widgets
 
         :param win: Surface on which to draw
@@ -23,6 +23,10 @@ class WidgetBase(ABC):
         self._height = height
 
         self._hidden = False
+        self._disabled = False
+
+        if not isSubWidget:
+            WidgetHandler.addWidget(self)
 
     @abstractmethod
     def listen(self, events):
@@ -41,6 +45,12 @@ class WidgetBase(ABC):
 
     def show(self):
         self._hidden = False
+
+    def disable(self):
+        self._disabled = True
+
+    def enable(self):
+        self._disabled = False
 
     def moveX(self, x):
         self._x += x
@@ -107,3 +117,15 @@ class WidgetBase(ABC):
 
     def setHeight(self, height):
         self._height = height
+
+
+class WidgetHandler:
+    activeWidgets = []
+
+    @staticmethod
+    def addWidget(widget: WidgetBase):
+        WidgetHandler.activeWidgets.append(widget)
+
+    @staticmethod
+    def getActiveWidgets() -> [WidgetBase]:
+        return WidgetHandler.activeWidgets

@@ -1,7 +1,9 @@
 import pygame
 import time
 
+import pygame_widgets
 from pygame_widgets.widget import WidgetBase
+from pygame_widgets.mouse import Mouse, MouseState
 
 
 class TextBox(WidgetBase):
@@ -10,7 +12,7 @@ class TextBox(WidgetBase):
     REPEAT_INTERVAL = 70
     CURSOR_INTERVAL = 400
 
-    def __init__(self, win, x, y, width, height, **kwargs):
+    def __init__(self, win, x, y, width, height, isSubWidget=False, **kwargs):
         """ A customisable textbox for Pygame
 
         :param win: Surface on which to draw
@@ -25,7 +27,7 @@ class TextBox(WidgetBase):
         :type height: int
         :param kwargs: Optional parameters
         """
-        super().__init__(win, x, y, width, height)
+        super().__init__(win, x, y, width, height, isSubWidget)
 
         self.selected = False
         self.showCursor = False
@@ -74,79 +76,80 @@ class TextBox(WidgetBase):
         :param events: Use pygame.event.get()
         :type events: list of pygame.event.Event
         """
-        if self.keyDown:
-            self.updateRepeatKey()
+        if not self._hidden and not self._disabled:
+            if self.keyDown:
+                self.updateRepeatKey()
 
-        pressed = pygame.mouse.get_pressed()[0]
-        x, y = pygame.mouse.get_pos()
+            # Selection
+            mouseState = Mouse.getMouseState()
+            x, y = Mouse.getMousePos()
 
-        # Selection
-        if pressed:
-            if self.contains(x, y):
-                self.selected = True
-                self.showCursor = True
-                self.cursorTime = time.time()
-
-            else:
-                self.selected = False
-                self.showCursor = False
-                self.cursorTime = time.time()
-
-        # Keyboard Input
-        if self.selected:
-            for event in events:
-                if event.type == pygame.KEYDOWN:
+            if mouseState == MouseState.CLICK:
+                if self.contains(x, y):
+                    self.selected = True
                     self.showCursor = True
-                    self.keyDown = True
-                    self.repeatKey = event
-                    self.repeatTime = time.time()
+                    self.cursorTime = time.time()
 
-                    if event.key == pygame.K_BACKSPACE:
-                        if self.cursorPosition != 0:
-                            self.maxLengthReached = False
-                            self.text.pop(self.cursorPosition - 1)
-                            self.onTextChanged(*self.onTextChangedParams)
+                else:
+                    self.selected = False
+                    self.showCursor = False
+                    self.cursorTime = time.time()
 
-                        self.cursorPosition = max(self.cursorPosition - 1, 0)
+            # Keyboard Input
+            if self.selected:
+                for event in events:
+                    if event.type == pygame.KEYDOWN:
+                        self.showCursor = True
+                        self.keyDown = True
+                        self.repeatKey = event
+                        self.repeatTime = time.time()
 
-                    elif event.key == pygame.K_DELETE:
-                        if not self.cursorPosition >= len(self.text):
-                            self.maxLengthReached = False
-                            self.text.pop(self.cursorPosition)
-                            self.onTextChanged(*self.onTextChangedParams)
+                        if event.key == pygame.K_BACKSPACE:
+                            if self.cursorPosition != 0:
+                                self.maxLengthReached = False
+                                self.text.pop(self.cursorPosition - 1)
+                                self.onTextChanged(*self.onTextChangedParams)
 
-                    elif event.key == pygame.K_RETURN:
-                        self.onSubmit(*self.onSubmitParams)
+                            self.cursorPosition = max(self.cursorPosition - 1, 0)
 
-                    elif event.key == pygame.K_RIGHT:
-                        self.cursorPosition = min(self.cursorPosition + 1, len(self.text))
+                        elif event.key == pygame.K_DELETE:
+                            if not self.cursorPosition >= len(self.text):
+                                self.maxLengthReached = False
+                                self.text.pop(self.cursorPosition)
+                                self.onTextChanged(*self.onTextChangedParams)
 
-                    elif event.key == pygame.K_LEFT:
-                        self.cursorPosition = max(self.cursorPosition - 1, 0)
+                        elif event.key == pygame.K_RETURN:
+                            self.onSubmit(*self.onSubmitParams)
 
-                    elif event.key == pygame.K_END:
-                        self.cursorPosition = len(self.text)
+                        elif event.key == pygame.K_RIGHT:
+                            self.cursorPosition = min(self.cursorPosition + 1, len(self.text))
 
-                    elif event.key == pygame.K_ESCAPE:
-                        if not self.escape:
-                            self.selected = False
-                            self.showCursor = False
-                            self.escape = True
-                            self.repeatKey = None
-                            self.keyDown = None
-                            self.firstRepeat = True
+                        elif event.key == pygame.K_LEFT:
+                            self.cursorPosition = max(self.cursorPosition - 1, 0)
 
-                    elif not self.maxLengthReached:
-                        if len(event.unicode) > 0:
-                            self.text.insert(self.cursorPosition, event.unicode)
-                            self.cursorPosition += 1
-                            self.onTextChanged(*self.onTextChangedParams)
+                        elif event.key == pygame.K_END:
+                            self.cursorPosition = len(self.text)
 
-                elif event.type == pygame.KEYUP:
-                    self.repeatKey = None
-                    self.keyDown = None
-                    self.firstRepeat = True
-                    self.escape = False
+                        elif event.key == pygame.K_ESCAPE:
+                            if not self.escape:
+                                self.selected = False
+                                self.showCursor = False
+                                self.escape = True
+                                self.repeatKey = None
+                                self.keyDown = None
+                                self.firstRepeat = True
+
+                        elif not self.maxLengthReached:
+                            if len(event.unicode) > 0:
+                                self.text.insert(self.cursorPosition, event.unicode)
+                                self.cursorPosition += 1
+                                self.onTextChanged(*self.onTextChangedParams)
+
+                    elif event.type == pygame.KEYUP:
+                        self.repeatKey = None
+                        self.keyDown = None
+                        self.firstRepeat = True
+                        self.escape = False
 
     def draw(self):
         """ Display to surface """
@@ -286,7 +289,5 @@ if __name__ == '__main__':
 
         win.fill((255, 255, 255))
 
-        textbox.listen(events)
-        textbox.draw()
-
+        pygame_widgets.update(events)
         pygame.display.update()

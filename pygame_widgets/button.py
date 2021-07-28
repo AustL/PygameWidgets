@@ -1,10 +1,12 @@
 import pygame
 
+import pygame_widgets
 from pygame_widgets.widget import WidgetBase
+from pygame_widgets.mouse import Mouse, MouseState
 
 
 class Button(WidgetBase):
-    def __init__(self, win, x, y, width, height, **kwargs):
+    def __init__(self, win, x, y, width, height, isSubWidget=False, **kwargs):
         """ A customisable button for Pygame
 
         :param win: Surface on which to draw
@@ -19,7 +21,7 @@ class Button(WidgetBase):
         :type height: int
         :param kwargs: Optional parameters
         """
-        super().__init__(win, x, y, width, height)
+        super().__init__(win, x, y, width, height, isSubWidget)
 
         # Colour
         self.inactiveColour = kwargs.get('inactiveColour', (150, 150, 150))
@@ -100,27 +102,30 @@ class Button(WidgetBase):
         :param events: Use pygame.event.get()
         :type events: list of pygame.event.Event
         """
-        if not self._hidden:
-            pressed = pygame.mouse.get_pressed()[0]
-            x, y = pygame.mouse.get_pos()
+        if not self._hidden and not self._disabled:
+            mouseState = Mouse.getMouseState()
+            x, y = Mouse.getMousePos()
 
             if self.contains(x, y):
-                if pressed:
-                    self.colour = self.pressedColour
-                    self.borderColour = self.pressedBorderColour
-                    if not self.clicked:
-                        self.clicked = True
-                        self.onClick(*self.onClickParams)
-
-                elif self.clicked:
+                if mouseState == MouseState.RELEASE and self.clicked:
                     self.clicked = False
                     self.onRelease(*self.onReleaseParams)
 
-                else:
+                elif mouseState == MouseState.CLICK:
+                    self.clicked = True
+                    self.onClick(*self.onClickParams)
+                    self.colour = self.pressedColour
+                    self.borderColour = self.pressedBorderColour
+
+                elif mouseState == MouseState.DRAG and self.clicked:
+                    self.colour = self.pressedColour
+                    self.borderColour = self.pressedBorderColour
+
+                elif mouseState == MouseState.HOVER or mouseState == MouseState.DRAG:
                     self.colour = self.hoverColour
                     self.borderColour = self.hoverBorderColour
 
-            elif not pressed:
+            else:
                 self.clicked = False
                 self.colour = self.inactiveColour
                 self.borderColour = self.inactiveBorderColour
@@ -322,7 +327,7 @@ class ButtonArray(WidgetBase):
             for j in range(down):
                 x = self._x + i * (width + self.separationThickness) + self.leftBorder
                 y = self._y + j * (height + self.separationThickness) + self.topBorder
-                self.buttons.append(Button(self.win, x, y, width, height,
+                self.buttons.append(Button(self.win, x, y, width, height, isSubWidget=True,
                                            **{k: v[count] for k, v in self.buttonAttributes.items() if v is not None})
                                     )
                 count += 1
@@ -333,7 +338,7 @@ class ButtonArray(WidgetBase):
         :param events: Use pygame.event.get()
         :type events: list of pygame.event.Event
         """
-        if not self._hidden:
+        if not self._hidden and not self._disabled:
             for button in self.buttons:
                 button.listen(events)
 
@@ -375,7 +380,10 @@ if __name__ == '__main__':
                     textVAlign='bottom', imageHAlign='centre', imageVAlign='centre', borderThickness=3,
                     onRelease=lambda: print('Release'), shadowDistance=5, borderColour=(0, 0, 0))
 
-    buttonArray = ButtonArray(win, 50, 50, 500, 500, (2, 2), border=100, texts=('1', '2', '3', '4'))
+    buttonArray = ButtonArray(win, 50, 50, 500, 500, (2, 2), border=100, texts=('1', '2', '3', '4'),
+                              onClicks=(lambda: print(1), lambda: print(2), lambda: print(3), lambda: print(4)))
+
+    buttonArray.hide()
 
     run = True
     while run:
@@ -388,7 +396,5 @@ if __name__ == '__main__':
 
         win.fill((255, 255, 255))
 
-        button.listen(events)
-        button.draw()
-
+        pygame_widgets.update(events)
         pygame.display.update()

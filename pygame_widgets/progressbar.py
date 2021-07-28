@@ -1,6 +1,7 @@
 from typing import Callable
 import pygame
 
+import pygame_widgets
 from pygame_widgets.widget import WidgetBase
 
 
@@ -74,6 +75,5 @@ if __name__ == '__main__':
 
         win.fill((255, 255, 255))
 
-        progressBar.draw()
-
+        pygame_widgets.update(events)
         pygame.display.update()
