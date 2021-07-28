@@ -110,7 +110,7 @@ class ComboBox(Dropdown):
         :param events: Use pygame.event.get()
         :type events: list of pygame.event.Event
         """
-        if not self._hidden:
+        if not self._hidden and not self._disabled:
             # Keeps state of selected
             previouslySelected = self.textBar.selected
             self.textBar.listen(events)

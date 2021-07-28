@@ -1,7 +1,9 @@
 import pygame
 from pygame import gfxdraw
 
+import pygame_widgets
 from pygame_widgets.widget import WidgetBase
+from pygame_widgets.mouse import Mouse, MouseState
 
 
 class Toggle(WidgetBase):
@@ -17,8 +19,6 @@ class Toggle(WidgetBase):
         self.handleRadius = kwargs.get('handleRadius', int(self._height / 1.3))
         self.radius = self._height // 2
 
-        self.hidden = False
-        self.clicked = False
         self.colour = self.onColour if self.value else self.offColour
         self.handleColour = self.handleOnColour if self.value else self.handleOffColour
 
@@ -28,21 +28,13 @@ class Toggle(WidgetBase):
         self.handleColour = self.handleOnColour if self.value else self.handleOffColour
 
     def listen(self, events):
-        if not self._hidden:
-            pressed = pygame.mouse.get_pressed()[0]
-            x, y = pygame.mouse.get_pos()
+        if not self._hidden and not self._disabled:
+            mouseState = Mouse.getMouseState()
+            x, y = Mouse.getMousePos()
 
             if self.contains(x, y):
-                if pressed:
-                    if not self.clicked:
-                        self.clicked = True
-                        self.toggle()
-
-                elif self.clicked:
-                    self.clicked = False
-
-            elif not pressed:
-                self.clicked = False
+                if mouseState == MouseState.CLICK:
+                    self.toggle()
 
     def draw(self):
         pygame.draw.rect(self.win, self.colour, (self._x, self._y, self._width, self._height))
@@ -81,7 +73,5 @@ if __name__ == '__main__':
 
         win.fill((255, 255, 255))
 
-        toggle.listen(events)
-        toggle.draw()
-
+        pygame_widgets.update(events)
         pygame.display.update()
