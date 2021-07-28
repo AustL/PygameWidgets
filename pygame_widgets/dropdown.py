@@ -5,20 +5,6 @@ from pygame_widgets.widget import WidgetBase
 from pygame_widgets.mouse import Mouse, MouseState
 
 
-def darker(colour):
-    assert len(colour) == 3
-    assert isinstance(colour, tuple)
-
-    colour = list(colour)
-    newColour = []
-    for c in colour:
-        if c - 30 > 10:
-            newColour.append(c - 30)
-        else:
-            newColour.append(10)
-    return tuple(newColour)
-
-
 class Dropdown(WidgetBase):
     def __init__(self, win, x, y, width, height, name, choices, isSubWidget=False, **kwargs):
         super().__init__(win, x, y, width, height, isSubWidget)
@@ -58,28 +44,18 @@ class Dropdown(WidgetBase):
 
             self.__choices.append(
                 DropdownChoice(
-                    self.win,
-                    x,
-                    y,
-                    width,
-                    height,
-                    text=text,
-                    drop=self,
-                    value=values[i],
-                    last=last,
-                    **kwargs,
+                    self.win, x, y, width, height,
+                    text=text, drop=self, value=values[i], last=last,
+                    **kwargs
                 )
             )
+
         self.__main = HeadDropdown(
-            self.win,
-            0,
-            0,
-            width,
-            height,
-            text=name,
-            drop=self,
-            **kwargs,
+            self.win, 0, 0, width, height,
+            text=name, drop=self,
+            **kwargs
         )
+
         # Function
         self.onClick = kwargs.get('onClick', lambda *args: None)
         self.onRelease = kwargs.get('onRelease', lambda *args: None)
@@ -138,9 +114,9 @@ class Dropdown(WidgetBase):
         return self.__chosen
 
     @chosen.setter
-    def chosen(self, new_chosen):
-        if isinstance(new_chosen, DropdownChoice):
-            self.__chosen = new_chosen
+    def chosen(self, newChosen):
+        if isinstance(newChosen, DropdownChoice):
+            self.__chosen = newChosen
         else:
             raise TypeError(
                 'Wrong type for \'chosen\' property, DropdownChoice is expected'
@@ -192,7 +168,7 @@ class DropdownChoice(WidgetBase):
             )
             pygame.draw.rect(
                 self.win,
-                darker(self.colour),
+                self.colour,
                 rect,
                 **self._computeBorderRadii()
             )
@@ -326,14 +302,8 @@ class DropdownChoice(WidgetBase):
 class HeadDropdown(DropdownChoice):
     def __init__(self, win, x, y, width, height, text, drop, **kwargs):
         super().__init__(
-            win,
-            x,
-            y,
-            width,
-            height,
-            text,
-            drop,
-            True,
+            win, x, y, width, height,
+            text, drop, True,
             **kwargs
         )
         self.__head_text = text
@@ -417,14 +387,14 @@ if __name__ == '__main__':
     )
 
 
-    def print_value():
+    def printValue():
         print(dropdown.getSelected())
 
 
     button = Button(
         win, 10, 10, 100, 50, text='Print Value', fontSize=30,
         margin=20, inactiveColour=(255, 0, 0), pressedColour=(0, 255, 0),
-        radius=5, onClick=print_value, font=pygame.font.SysFont('calibri', 10),
+        radius=5, onClick=printValue, font=pygame.font.SysFont('calibri', 10),
         textVAlign='bottom'
     )
 

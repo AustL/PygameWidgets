@@ -1,3 +1,4 @@
+import pygame_widgets
 from pygame_widgets.widget import WidgetBase
 from pygame_widgets.textbox import TextBox
 from pygame_widgets.dropdown import Dropdown, DropdownChoice
@@ -49,7 +50,7 @@ class ComboBox(Dropdown):
                 textboxKwargs[key] = value
 
         self.textBar = TextBox(
-            win, x, y, width, height,
+            win, x, y, width, height, isSubWidget=True,
             onTextChanged=self.updateSearchResults,
             **textboxKwargs
         )
@@ -96,14 +97,8 @@ class ComboBox(Dropdown):
 
             self.__choiceWidgets.append(
                 DropdownChoice(
-                    self.win,
-                    x,
-                    y,
-                    width,
-                    height,
-                    text=text,
-                    drop=self,
-                    value=i,
+                    self.win, x, y, width, height,
+                    text=text, drop=self, value=i,
                     last=(i == self.maxResults - 1),
                     **kwargs,
                 )
@@ -193,7 +188,7 @@ class ComboBox(Dropdown):
 
 if __name__ == '__main__':
     import pygame
-    from pygame_widgets import Button
+    from pygame_widgets.button import Button
 
     pygame.init()
     win = pygame.display.set_mode((600, 600))
@@ -230,9 +225,5 @@ if __name__ == '__main__':
 
         win.fill((255, 255, 255))
 
-        comboBox.listen(events)
-        comboBox.draw()
-        button.listen(events)
-        button.draw()
-
+        pygame_widgets.update(events)
         pygame.display.update()

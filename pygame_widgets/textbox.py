@@ -12,7 +12,7 @@ class TextBox(WidgetBase):
     REPEAT_INTERVAL = 70
     CURSOR_INTERVAL = 400
 
-    def __init__(self, win, x, y, width, height, **kwargs):
+    def __init__(self, win, x, y, width, height, isSubWidget=False, **kwargs):
         """ A customisable textbox for Pygame
 
         :param win: Surface on which to draw
@@ -27,7 +27,7 @@ class TextBox(WidgetBase):
         :type height: int
         :param kwargs: Optional parameters
         """
-        super().__init__(win, x, y, width, height)
+        super().__init__(win, x, y, width, height, isSubWidget)
 
         self.selected = False
         self.showCursor = False
