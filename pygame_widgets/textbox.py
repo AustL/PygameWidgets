@@ -260,6 +260,7 @@ class TextBox(WidgetBase):
     def setText(self, text):
         self.text = [c for c in str(text)]
         self.cursorPosition = len(self.text)
+        self.maxLengthReached = False
 
     def getText(self):
         return ''.join(self.text)
