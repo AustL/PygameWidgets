@@ -6,6 +6,4 @@ from pygame.event import Event
 
 def update(events: [Event]):
     Mouse.updateMouseState()
-    for widget in WidgetHandler.getActiveWidgets():
-        widget.listen(events)
-        widget.draw()
+    WidgetHandler.main(events)

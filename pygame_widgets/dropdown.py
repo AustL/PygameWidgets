@@ -42,17 +42,17 @@ class Dropdown(WidgetBase):
                 x = -(i + 1) * width
                 y = 0
 
-            self.__choices.append(
-                DropdownChoice(
-                    self.win, x, y, width, height,
-                    text=text, drop=self, value=values[i], last=last,
-                    **kwargs
-                )
+            choice = DropdownChoice(
+                self.win, x, y, width, height,
+                text=text, dropdown=self, value=values[i], last=last,
+                **kwargs
             )
+            choice.hide()
+            self.__choices.append(choice)
 
         self.__main = HeadDropdown(
             self.win, 0, 0, width, height,
-            text=name, drop=self,
+            text=name, dropdown=self,
             **kwargs
         )
 
@@ -68,7 +68,6 @@ class Dropdown(WidgetBase):
         :param events: Use pygame.event.get()
         :type events: list of pygame.event.Event
         """
-
         if not self._hidden and not self._disabled:
             mouseState = Mouse.getMouseState()
             x, y = Mouse.getMousePos()
@@ -76,21 +75,23 @@ class Dropdown(WidgetBase):
             if self.contains(x, y):
                 if mouseState == MouseState.CLICK:
                     self.onClick(*self.onClickParams)
+
                 elif mouseState == MouseState.RELEASE:
                     self.onRelease(*self.onReleaseParams)
 
             # Then we handle the DropdownChoices
             self.__main.listen(events)
-            if self.dropped:
-                for c in self.__choices:
-                    c.listen(events)
+            for c in self.__choices:
+                c.listen(events)
 
     def draw(self):
         if not self._hidden:
             self.__main.draw()
-            if self.dropped:  # dropped
-                for c in self.__choices:
-                    c.draw()
+            for c in self.__choices:
+                c.draw()
+
+    def contains(self, x, y):
+        return super().contains(x, y) or (any([c.contains(x, y) for c in self.__choices]) and self._dropped)
 
     def reset(self):
         self.__chosen = None
@@ -98,16 +99,18 @@ class Dropdown(WidgetBase):
     def getSelected(self):
         return self.__chosen._value if self.__chosen is not None else None
 
-    @property
-    def dropped(self):
-        return self._dropped
-
-    @dropped.setter
-    def dropped(self, new_dropped):
-        if isinstance(new_dropped, bool):
-            self._dropped = new_dropped
+    def toggleDropped(self):
+        self._dropped = not self._dropped
+        if self._dropped:
+            for c in self.__choices:
+                c.show()
+                self.moveToTop()
         else:
-            raise TypeError('Wrong type for \'dropped\' property, boolean is expected')
+            for c in self.__choices:
+                c.hide()
+
+    def isDropped(self):
+        return self._dropped
 
     @property
     def chosen(self):
@@ -122,14 +125,18 @@ class Dropdown(WidgetBase):
                 'Wrong type for \'chosen\' property, DropdownChoice is expected'
             )
 
+    def setDropped(self, drop):
+        if drop != self._dropped:
+            self.toggleDropped()
+
 
 class DropdownChoice(WidgetBase):
-    def __init__(self, win, x, y, width, height, text, drop, last, **kwargs):
+    def __init__(self, win, x, y, width, height, text: str, dropdown: Dropdown, last: bool, **kwargs):
         super().__init__(win, x, y, width, height, isSubWidget=True)
 
         self.__text = text
 
-        self._drop = drop
+        self._dropdown = dropdown
         self._value = kwargs.get('value', text)
         # Border
         self.borderThickness = kwargs.get('borderThickness', 3)
@@ -212,8 +219,8 @@ class DropdownChoice(WidgetBase):
             if self.contains(x, y):
                 if mouseState == MouseState.RELEASE and self.clicked:
                     self.clicked = False
-                    self._drop.dropped = False
-                    self._drop.chosen = self
+                    self._dropdown.setDropped(False)
+                    self._dropdown.chosen = self
 
                 elif mouseState == MouseState.CLICK:
                     self.clicked = True
@@ -236,35 +243,35 @@ class DropdownChoice(WidgetBase):
         )
 
     def _computeBorderRadii(self):
-        border_radius = {}
+        borderRadius = {}
         if not self.last:
-            return border_radius
+            return borderRadius
         if self.direction == 'up':
-            border_radius['border_top_left_radius'] = self.borderRadius
-            border_radius['border_top_right_radius'] = self.borderRadius
+            borderRadius['border_top_left_radius'] = self.borderRadius
+            borderRadius['border_top_right_radius'] = self.borderRadius
 
         elif self.direction == 'down':
-            border_radius['border_bottom_left_radius'] = self.borderRadius
-            border_radius['border_bottom_right_radius'] = self.borderRadius
+            borderRadius['border_bottom_left_radius'] = self.borderRadius
+            borderRadius['border_bottom_right_radius'] = self.borderRadius
 
         elif self.direction == 'right':
-            border_radius['border_top_right_radius'] = self.borderRadius
-            border_radius['border_bottom_right_radius'] = self.borderRadius
+            borderRadius['border_top_right_radius'] = self.borderRadius
+            borderRadius['border_bottom_right_radius'] = self.borderRadius
 
         elif self.direction == 'left':
-            border_radius['border_top_left_radius'] = self.borderRadius
-            border_radius['border_bottom_left_radius'] = self.borderRadius
+            borderRadius['border_top_left_radius'] = self.borderRadius
+            borderRadius['border_bottom_left_radius'] = self.borderRadius
 
-        return border_radius
+        return borderRadius
 
     @property
     def text(self):
         return self.__text
 
     @text.setter
-    def text(self, new_text):
-        if isinstance(new_text, str):
-            self.__text = new_text
+    def text(self, newText):
+        if isinstance(newText, str):
+            self.__text = newText
         else:
             raise TypeError('Wrong type for \'text\' property, str is expected')
 
@@ -277,33 +284,33 @@ class DropdownChoice(WidgetBase):
         return self.__last
 
     @last.setter
-    def last(self, new_last):
-        if isinstance(new_last, bool):
-            self.__last = new_last
+    def last(self, newLast):
+        if isinstance(newLast, bool):
+            self.__last = newLast
         else:
             raise TypeError('Wrong type for \'last\' property, boolean is expected')
 
     @direction.setter
-    def direction(self, new_direction):
-        if isinstance(new_direction, str):
-            self.__direction = new_direction
+    def direction(self, newDirection):
+        if isinstance(newDirection, str):
+            self.__direction = newDirection
         else:
             raise TypeError('Wrong type for \'direction\' property, str is expected')
 
     @property
     def computedX(self):
-        return self._drop.getX() + self._x
+        return self._dropdown.getX() + self._x
 
     @property
     def computedY(self):
-        return self._drop.getY() + self._y
+        return self._dropdown.getY() + self._y
 
 
 class HeadDropdown(DropdownChoice):
-    def __init__(self, win, x, y, width, height, text, drop, **kwargs):
+    def __init__(self, win, x, y, width, height, text, dropdown, **kwargs):
         super().__init__(
             win, x, y, width, height,
-            text, drop, True,
+            text, dropdown, last=True,
             **kwargs
         )
         self.__head_text = text
@@ -314,29 +321,28 @@ class HeadDropdown(DropdownChoice):
         :param events: Use pygame.event.get()
         :type events: list of pygame.event.Event
         """
-        if not self._hidden:
-            pressed = pygame.mouse.get_pressed()[0]
-            right_click_pressed = pygame.mouse.get_pressed()[2]
-            x, y = pygame.mouse.get_pos()
+        if not self._hidden and not self._disabled:
+            mouseState = Mouse.getMouseState()
+            x, y = Mouse.getMousePos()
 
             if self.contains(x, y):
-                if pressed:
+                if mouseState == MouseState.CLICK:
+                    self.clicked = True
+                    self._dropdown.toggleDropped()
+
+                elif mouseState == MouseState.DRAG and self.clicked:
                     self.colour = self.pressedColour
-                    if not self.clicked:
-                        self.clicked = True
 
-                        self._drop.dropped = not self._drop.dropped
-
-                elif self.clicked:
+                elif mouseState == MouseState.RELEASE:
                     self.clicked = False
 
-                else:
+                elif mouseState == MouseState.HOVER or mouseState == MouseState.DRAG:
                     self.colour = self.hoverColour
 
-                if right_click_pressed:
-                    self._drop.reset()
+                elif mouseState == MouseState.RIGHT_CLICK:
+                    self._dropdown.reset()
 
-            elif not pressed:
+            else:
                 self.clicked = False
                 self.colour = self.inactiveColour
 
@@ -344,7 +350,7 @@ class HeadDropdown(DropdownChoice):
         borderRadius = {}
         if not self.last:
             return borderRadius
-        if self._drop.dropped:
+        if self._dropdown.isDropped():
             if self.direction == 'up':
                 borderRadius['border_bottom_left_radius'] = self.borderRadius
                 borderRadius['border_bottom_right_radius'] = self.borderRadius
@@ -370,7 +376,7 @@ class HeadDropdown(DropdownChoice):
 
     @property
     def text(self):
-        return self._drop.chosen.text if self._drop.chosen is not None else self.__head_text
+        return self._dropdown.chosen.text if self._dropdown.chosen is not None else self.__head_text
 
 
 if __name__ == '__main__':
@@ -392,7 +398,7 @@ if __name__ == '__main__':
 
 
     button = Button(
-        win, 10, 10, 100, 50, text='Print Value', fontSize=30,
+        win, 120, 100, 100, 50, text='Print Value', fontSize=30,
         margin=20, inactiveColour=(255, 0, 0), pressedColour=(0, 255, 0),
         radius=5, onClick=printValue, font=pygame.font.SysFont('calibri', 10),
         textVAlign='bottom'
