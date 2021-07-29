@@ -1,4 +1,5 @@
 import pygame_widgets
+from pygame_widgets import Mouse
 from pygame_widgets.widget import WidgetBase
 from pygame_widgets.textbox import TextBox
 from pygame_widgets.dropdown import Dropdown, DropdownChoice
@@ -74,7 +75,7 @@ class ComboBox(Dropdown):
         """Create the widgets for the choices."""
         # We create the DropdownChoice(s)
         direction = kwargs.get('direction', 'down')
-        self.__choiceWidgets = []
+        self.__choices = []
         for i, text in enumerate(self.choices):
             if i == self.maxResults:
                 return
@@ -95,10 +96,10 @@ class ComboBox(Dropdown):
                 x = -(i + 1) * width
                 y = 0
 
-            self.__choiceWidgets.append(
+            self.__choices.append(
                 DropdownChoice(
                     self.win, x, y, width, height,
-                    text=text, drop=self, value=i,
+                    text=text, dropdown=self, value=i,
                     last=(i == self.maxResults - 1),
                     **kwargs,
                 )
@@ -115,8 +116,8 @@ class ComboBox(Dropdown):
             previouslySelected = self.textBar.selected
             self.textBar.listen(events)
 
-            if self.dropped:
-                for dropdownChoice in self.__choiceWidgets:
+            if self._dropped:
+                for dropdownChoice in self.__choices:
                     dropdownChoice.listen(events)
                     if dropdownChoice.clicked:
                         # The choice was clicked by user
@@ -126,7 +127,7 @@ class ComboBox(Dropdown):
             # Whether the search is started or stopped
             if previouslySelected and not self.textBar.selected:
                 self.onStopSearch(*self.onStopSearchParams)
-                self.dropped = False
+                self._dropped = False
 
             if not previouslySelected and self.textBar.selected:
                 self.onStartSearch(*self.onStartSearchParams)
@@ -136,18 +137,23 @@ class ComboBox(Dropdown):
         """Draw the widget."""
         if not self._hidden:
             self.textBar.draw()
-            if self.dropped:
+            if self._dropped:
                 # Find how many choices should be shown
                 numberVisible = min(len(self.suggestions), self.maxResults)
-                for i, dropdownChoice in enumerate(self.__choiceWidgets):
-                    # Define if the the drop down should be shown
+                for i, dropdownChoice in enumerate(self.__choices):
+                    # Define if the the dropdown should be shown
                     if i < numberVisible:
                         dropdownChoice.show()
+                        self.moveToTop()
                         # Choose the text to show
                         dropdownChoice.text = self.suggestions[i]
                     else:
                         dropdownChoice.hide()
                     dropdownChoice.draw()
+
+    def contains(self, x, y):
+        return super(Dropdown, self).contains(x, y) or\
+               (any([c.contains(x, y) for c in self.__choices]) and self._dropped)
 
     def updateSearchResults(self):
         """Update the suggested results based on selected text.
@@ -155,15 +161,14 @@ class ComboBox(Dropdown):
         Uses a 'contains' research. Could be improved by other
         search algorithms.
         """
-
         text = self.textBar.getText()
 
         if text != '':
             # Finds all the texts that start with the same text
             self.suggestions = self._searchAlgo(text, self.choices)
-            self.dropped = True
+            self._dropped = True
         else:
-            self.dropped = False
+            self._dropped = False
 
     def _searchAlgo(self, text, choices):
         """Return the suggestions of text in choices."""
@@ -194,7 +199,7 @@ if __name__ == '__main__':
     win = pygame.display.set_mode((600, 600))
 
     comboBox = ComboBox(
-        win, 120, 10, 250, 50, name='Select Color',
+        win, 120, 10, 250, 50, name='Select Colour',
         choices=pygame.colordict.THECOLORS.keys(),
         maxResults=4,
         font=pygame.font.SysFont('calibri', 30),
@@ -208,7 +213,7 @@ if __name__ == '__main__':
 
 
     button = Button(
-        win, 10, 10, 100, 50, text='Set Color', fontSize=30,
+        win, 120, 100, 100, 50, text='Set Colour', fontSize=30,
         margin=15, inactiveColour=(200, 0, 100), pressedColour=(0, 255, 0),
         radius=5, onClick=output, font=pygame.font.SysFont('calibri', 18),
         textVAlign='bottom'

@@ -2,6 +2,8 @@ from abc import abstractmethod, ABC
 
 from pygame.event import Event
 
+from pygame_widgets.mouse import Mouse
+
 
 class WidgetBase(ABC):
     def __init__(self, win, x, y, width, height, isSubWidget=False):
@@ -23,6 +25,7 @@ class WidgetBase(ABC):
         self._y = y
         self._width = width
         self._height = height
+        self._isSubWidget = isSubWidget
 
         self._hidden = False
         self._disabled = False
@@ -47,12 +50,20 @@ class WidgetBase(ABC):
 
     def show(self):
         self._hidden = False
+        if not self._isSubWidget:
+            WidgetHandler.moveToTop(self)
 
     def disable(self):
         self._disabled = True
 
     def enable(self):
         self._disabled = False
+
+    def isSubWidget(self):
+        return self._isSubWidget
+
+    def moveToTop(self):
+        WidgetHandler.moveToTop(self)
 
     def moveX(self, x):
         self._x += x
@@ -122,18 +133,32 @@ class WidgetBase(ABC):
 
 
 class WidgetHandler:
-    _activeWidgets = []
+    _widgets: [WidgetBase] = []
 
     @staticmethod
     def main(events: [Event]) -> None:
-        for widget in WidgetHandler._activeWidgets:
-            widget.listen(events)
+        blocked = False
+
+        for widget in WidgetHandler._widgets[::-1]:
+            if not blocked or not widget.contains(*Mouse.getMousePos()):
+                widget.listen(events)
+
+            # Ensure widgets covered by others are not affected (widgets created later)
+            if widget.contains(*Mouse.getMousePos()):  # TODO: Unless 'transparent'
+                blocked = True
+
+        for widget in WidgetHandler._widgets:
             widget.draw()
 
     @staticmethod
     def addWidget(widget: WidgetBase) -> None:
-        WidgetHandler._activeWidgets.insert(0, widget)
+        WidgetHandler._widgets.append(widget)
 
     @staticmethod
-    def getActiveWidgets() -> [WidgetBase]:
-        return WidgetHandler._activeWidgets
+    def moveToTop(widget: WidgetBase):
+        WidgetHandler._widgets.remove(widget)
+        WidgetHandler.addWidget(widget)
+
+    @staticmethod
+    def getWidgets() -> [WidgetBase]:
+        return WidgetHandler._widgets
