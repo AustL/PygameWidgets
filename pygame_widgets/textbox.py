@@ -224,7 +224,7 @@ class TextBox(WidgetBase):
                 except IndexError:
                     self.cursorPosition -= 1
 
-            if x[self.cursorPosition] > self._x + self._width - self.textOffsetRight:
+            if x[-1] > self._x + self._width - self.textOffsetRight:
                 self.maxLengthReached = True
 
     def updateCursor(self):
@@ -260,6 +260,7 @@ class TextBox(WidgetBase):
     def setText(self, text):
         self.text = [c for c in str(text)]
         self.cursorPosition = len(self.text)
+        self.maxLengthReached = False
 
     def getText(self):
         return ''.join(self.text)
@@ -267,7 +268,7 @@ class TextBox(WidgetBase):
 
 if __name__ == '__main__':
     def output():
-        print(textbox.getText())
+        print(len(textbox.getText()))
         textbox.setText('')
 
 
