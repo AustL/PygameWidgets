@@ -68,7 +68,6 @@ class Dropdown(WidgetBase):
         :param events: Use pygame.event.get()
         :type events: list of pygame.event.Event
         """
-
         if not self._hidden and not self._disabled:
             mouseState = Mouse.getMouseState()
             x, y = Mouse.getMousePos()
@@ -76,6 +75,7 @@ class Dropdown(WidgetBase):
             if self.contains(x, y):
                 if mouseState == MouseState.CLICK:
                     self.onClick(*self.onClickParams)
+
                 elif mouseState == MouseState.RELEASE:
                     self.onRelease(*self.onReleaseParams)
 
@@ -314,29 +314,28 @@ class HeadDropdown(DropdownChoice):
         :param events: Use pygame.event.get()
         :type events: list of pygame.event.Event
         """
-        if not self._hidden:
-            pressed = pygame.mouse.get_pressed()[0]
-            right_click_pressed = pygame.mouse.get_pressed()[2]
-            x, y = pygame.mouse.get_pos()
+        if not self._hidden and not self._disabled:
+            mouseState = Mouse.getMouseState()
+            x, y = Mouse.getMousePos()
 
             if self.contains(x, y):
-                if pressed:
+                if mouseState == MouseState.CLICK:
+                    self.clicked = True
+                    self._drop.dropped = not self._drop.dropped
+
+                elif mouseState == MouseState.DRAG and self.clicked:
                     self.colour = self.pressedColour
-                    if not self.clicked:
-                        self.clicked = True
 
-                        self._drop.dropped = not self._drop.dropped
-
-                elif self.clicked:
+                elif mouseState == MouseState.RELEASE:
                     self.clicked = False
 
-                else:
+                elif mouseState == MouseState.HOVER or mouseState == MouseState.DRAG:
                     self.colour = self.hoverColour
 
-                if right_click_pressed:
+                elif mouseState == MouseState.RIGHT_CLICK:
                     self._drop.reset()
 
-            elif not pressed:
+            else:
                 self.clicked = False
                 self.colour = self.inactiveColour
 
