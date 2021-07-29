@@ -125,6 +125,10 @@ class Dropdown(WidgetBase):
                 'Wrong type for \'chosen\' property, DropdownChoice is expected'
             )
 
+    def setDropped(self, drop):
+        if drop != self._dropped:
+            self.toggleDropped()
+
 
 class DropdownChoice(WidgetBase):
     def __init__(self, win, x, y, width, height, text: str, dropdown: Dropdown, last: bool, **kwargs):
@@ -215,7 +219,7 @@ class DropdownChoice(WidgetBase):
             if self.contains(x, y):
                 if mouseState == MouseState.RELEASE and self.clicked:
                     self.clicked = False
-                    self._dropdown.dropped = False
+                    self._dropdown.setDropped(False)
                     self._dropdown.chosen = self
 
                 elif mouseState == MouseState.CLICK:

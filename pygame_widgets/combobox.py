@@ -12,9 +12,7 @@ class ComboBox(Dropdown):
             textboxKwargs=None,
             **kwargs
     ):
-        """Initialise a customisable combo box for Pygame.
-
-        The bar can be written on, and displays under it the results.
+        """Initialise a customisable combo box for Pygame. Acts like a searchable dropdown.
 
         :param win: Surface on which to draw
         :type win: pygame.Surface
@@ -213,7 +211,7 @@ if __name__ == '__main__':
 
 
     button = Button(
-        win, 120, 100, 100, 50, text='Set Colour', fontSize=30,
+        win, 10, 10, 100, 50, text='Set Colour', fontSize=30,
         margin=15, inactiveColour=(200, 0, 100), pressedColour=(0, 255, 0),
         radius=5, onClick=output, font=pygame.font.SysFont('calibri', 18),
         textVAlign='bottom'
