@@ -392,7 +392,7 @@ if __name__ == '__main__':
 
 
     button = Button(
-        win, 10, 10, 100, 50, text='Print Value', fontSize=30,
+        win, 120, 100, 100, 50, text='Print Value', fontSize=30,
         margin=20, inactiveColour=(255, 0, 0), pressedColour=(0, 255, 0),
         radius=5, onClick=printValue, font=pygame.font.SysFont('calibri', 10),
         textVAlign='bottom'

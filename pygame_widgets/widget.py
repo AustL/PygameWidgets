@@ -1,5 +1,7 @@
 from abc import abstractmethod, ABC
 
+from pygame.event import Event
+
 
 class WidgetBase(ABC):
     def __init__(self, win, x, y, width, height, isSubWidget=False):
@@ -120,12 +122,18 @@ class WidgetBase(ABC):
 
 
 class WidgetHandler:
-    activeWidgets = []
+    _activeWidgets = []
 
     @staticmethod
-    def addWidget(widget: WidgetBase):
-        WidgetHandler.activeWidgets.append(widget)
+    def main(events: [Event]) -> None:
+        for widget in WidgetHandler._activeWidgets:
+            widget.listen(events)
+            widget.draw()
+
+    @staticmethod
+    def addWidget(widget: WidgetBase) -> None:
+        WidgetHandler._activeWidgets.insert(0, widget)
 
     @staticmethod
     def getActiveWidgets() -> [WidgetBase]:
-        return WidgetHandler.activeWidgets
+        return WidgetHandler._activeWidgets
