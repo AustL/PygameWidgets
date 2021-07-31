@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        
+        <link rel="shortcut icon" href="../img/favicon.ico">
+        <title>Button - My Docs</title>
+        <link href="../css/bootstrap.min.css" rel="stylesheet">
+        <link href="../css/font-awesome.min.css" rel="stylesheet">
+        <link href="../css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css">
+
+        <script src="../js/jquery-1.10.2.min.js" defer></script>
+        <script src="../js/bootstrap.min.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script> 
+    </head>
+
+    <body>
+        <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
+            <div class="container">
+                <a class="navbar-brand" href="..">My Docs</a>
+                <!-- Expander button -->
+                <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbar-collapse">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Expanded navigation -->
+                <div id="navbar-collapse" class="navbar-collapse collapse">
+                        <!-- Main navigation -->
+                        <ul class="nav navbar-nav">
+                            <li class="navitem">
+                                <a href=".." class="nav-link">Pygame Widgets</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="../animations/" class="nav-link">Animations</a>
+                            </li>
+                            <li class="navitem active">
+                                <a href="./" class="nav-link">Button</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="../buttonarray/" class="nav-link">ButtonArray</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="../combobox/" class="nav-link">ComboBox</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="../common/" class="nav-link">Common</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="../dropdown/" class="nav-link">Dropdown</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="../progressbar/" class="nav-link">Progress Bar</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="../slider/" class="nav-link">Slider</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="../textbox/" class="nav-link">TextBox</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="../toggle/" class="nav-link">Toggle</a>
+                            </li>
+                        </ul>
+
+                    <ul class="nav navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-toggle="modal" data-target="#mkdocs_search_modal">
+                                <i class="fa fa-search"></i> Search
+                            </a>
+                        </li>
+                            <li class="nav-item">
+                                <a rel="prev" href="../animations/" class="nav-link">
+                                    <i class="fa fa-arrow-left"></i> Previous
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a rel="next" href="../buttonarray/" class="nav-link">
+                                    Next <i class="fa fa-arrow-right"></i>
+                                </a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                    <div class="col-md-3"><div class="navbar-light navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#toc-collapse" title="Table of Contents">
+            <span class="fa fa-angle-down"></span>
+        </button>
+    </div>
+
+    
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-secondary">
+        <ul class="nav flex-column">
+            
+            <li class="nav-item" data-level="1"><a href="#button" class="nav-link">Button</a>
+              <ul class="nav flex-column">
+            <li class="nav-item" data-level="2"><a href="#example-usage" class="nav-link">Example Usage</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#optional-parameters" class="nav-link">Optional Parameters</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+              </ul>
+            </li>
+        </ul>
+    </div>
+</div></div>
+                    <div class="col-md-9" role="main">
+
+<h1 id="button">Button</h1>
+<p>A button that allows fully customisable text, images, colours and functions.</p>
+<h2 id="example-usage">Example Usage</h2>
+<p><em>Note: See <a href="../examples/button_example.py">example</a></em></p>
+<pre><code class="language-Python">import pygame
+from pygame_widgets import Button
+
+# Set up Pygame
+pygame.init()
+win = pygame.display.set_mode((600, 600))
+
+# Creates the button with optional parameters
+button = Button(
+    # Mandatory Parameters
+    win,  # Surface to place button on
+    100,  # X-coordinate of top left corner
+    100,  # Y-coordinate of top left corner
+    300,  # Width
+    150,  # Height
+
+    # Optional Parameters
+    text='Hello',  # Text to display
+    fontSize=50,  # Size of font
+    margin=20,  # Minimum distance between text/image and edge of button
+    inactiveColour=(255, 0, 0),  # Colour of button when not being interacted with
+    hoverColour=(200, 0, 0),  # Colour of button when being hovered over
+    pressedColour=(0, 255, 0),  # Colour of button when being clicked
+    radius=20,  # Radius of border corners (leave empty for not curved)
+    onClick=lambda: print('Click')  # Function to call when clicked on
+)
+
+run = True
+while run:
+    events = pygame.event.get()
+    for event in events:
+        if event.type == pygame.QUIT:
+            pygame.quit()
+            run = False
+            quit()
+
+    win.fill((255, 255, 255))
+
+    # Allows button to check for clicks/events
+    button.listen(events)
+
+    # Renders button to screen
+    button.draw()
+
+    pygame.display.update()
+</code></pre>
+<p>This button will be placed at (100, 100) with a width of 300 and a height of 150, display the text 'Hello' with font
+size 50, leaving a margin of 20 and a radius of 20. When hovered over, the button changes to a darker red.
+When clicked, the button will change colour from red to green and 'Click' will be printed to the console.</p>
+<h2 id="optional-parameters">Optional Parameters</h2>
+<table>
+<thead>
+<tr>
+<th align="center">Parameter</th>
+<th>Description</th>
+<th align="center">Type</th>
+<th align="center">Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">inactiveColour</td>
+<td>Default colour when not pressed or hovered over.</td>
+<td align="center">(int, int, int)</td>
+<td align="center">(150, 150, 150)</td>
+</tr>
+<tr>
+<td align="center">pressedColour</td>
+<td>Colour when pressed.</td>
+<td align="center">(int, int, int)</td>
+<td align="center">(100, 100, 100)</td>
+</tr>
+<tr>
+<td align="center">hoverColour</td>
+<td>Colour when hovered over.</td>
+<td align="center">(int, int, int)</td>
+<td align="center">(125, 125, 125)</td>
+</tr>
+<tr>
+<td align="center">shadowDistance</td>
+<td>Distance to projected shadow. Set to 0 if no shadow desired.</td>
+<td align="center">int</td>
+<td align="center">0</td>
+</tr>
+<tr>
+<td align="center">shadowColour</td>
+<td>Colour of shadow</td>
+<td align="center">(int, int, int)</td>
+<td align="center">(210, 210, 180)</td>
+</tr>
+<tr>
+<td align="center">onClick</td>
+<td>Function to be called when clicked.</td>
+<td align="center">function</td>
+<td align="center">None</td>
+</tr>
+<tr>
+<td align="center">onClickParams</td>
+<td>Parameters to be fed into onClick function.</td>
+<td align="center">(*any)</td>
+<td align="center">()</td>
+</tr>
+<tr>
+<td align="center">onRelease</td>
+<td>Function to be called when released.</td>
+<td align="center">function</td>
+<td align="center">None</td>
+</tr>
+<tr>
+<td align="center">onReleaseParams</td>
+<td>Parameters to be fed into onRelease function.</td>
+<td align="center">(*any)</td>
+<td align="center">()</td>
+</tr>
+<tr>
+<td align="center">textColour</td>
+<td>Colour of text.</td>
+<td align="center">(int, int, int)</td>
+<td align="center">(0, 0, 0)</td>
+</tr>
+<tr>
+<td align="center">fontSize</td>
+<td>Size of text.</td>
+<td align="center">int</td>
+<td align="center">20</td>
+</tr>
+<tr>
+<td align="center">text</td>
+<td>String to be displayed.</td>
+<td align="center">str</td>
+<td align="center">''</td>
+</tr>
+<tr>
+<td align="center">font</td>
+<td>Font of text.</td>
+<td align="center">pygame.font.Font</td>
+<td align="center">Calibri</td>
+</tr>
+<tr>
+<td align="center">textHAlign</td>
+<td>Horizontal alignment of text. Can be 'centre', 'left' or 'right'.</td>
+<td align="center">str</td>
+<td align="center">'centre'</td>
+</tr>
+<tr>
+<td align="center">textVAlign</td>
+<td>Vertical alignment of text. Can be 'centre', 'top' or 'bottom'.</td>
+<td align="center">str</td>
+<td align="center">'centre'</td>
+</tr>
+<tr>
+<td align="center">margin</td>
+<td>Minimum distance between text / image and edge.</td>
+<td align="center">int</td>
+<td align="center">20</td>
+</tr>
+<tr>
+<td align="center">image</td>
+<td>Image to be displayed.</td>
+<td align="center">pygame.Surface</td>
+<td align="center">None</td>
+</tr>
+<tr>
+<td align="center">imageHAlign</td>
+<td>Horizontal alignment of image. Can be 'centre', 'left' or 'right'.</td>
+<td align="center">str</td>
+<td align="center">'centre'</td>
+</tr>
+<tr>
+<td align="center">imageVAlign</td>
+<td>Vertical alignment of image. Can be 'centre', 'top' or 'bottom'.</td>
+<td align="center">str</td>
+<td align="center">'centre'</td>
+</tr>
+<tr>
+<td align="center">radius</td>
+<td>Border radius. Set to half of width for circular button. Set to 0 for no radius.</td>
+<td align="center">int</td>
+<td align="center">0</td>
+</tr>
+</tbody>
+</table></div>
+            </div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script>
+            var base_url = "..",
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
+        </script>
+        <script src="../js/base.js" defer></script>
+        <script src="../search/main.js" defer></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="searchModalLabel">Search</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+                <p>From here you can search these documents. Enter your search terms below.</p>
+                <form>
+                    <div class="form-group">
+                        <input type="search" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results" data-no-results-text="No results found"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>
