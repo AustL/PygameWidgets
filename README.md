@@ -33,6 +33,8 @@ If you receive no errors, the installation was successful.
 
 ## Usage
 
+For full documentation, see [pygamewidgets.readthedocs.io](https://pygamewidgets.readthedocs.io/en/latest/).
+
 * [Common](docs/common.md)
 * [Button](docs/button.md)
 * [ButtonArray](docs/buttonarray.md)
