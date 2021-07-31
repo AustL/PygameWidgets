@@ -31,7 +31,7 @@ _Note: If ever in doubt, check the existing code._
 * **SINGLE** quotes for 'strings'
 * Double quotes for """docstrings""" only
 * Extracting keyword arguments should be done with _kwargs.get('key', default)_
-* Only use built-in exceptions if logical, otherwise create a custom exception in [exceptions.py](../pygame_widgets/exceptions/exceptions.py)
+* Only use built-in exceptions if logical, otherwise create a custom exception in <a href="https://github.com/AustL/PygameWidgets/blob/master/pygame_widgets/exceptions/exceptions.py" target="_blank">exceptions.py</a>
 
 ## Documentation
 * Docstrings should include a short description of the function or class followed by parameter descriptions and types
