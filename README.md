@@ -35,16 +35,16 @@ If you receive no errors, the installation was successful.
 
 For full documentation, see [pygamewidgets.readthedocs.io](https://pygamewidgets.readthedocs.io/en/latest/).
 
-* [Common](docs/common.md)
-* [Button](docs/button.md)
-* [ButtonArray](docs/buttonarray.md)
-* [TextBox](docs/textbox.md)
-* [Slider](docs/slider.md)
-* [Toggle](docs/toggle.md)
-* [ProgressBar](docs/progressbar.md)
-* [Dropdown](docs/dropdown.md)
-* [ComboBox](docs/combobox.md)
-* [Animations](docs/animations.md)
+* [Common](docs/widgets/common.md)
+* [Button](docs/widgets/button.md)
+* [ButtonArray](docs/widgets/buttonarray.md)
+* [TextBox](docs/widgets/textbox.md)
+* [Slider](docs/widgets/slider.md)
+* [Toggle](docs/widgets/toggle.md)
+* [ProgressBar](docs/widgets/progressbar.md)
+* [Dropdown](docs/widgets/dropdown.md)
+* [ComboBox](docs/widgets/combobox.md)
+* [Animations](docs/animations/animations.md)
 
 ## How to Contribute
 
