@@ -68,13 +68,15 @@ class Slider(WidgetBase):
             if self.vertical:
                 if self.curved:
                     pygame.draw.circle(self.win, self.colour, (self._x + self._width // 2, self._y), self.radius)
-                    pygame.draw.circle(self.win, self.colour, (self._x + self._width // 2, self._y + self._height), self.radius)
+                    pygame.draw.circle(self.win, self.colour, (self._x + self._width // 2, self._y + self._height),
+                                       self.radius)
                 circle = (self._x + self._width // 2,
                           int(self._y + (self.max - self.value) / (self.max - self.min) * self._height))
             else:
                 if self.curved:
                     pygame.draw.circle(self.win, self.colour, (self._x, self._y + self._height // 2), self.radius)
-                    pygame.draw.circle(self.win, self.colour, (self._x + self._width, self._y + self._height // 2), self.radius)
+                    pygame.draw.circle(self.win, self.colour, (self._x + self._width, self._y + self._height // 2),
+                                       self.radius)
                 circle = (int(self._x + (self.value - self.min) / (self.max - self.min) * self._width),
                           self._y + self._height // 2)
 

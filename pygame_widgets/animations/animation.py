@@ -3,7 +3,7 @@ import time
 import pygame
 
 import pygame_widgets
-from pygame_widgets.exceptions.exceptions import InvalidParameter, InvalidParameterType
+from pygame_widgets.exceptions import InvalidParameter, InvalidParameterType
 
 
 class AnimationBase:
@@ -69,7 +69,8 @@ class AnimationBase:
             # Tuple animation
             for param, initialTuple in initialTupleParams.items():
                 target = self.params[param]
-                newValue = tuple(initialTuple[i] + step * (target[i] - initialTuple[i]) for i in range(len(initialTuple)))
+                newValue = tuple(
+                    initialTuple[i] + step * (target[i] - initialTuple[i]) for i in range(len(initialTuple)))
                 self.widget.set(param, newValue)
 
         # Ensure value is exactly correct at end
@@ -96,6 +97,7 @@ class Recolour(AnimationBase):
 
 if __name__ == '__main__':
     from pygame_widgets.button import Button
+
 
     def animate():
         resize.start()

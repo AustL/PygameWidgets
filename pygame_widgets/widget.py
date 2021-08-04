@@ -42,7 +42,7 @@ class WidgetBase(ABC):
         pass
 
     def contains(self, x, y):
-        return (self._x < x - self.win.get_abs_offset()[0] < self._x + self._width) and\
+        return (self._x < x - self.win.get_abs_offset()[0] < self._x + self._width) and \
                (self._y < y - self.win.get_abs_offset()[1] < self._y + self._height)
 
     def hide(self):

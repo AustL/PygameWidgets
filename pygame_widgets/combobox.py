@@ -150,7 +150,7 @@ class ComboBox(Dropdown):
                     dropdownChoice.draw()
 
     def contains(self, x, y):
-        return super(Dropdown, self).contains(x, y) or\
+        return super(Dropdown, self).contains(x, y) or \
                (any([c.contains(x, y) for c in self.__choices]) and self._dropped)
 
     def updateSearchResults(self):
