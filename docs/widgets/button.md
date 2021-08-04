@@ -8,7 +8,9 @@ A button that allows fully customisable text, images, colours and functions.
 
 ```Python
 import pygame
-from pygame_widgets import Button
+
+import pygame_widgets
+from pygame_widgets.button import Button
 
 # Set up Pygame
 pygame.init()
@@ -27,9 +29,9 @@ button = Button(
     text='Hello',  # Text to display
     fontSize=50,  # Size of font
     margin=20,  # Minimum distance between text/image and edge of button
-    inactiveColour=(255, 0, 0),  # Colour of button when not being interacted with
-    hoverColour=(200, 0, 0),  # Colour of button when being hovered over
-    pressedColour=(0, 255, 0),  # Colour of button when being clicked
+    inactiveColour=(200, 50, 0),  # Colour of button when not being interacted with
+    hoverColour=(150, 0, 0),  # Colour of button when being hovered over
+    pressedColour=(0, 200, 20),  # Colour of button when being clicked
     radius=20,  # Radius of border corners (leave empty for not curved)
     onClick=lambda: print('Click')  # Function to call when clicked on
 )
@@ -45,12 +47,7 @@ while run:
 
     win.fill((255, 255, 255))
 
-    # Allows button to check for clicks/events
-    button.listen(events)
-
-    # Renders button to screen
-    button.draw()
-
+    pygame_widgets.update(events)  # Call once every loop to allow widgets to render and listen
     pygame.display.update()
 ```
 

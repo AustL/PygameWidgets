@@ -1,5 +1,7 @@
 import pygame
-from pygame_widgets import ButtonArray
+
+import pygame_widgets
+from pygame_widgets.button import ButtonArray
 
 # Set up Pygame
 pygame.init()
@@ -15,7 +17,9 @@ buttonArray = ButtonArray(
     500,  # Height
     (2, 2),  # Shape: 2 buttons wide, 2 buttons tall
     border=100,  # Distance between buttons and edge of array
-    texts=('1', '2', '3', '4')  # Sets the texts of each button (counts left to right then top to bottom)
+    texts=('1', '2', '3', '4'),  # Sets the texts of each button (counts left to right then top to bottom)
+    # When clicked, print number
+    onClicks=(lambda: print('1'), lambda: print('2'), lambda: print('3'), lambda: print('4'))
 )
 
 run = True
@@ -29,10 +33,5 @@ while run:
 
     win.fill((255, 255, 255))
 
-    # Allows button array to check for clicks/events
-    buttonArray.listen(events)
-
-    # Renders button array to screen
-    buttonArray.draw()
-
+    pygame_widgets.update(events)  # Call once every loop to allow widgets to render and listen
     pygame.display.update()
