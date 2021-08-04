@@ -5,8 +5,9 @@ Allows switching between true and false options
 ## Example Usage
 
 ```Python
+import pygame_widgets
 import pygame
-from pygame_widgets import Toggle
+from pygame_widgets.toggle import Toggle
 
 pygame.init()
 win = pygame.display.set_mode((1000, 600))
@@ -24,9 +25,7 @@ while run:
 
     win.fill((255, 255, 255))
 
-    toggle.listen(events)
-    toggle.draw()
-
+    pygame_widgets.update(events)
     pygame.display.update()
 ```
 

@@ -5,9 +5,10 @@ Displays a continuously changing percentage
 ## Example Usage
 
 ```Python
+import pygame_widgets
 import pygame
 import time
-from pygame_widgets import ProgressBar
+from pygame_widgets.progressbar import ProgressBar
 
 startTime = time.time()
 
@@ -27,8 +28,7 @@ while run:
 
     win.fill((255, 255, 255))
 
-    progressBar.draw()
-
+    pygame_widgets.update(events)
     pygame.display.update()
 ```
 

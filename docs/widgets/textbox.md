@@ -7,8 +7,9 @@ A box for text input or display
 ## Example Usage
 
 ```Python
+import pygame_widgets
 import pygame
-from pygame_widgets import TextBox
+from pygame_widgets.textbox import TextBox
 
 
 def output():
@@ -34,9 +35,7 @@ while run:
 
     win.fill((255, 255, 255))
 
-    textbox.listen(events)
-    textbox.draw()
-
+    pygame_widgets.update(events)
     pygame.display.update()
 ```
 

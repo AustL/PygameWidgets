@@ -5,8 +5,10 @@ A dropdown menu allowing the selection of various elements.
 ![dropdown.gif](../images/dropdown.gif)
 
 ```Python
+import pygame_widgets
 import pygame
-from pygame_widgets import Button, Dropdown
+from pygame_widgets.button import Button
+from pygame_widgets.dropdown import Dropdown
 
 pygame.init()
 win = pygame.display.set_mode((400, 280))
@@ -44,11 +46,7 @@ while run:
 
     win.fill((255, 255, 255))
 
-    dropdown.listen(events)
-    dropdown.draw()
-    button.listen(events)
-    button.draw()
-
+    pygame_widgets.update(events)
     pygame.display.update()
 ```
 

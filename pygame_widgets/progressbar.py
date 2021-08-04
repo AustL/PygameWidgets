@@ -19,6 +19,8 @@ class ProgressBar(WidgetBase):
 
         self.radius = self._height / 2 if self.curved else 0
 
+        self.disable()
+
     def listen(self, events):
         pass
 

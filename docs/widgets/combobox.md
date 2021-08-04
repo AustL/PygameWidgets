@@ -11,8 +11,11 @@ the `textboxKwargs` parameter.
 ![combobox.gif](../images/combobox.gif)
 
 ```Python
+import pygame_widgets
 import pygame
-from pygame_widgets import ComboBox, Button
+
+from pygame_widgets.combobox import ComboBox
+from pygame_widgets.button import Button
 
 pygame.init()
 win = pygame.display.set_mode((600, 600))
@@ -32,7 +35,7 @@ def output():
 
 
 button = Button(
-    win, 10, 10, 100, 50, text='Set Color', fontSize=30,
+    win, 10, 10, 100, 50, text='Set Colour', fontSize=30,
     margin=15, inactiveColour=(200, 0, 100), pressedColour=(0, 255, 0),
     radius=5, onClick=output, font=pygame.font.SysFont('calibri', 18),
     textVAlign='bottom'
@@ -49,11 +52,7 @@ while run:
 
     win.fill((255, 255, 255))
 
-    comboBox.listen(events)
-    comboBox.draw()
-    button.listen(events)
-    button.draw()
-
+    pygame_widgets.update(events)
     pygame.display.update()
 ```
 
