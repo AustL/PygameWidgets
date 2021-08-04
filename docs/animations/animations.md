@@ -6,8 +6,10 @@ directly.
 ## Example Usage
 
 ```Python
+import pygame_widgets
 import pygame
-from pygame_widgets import Button, Resize
+from pygame_widgets.button import Button
+from pygame_widgets.animations import Resize
 
 pygame.init()
 win = pygame.display.set_mode((600, 600))
@@ -28,9 +30,7 @@ while run:
 
     win.fill((255, 255, 255))
 
-    button.listen(events)
-    button.draw()
-
+    pygame_widgets.update(events)
     pygame.display.update()
 ```
 
