@@ -6,13 +6,50 @@ A helper module for common widgets that may be required in developing applicatio
 customisable buttons, collections of buttons, textboxes, sliders and many more! If there are any widgets that you would like to see
 added, please create an issue!
 
-## NEW FEATURES
+## Changes in Pygame Widgets v1.0.0
+In v1.0.0, there are some minor changes to the use of the module, which may affect existing projects.
+This outlines the changes that will affect current users in the new version.
 
-* Combo Box: Select options from a list that appears when typing into a search bar
-* Dropdown: Select options from a list that appears when hovered over
-* Progress Bar: Shows a percentage of completeness, great for loading screens and health bars
-* Toggle: Allows switching between two values, great for settings
-* Animations: Create an animation that changes a widgets attributes over some time, running on a separate thread
+* As more widgets are added, importing is now different
+```Python
+# Now
+from pygame_widgets.button import Button
+
+# Instead of
+from pygame_widgets import Button  # Will not work
+```
+* All widgets are now updated (draw and listen) by the update method
+
+```Python
+import pygame
+import pygame_widgets
+from pygame_widgets.button import Button
+
+pygame.init()
+win = pygame.display.set_mode((600, 600))
+button = Button(win, 100, 100, 300, 150)
+
+run = True
+while run:
+    events = pygame.event.get()
+    for event in events:
+        if event.type == pygame.QUIT:
+            pygame.quit()
+            run = False
+            quit()
+            
+    win.fill((255, 255, 255))
+    
+    # Now
+    pygame_widgets.update(events)
+    
+    # Instead of
+    button.listen(events)
+    button.draw()
+    
+    pygame.display.update()
+```
+
 
 ## Prerequisites
 
