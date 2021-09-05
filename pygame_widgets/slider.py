@@ -2,8 +2,9 @@ import pygame
 from pygame import gfxdraw
 import math
 
+import pygame_widgets
 from pygame_widgets.widget import WidgetBase
-from pygame_widgets import TextBox
+from pygame_widgets.mouse import Mouse, MouseState
 
 
 class Slider(WidgetBase):
@@ -41,12 +42,16 @@ class Slider(WidgetBase):
             self.handleRadius = kwargs.get('handleRadius', int(self._height / 1.3))
 
     def listen(self, events):
-        pressed = pygame.mouse.get_pressed()[0]
-        x, y = pygame.mouse.get_pos()
+        if not self._hidden and not self._disabled:
+            mouseState = Mouse.getMouseState()
+            x, y = Mouse.getMousePos()
 
-        if pressed:
             if self.contains(x, y):
-                self.selected = True
+                if mouseState == MouseState.CLICK:
+                    self.selected = True
+
+            if mouseState == MouseState.RELEASE:
+                self.selected = False
 
             if self.selected:
                 if self.vertical:
@@ -56,27 +61,27 @@ class Slider(WidgetBase):
                     self.value = self.round((x - self._x) / self._width * self.max + self.min)
                     self.value = max(min(self.value, self.max), self.min)
 
-        else:
-            self.selected = False
-
     def draw(self):
-        pygame.draw.rect(self.win, self.colour, (self._x, self._y, self._width, self._height))
+        if not self._hidden:
+            pygame.draw.rect(self.win, self.colour, (self._x, self._y, self._width, self._height))
 
-        if self.vertical:
-            if self.curved:
-                pygame.draw.circle(self.win, self.colour, (self._x + self._width // 2, self._y), self.radius)
-                pygame.draw.circle(self.win, self.colour, (self._x + self._width // 2, self._y + self._height), self.radius)
-            circle = (self._x + self._width // 2,
-                      int(self._y + (self.max - self.value) / (self.max - self.min) * self._height))
-        else:
-            if self.curved:
-                pygame.draw.circle(self.win, self.colour, (self._x, self._y + self._height // 2), self.radius)
-                pygame.draw.circle(self.win, self.colour, (self._x + self._width, self._y + self._height // 2), self.radius)
-            circle = (int(self._x + (self.value - self.min) / (self.max - self.min) * self._width),
-                      self._y + self._height // 2)
+            if self.vertical:
+                if self.curved:
+                    pygame.draw.circle(self.win, self.colour, (self._x + self._width // 2, self._y), self.radius)
+                    pygame.draw.circle(self.win, self.colour, (self._x + self._width // 2, self._y + self._height),
+                                       self.radius)
+                circle = (self._x + self._width // 2,
+                          int(self._y + (self.max - self.value) / (self.max - self.min) * self._height))
+            else:
+                if self.curved:
+                    pygame.draw.circle(self.win, self.colour, (self._x, self._y + self._height // 2), self.radius)
+                    pygame.draw.circle(self.win, self.colour, (self._x + self._width, self._y + self._height // 2),
+                                       self.radius)
+                circle = (int(self._x + (self.value - self.min) / (self.max - self.min) * self._width),
+                          self._y + self._height // 2)
 
-        gfxdraw.filled_circle(self.win, *circle, self.handleRadius, self.handleColour)
-        gfxdraw.aacircle(self.win, *circle, self.handleRadius, self.handleColour)
+            gfxdraw.filled_circle(self.win, *circle, self.handleRadius, self.handleColour)
+            gfxdraw.aacircle(self.win, *circle, self.handleRadius, self.handleColour)
 
     def contains(self, x, y):
         if self.vertical:
@@ -102,6 +107,8 @@ class Slider(WidgetBase):
 
 
 if __name__ == '__main__':
+    from pygame_widgets.textbox import TextBox
+
     pygame.init()
     win = pygame.display.set_mode((1000, 600))
 
@@ -110,6 +117,9 @@ if __name__ == '__main__':
 
     v_slider = Slider(win, 900, 200, 40, 300, min=0, max=99, step=1, vertical=True)
     v_output = TextBox(win, 800, 320, 50, 50, fontSize=30)
+
+    output.disable()
+    v_output.disable()
 
     run = True
     while run:
@@ -122,16 +132,8 @@ if __name__ == '__main__':
 
         win.fill((255, 255, 255))
 
-        slider.listen(events)
-        v_slider.listen(events)
-
-        slider.draw()
-        v_slider.draw()
-
         output.setText(slider.getValue())
         v_output.setText(v_slider.getValue())
 
-        output.draw()
-        v_output.draw()
-
+        pygame_widgets.update(events)
         pygame.display.update()

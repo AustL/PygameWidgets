@@ -1,10 +1,12 @@
 import pygame
 
+import pygame_widgets
 from pygame_widgets.widget import WidgetBase
+from pygame_widgets.mouse import Mouse, MouseState
 
 
 class Button(WidgetBase):
-    def __init__(self, win, x, y, width, height, **kwargs):
+    def __init__(self, win, x, y, width, height, isSubWidget=False, **kwargs):
         """ A customisable button for Pygame
 
         :param win: Surface on which to draw
@@ -19,13 +21,14 @@ class Button(WidgetBase):
         :type height: int
         :param kwargs: Optional parameters
         """
-        super().__init__(win, x, y, width, height)
+        super().__init__(win, x, y, width, height, isSubWidget)
 
         # Colour
         self.inactiveColour = kwargs.get('inactiveColour', (150, 150, 150))
         self.hoverColour = kwargs.get('hoverColour', (125, 125, 125))
         self.pressedColour = kwargs.get('pressedColour', (100, 100, 100))
-        self.colour = self.inactiveColour
+        self.colour = kwargs.get('colour', self.inactiveColour)  # Allows colour to override inactiveColour
+        self.inactiveColour = self.colour
         self.shadowDistance = kwargs.get('shadowDistance', 0)
         self.shadowColour = kwargs.get('shadowColour', (210, 210, 180))
 
@@ -58,7 +61,13 @@ class Button(WidgetBase):
             self.imageRect = self.image.get_rect()
             self.alignImageRect()
 
-        # Shape
+        # Border
+        self.borderThickness = kwargs.get('borderThickness', 0)
+        self.inactiveBorderColour = kwargs.get('inactiveBorderColour', (0, 0, 0))
+        self.hoverBorderColour = kwargs.get('hoverBorderColour', (80, 80, 80))
+        self.pressedBorderColour = kwargs.get('pressedBorderColour', (100, 100, 100))
+        self.borderColour = kwargs.get('borderColour', self.inactiveBorderColour)
+        self.inactiveBorderColour = self.borderColour
         self.radius = kwargs.get('radius', 0)
 
     def alignImageRect(self):
@@ -93,60 +102,86 @@ class Button(WidgetBase):
         :param events: Use pygame.event.get()
         :type events: list of pygame.event.Event
         """
-        if not self._hidden:
-            pressed = pygame.mouse.get_pressed()[0]
-            x, y = pygame.mouse.get_pos()
+        if not self._hidden and not self._disabled:
+            mouseState = Mouse.getMouseState()
+            x, y = Mouse.getMousePos()
 
             if self.contains(x, y):
-                if pressed:
-                    self.colour = self.pressedColour
-                    if not self.clicked:
-                        self.clicked = True
-                        self.onClick(*self.onClickParams)
-
-                elif self.clicked:
+                if mouseState == MouseState.RELEASE and self.clicked:
                     self.clicked = False
                     self.onRelease(*self.onReleaseParams)
 
-                else:
-                    self.colour = self.hoverColour
+                elif mouseState == MouseState.CLICK:
+                    self.clicked = True
+                    self.onClick(*self.onClickParams)
+                    self.colour = self.pressedColour
+                    self.borderColour = self.pressedBorderColour
 
-            elif not pressed:
+                elif mouseState == MouseState.DRAG and self.clicked:
+                    self.colour = self.pressedColour
+                    self.borderColour = self.pressedBorderColour
+
+                elif mouseState == MouseState.HOVER or mouseState == MouseState.DRAG:
+                    self.colour = self.hoverColour
+                    self.borderColour = self.hoverBorderColour
+
+            else:
                 self.clicked = False
                 self.colour = self.inactiveColour
+                self.borderColour = self.inactiveBorderColour
 
     def draw(self):
         """ Display to surface """
         if not self._hidden:
             if pygame.version.vernum[0] < 2:
-                rects = [
+                borderRects = [
                     (self._x + self.radius, self._y, self._width - self.radius * 2, self._height),
-                    (self._x, self._y + self.radius, self._width, self._height - self.radius * 2)
+                    (self._x, self._y + self.radius, self._width, self._height - self.radius * 2),
                 ]
 
-                circles = [
+                borderCircles = [
                     (self._x + self.radius, self._y + self.radius),
                     (self._x + self.radius, self._y + self._height - self.radius),
                     (self._x + self._width - self.radius, self._y + self.radius),
                     (self._x + self._width - self.radius, self._y + self._height - self.radius)
                 ]
 
-                for rect in rects:
-                    x, y, width, height = rect
-                    pygame.draw.rect(
-                        self.win, self.shadowColour, (x + self.shadowDistance, y + self.shadowDistance, width, height)
+                backgroundRects = [
+                    (
+                        self._x + self.borderThickness + self.radius,
+                        self._y + self.borderThickness,
+                        self._width - 2 * (self.borderThickness + self.radius),
+                        self._height - 2 * self.borderThickness
+                    ),
+                    (
+                        self._x + self.borderThickness,
+                        self._y + self.borderThickness + self.radius,
+                        self._width - 2 * self.borderThickness,
+                        self._height - 2 * (self.borderThickness + self.radius)
                     )
+                ]
 
-                for circle in circles:
-                    x, y = circle
-                    pygame.draw.circle(
-                        self.win, self.shadowColour, (x + self.shadowDistance, y + self.shadowDistance), self.radius
-                    )
+                backgroundCircles = [
+                    (self._x + self.radius + self.borderThickness,
+                     self._y + self.radius + self.borderThickness),
+                    (self._x + self.radius + self.borderThickness,
+                     self._y + self._height - self.radius - self.borderThickness),
+                    (self._x + self._width - self.radius - self.borderThickness,
+                     self._y + self.radius + self.borderThickness),
+                    (self._x + self._width - self.radius - self.borderThickness,
+                     self._y + self._height - self.radius - self.borderThickness)
+                ]
 
-                for rect in rects:
+                for rect in borderRects:
+                    pygame.draw.rect(self.win, self.borderColour, rect)
+
+                for circle in borderCircles:
+                    pygame.draw.circle(self.win, self.borderColour, circle, self.radius)
+
+                for rect in backgroundRects:
                     pygame.draw.rect(self.win, self.colour, rect)
 
-                for circle in circles:
+                for circle in backgroundCircles:
                     pygame.draw.circle(self.win, self.colour, circle, self.radius)
             else:
                 pygame.draw.rect(
@@ -156,13 +191,24 @@ class Button(WidgetBase):
                 )
 
                 pygame.draw.rect(
-                    self.win, self.colour, (self._x, self._y, self._width, self._height),
+                    self.win, self.borderColour, (self._x, self._y, self._width, self._height),
+                    border_radius=self.radius
+                )
+
+                pygame.draw.rect(
+                    self.win, self.colour, (self._x + self.borderThickness, self._y + self.borderThickness,
+                                            self._width - self.borderThickness * 2,
+                                            self._height - self.borderThickness * 2),
                     border_radius=self.radius
                 )
 
             if self.image:
+                self.imageRect = self.image.get_rect()
+                self.alignImageRect()
                 self.win.blit(self.image, self.imageRect)
 
+            self.textRect = self.text.get_rect()
+            self.alignTextRect()
             self.win.blit(self.text, self.textRect)
 
     def setImage(self, image):
@@ -281,7 +327,7 @@ class ButtonArray(WidgetBase):
             for j in range(down):
                 x = self._x + i * (width + self.separationThickness) + self.leftBorder
                 y = self._y + j * (height + self.separationThickness) + self.topBorder
-                self.buttons.append(Button(self.win, x, y, width, height,
+                self.buttons.append(Button(self.win, x, y, width, height, isSubWidget=True,
                                            **{k: v[count] for k, v in self.buttonAttributes.items() if v is not None})
                                     )
                 count += 1
@@ -292,7 +338,7 @@ class ButtonArray(WidgetBase):
         :param events: Use pygame.event.get()
         :type events: list of pygame.event.Event
         """
-        if not self._hidden:
+        if not self._hidden and not self._disabled:
             for button in self.buttons:
                 button.listen(events)
 
@@ -331,10 +377,13 @@ if __name__ == '__main__':
     button = Button(win, 100, 100, 300, 150, text='Hello', fontSize=50, margin=20,
                     inactiveColour=(255, 0, 0), pressedColour=(0, 255, 0), radius=20,
                     onClick=lambda: print('Click'), font=pygame.font.SysFont('calibri', 10),
-                    textVAlign='bottom', imageHAlign='centre', imageVAlign='centre',
-                    onRelease=lambda: print('Release'), shadowDistance=5)
+                    textVAlign='bottom', imageHAlign='centre', imageVAlign='centre', borderThickness=3,
+                    onRelease=lambda: print('Release'), shadowDistance=5, borderColour=(0, 0, 0))
 
-    buttonArray = ButtonArray(win, 50, 50, 500, 500, (2, 2), border=100, texts=('1', '2', '3', '4'))
+    buttonArray = ButtonArray(win, 50, 50, 500, 500, (2, 2), border=100, texts=('1', '2', '3', '4'),
+                              onClicks=(lambda: print(1), lambda: print(2), lambda: print(3), lambda: print(4)))
+
+    buttonArray.hide()
 
     run = True
     while run:
@@ -347,7 +396,5 @@ if __name__ == '__main__':
 
         win.fill((255, 255, 255))
 
-        button.listen(events)
-        button.draw()
-
+        pygame_widgets.update(events)
         pygame.display.update()

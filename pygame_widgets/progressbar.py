@@ -1,10 +1,11 @@
 from typing import Callable
 import pygame
 
+import pygame_widgets
 from pygame_widgets.widget import WidgetBase
 
 
-class ProgessBar(WidgetBase):
+class ProgressBar(WidgetBase):
     def __init__(self, win, x, y, width, height, progress: Callable[[], float], **kwargs):
         super().__init__(win, x, y, width, height)
         self.progress = progress
@@ -17,6 +18,8 @@ class ProgessBar(WidgetBase):
         self.percent = self.progress()
 
         self.radius = self._height / 2 if self.curved else 0
+
+        self.disable()
 
     def listen(self, events):
         pass
@@ -61,7 +64,7 @@ if __name__ == '__main__':
     pygame.init()
     win = pygame.display.set_mode((1000, 600))
 
-    progressBar = ProgessBar(win, 100, 100, 500, 40, lambda: 1 - (time.time() - startTime) / 10, curved=True)
+    progressBar = ProgressBar(win, 100, 100, 500, 40, lambda: 1 - (time.time() - startTime) / 10, curved=True)
 
     run = True
     while run:
@@ -74,6 +77,5 @@ if __name__ == '__main__':
 
         win.fill((255, 255, 255))
 
-        progressBar.draw()
-
+        pygame_widgets.update(events)
         pygame.display.update()

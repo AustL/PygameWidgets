@@ -2,7 +2,8 @@ from threading import Thread
 import time
 import pygame
 
-from pygame_widgets.exceptions.exceptions import InvalidParameter, InvalidParameterType
+import pygame_widgets
+from pygame_widgets.exceptions import InvalidParameter, InvalidParameterType
 
 
 class AnimationBase:
@@ -68,7 +69,8 @@ class AnimationBase:
             # Tuple animation
             for param, initialTuple in initialTupleParams.items():
                 target = self.params[param]
-                newValue = tuple(initialTuple[i] + step * (target[i] - initialTuple[i]) for i in range(len(initialTuple)))
+                newValue = tuple(
+                    initialTuple[i] + step * (target[i] - initialTuple[i]) for i in range(len(initialTuple)))
                 self.widget.set(param, newValue)
 
         # Ensure value is exactly correct at end
@@ -94,7 +96,9 @@ class Recolour(AnimationBase):
 
 
 if __name__ == '__main__':
-    from pygame_widgets import Button
+    from pygame_widgets.button import Button
+
+
     def animate():
         resize.start()
         translate.start()
@@ -103,7 +107,7 @@ if __name__ == '__main__':
     pygame.init()
     win = pygame.display.set_mode((600, 600))
 
-    button = Button(win, 100, 100, 300, 150, inactiveColour=(0, 200, 0), hoverColour=(0, 200, 0))
+    button = Button(win, 100, 100, 300, 150, text="Hello", inactiveColour=(0, 200, 0), hoverColour=(0, 200, 0))
 
     resize = Resize(button, 3, 200, 200)
     translate = Recolour(button, 5, (0, 100, 100))
@@ -120,7 +124,5 @@ if __name__ == '__main__':
 
         win.fill((255, 255, 255))
 
-        button.listen(events)
-        button.draw()
-
+        pygame_widgets.update(events)
         pygame.display.update()

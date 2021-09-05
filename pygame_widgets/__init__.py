@@ -1,4 +1,9 @@
-from pygame_widgets.textbox import TextBox
-from pygame_widgets.button import Button, ButtonArray
-from pygame_widgets.slider import Slider
-from pygame_widgets.animations.animation import AnimationBase, Translate, Resize
+from pygame_widgets.mouse import Mouse
+from pygame_widgets.widget import WidgetHandler
+
+from pygame.event import Event
+
+
+def update(events: [Event]):
+    Mouse.updateMouseState()
+    WidgetHandler.main(events)
