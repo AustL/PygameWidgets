@@ -95,6 +95,12 @@ class Popup(WidgetBase):
 if __name__ == '__main__':
     from pygame_widgets.button import Button
 
+    def setButtonColour():
+        if popup.getResult():
+            button.setInactiveColour('green')
+        elif popup.getResult() == False:
+            button.setInactiveColour('red')
+
     pygame.init()
     win = pygame.display.set_mode((600, 600))
 
@@ -117,3 +123,4 @@ if __name__ == '__main__':
 
         pygame_widgets.update(events)
         pygame.display.update()
+        setButtonColour()
