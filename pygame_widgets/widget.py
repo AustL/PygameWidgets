@@ -41,12 +41,17 @@ class WidgetBase(ABC):
     def draw(self):
         pass
 
+    def __repr__(self):
+        return f'{type(self).__name__}(x = {self._x}, y = {self._y}, width = {self._width}, height = {self._height})'
+
     def contains(self, x, y):
         return (self._x < x - self.win.get_abs_offset()[0] < self._x + self._width) and \
                (self._y < y - self.win.get_abs_offset()[1] < self._y + self._height)
 
     def hide(self):
         self._hidden = True
+        if not self._isSubWidget:
+            WidgetHandler.moveToBottom(self)
 
     def show(self):
         self._hidden = False
@@ -64,6 +69,9 @@ class WidgetBase(ABC):
 
     def moveToTop(self):
         WidgetHandler.moveToTop(self)
+
+    def moveToBottom(self):
+        WidgetHandler.moveToBottom(self)
 
     def moveX(self, x):
         self._x += x
@@ -131,6 +139,13 @@ class WidgetBase(ABC):
     def setHeight(self, height):
         self._height = height
 
+    def setIsSubWidget(self, isSubWidget):
+        self._isSubWidget = isSubWidget
+        if isSubWidget:
+            WidgetHandler.removeWidget(self)
+        else:
+            WidgetHandler.addWidget(self)
+
 
 class WidgetHandler:
     _widgets: [WidgetBase] = []
@@ -152,12 +167,31 @@ class WidgetHandler:
 
     @staticmethod
     def addWidget(widget: WidgetBase) -> None:
-        WidgetHandler._widgets.append(widget)
+        if widget not in WidgetHandler._widgets:
+            WidgetHandler._widgets.append(widget)
+
+    @staticmethod
+    def removeWidget(widget: WidgetBase) -> None:
+        try:
+            WidgetHandler._widgets.remove(widget)
+        except ValueError:
+            print(f'Error: Tried to remove {widget} when {widget} not in WidgetHandler.')
 
     @staticmethod
     def moveToTop(widget: WidgetBase):
-        WidgetHandler._widgets.remove(widget)
-        WidgetHandler.addWidget(widget)
+        try:
+            WidgetHandler._widgets.remove(widget)
+            WidgetHandler.addWidget(widget)
+        except ValueError:
+            print(f'Error: Tried to move {widget} to top when {widget} not in WidgetHandler.')
+
+    @staticmethod
+    def moveToBottom(widget: WidgetBase):
+        try:
+            WidgetHandler._widgets.remove(widget)
+            WidgetHandler._widgets.insert(0, widget)
+        except ValueError:
+            print(f'Error: Tried to move {widget} to bottom when {widget} not in WidgetHandler.')
 
     @staticmethod
     def getWidgets() -> [WidgetBase]:

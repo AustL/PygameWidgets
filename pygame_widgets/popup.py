@@ -1,5 +1,6 @@
 import pygame
 
+import pygame_widgets
 from pygame_widgets.widget import WidgetBase
 from pygame_widgets.util import drawText
 
@@ -11,6 +12,10 @@ class Popup(WidgetBase):
         self.title = title
         self.text = text
         self.buttons = buttons
+
+        # Change to button array
+        for button in self.buttons:
+            button.setIsSubWidget(True)
 
         self.margin = kwargs.get('margin', 20)
 
@@ -33,30 +38,30 @@ class Popup(WidgetBase):
         # self.hide()
 
     def alignTitleRect(self):
-        return pygame.Rect(self.x + self.margin, self.y + self.margin,
-                           self.width - self.margin * 2, self.height // 3 - self.margin * 2)
+        return pygame.Rect(self._x + self.margin, self._y + self.margin,
+                           self._width - self.margin * 2, self._height // 3 - self.margin * 2)
 
     def alignTextRect(self):
-        return pygame.Rect(self.x + self.margin, self.y + self.height // 3,
-                           self.width - self.margin * 2, self.height // 2 - self.margin * 2)
+        return pygame.Rect(self._x + self.margin, self._y + self._height // 3,
+                           self._width - self.margin * 2, self._height // 2 - self.margin * 2)
 
     def listen(self, events):
-        if not self.hidden:
+        if not self._hidden:
             pass
 
     def draw(self):
-        if not self.hidden:
+        if not self._hidden:
             if pygame.version.vernum[0] < 2:
                 rects = [
-                    (self.x + self.radius, self.y, self.width - self.radius * 2, self.height),
-                    (self.x, self.y + self.radius, self.width, self.height - self.radius * 2)
+                    (self._x + self.radius, self._y, self._width - self.radius * 2, self._height),
+                    (self._x, self._y + self.radius, self._width, self._height - self.radius * 2)
                 ]
 
                 circles = [
-                    (self.x + self.radius, self.y + self.radius),
-                    (self.x + self.radius, self.y + self.height - self.radius),
-                    (self.x + self.width - self.radius, self.y + self.radius),
-                    (self.x + self.width - self.radius, self.y + self.height - self.radius)
+                    (self._x + self.radius, self._y + self.radius),
+                    (self._x + self.radius, self._y + self._height - self.radius),
+                    (self._x + self._width - self.radius, self._y + self.radius),
+                    (self._x + self._width - self.radius, self._y + self._height - self.radius)
                 ]
 
                 for rect in rects:
@@ -79,12 +84,12 @@ class Popup(WidgetBase):
             else:
                 pygame.draw.rect(
                     self.win, self.shadowColour,
-                    (self.x + self.shadowDistance, self.y + self.shadowDistance, self.width, self.height),
+                    (self._x + self.shadowDistance, self._y + self.shadowDistance, self._width, self._height),
                     border_radius=self.radius
                 )
 
                 pygame.draw.rect(
-                    self.win, self.colour, (self.x, self.y, self.width, self.height),
+                    self.win, self.colour, (self._x, self._y, self._width, self._height),
                     border_radius=self.radius
                 )
 
@@ -114,7 +119,5 @@ if __name__ == '__main__':
 
         win.fill((255, 255, 255))
 
-        popup.listen(events)
-        popup.draw()
-
+        pygame_widgets.update(events)
         pygame.display.update()
