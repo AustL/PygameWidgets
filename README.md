@@ -53,7 +53,7 @@ while run:
 
 ## Prerequisites
 
-* [Python 3](https://www.python.org/downloads) `>= 3.7`
+* [Python 3](https://www.python.org/downloads) `>= 3.10`
 * [Pygame](https://www.pygame.org/wiki/GettingStarted) `>= 2.0.0`
 
 ## Installation

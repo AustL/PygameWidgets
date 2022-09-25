@@ -18,7 +18,7 @@ setuptools.setup(
         'License :: OSI Approved :: MIT License',
         'Operating System :: OS Independent'
     ],
-    python_requires='>=3.6',
+    python_requires='>=3.10',
     license='MIT',
     install_requires=['pygame>=2.0.0']
 )
