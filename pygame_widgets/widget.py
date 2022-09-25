@@ -101,6 +101,12 @@ class WidgetBase(ABC):
     def getHeight(self):
         return self._height
 
+    def isVisible(self):
+        return not self._hidden
+
+    def isEnabled(self):
+        return not self._disabled
+
     def set(self, attr, value):
         """Default setter for any attributes. Call super if overriding
 
