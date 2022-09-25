@@ -1,21 +1,34 @@
 import pygame
+import tkinter as tk
+from tkinter import messagebox
+from enum import Enum
 
 import pygame_widgets
 from pygame_widgets.widget import WidgetBase
-from pygame_widgets.util import drawText
+
+tk.Tk().wm_withdraw()
+
+
+class PopupType(Enum):
+    INFO = 0
+    ERROR = 1
+    WARNING = 2
+    QUESTION = 3
+    OK_CANCEL = 4
+    YES_NO = 5
+    YES_NO_CANCEL = 6
+    RETRY_CANCEL = 7
 
 
 class Popup(WidgetBase):
-    def __init__(self, win: pygame.Surface, x: int, y: int, width: int, height: int, title: str, text: str, *buttons,
-                 **kwargs):
+    def __init__(self, win: pygame.Surface, x: int, y: int, width: int, height: int, popupType: PopupType,
+                 title: str, text: str, trigger=lambda *args: None, *buttons, **kwargs):
         super().__init__(win, x, y, width, height)
+        self.popupType = popupType
         self.title = title
         self.text = text
+        self.trigger = trigger
         self.buttons = buttons
-
-        # Change to button array
-        for button in self.buttons:
-            button.setIsSubWidget(True)
 
         self.margin = kwargs.get('margin', 20)
 
@@ -35,7 +48,9 @@ class Popup(WidgetBase):
         self.shadowDistance = kwargs.get('shadowDistance', 0)
         self.shadowColour = kwargs.get('shadowColour', (210, 210, 180))
 
-        # self.hide()
+        self.result = None
+
+        self.hide()
 
     def alignTitleRect(self):
         return pygame.Rect(self._x + self.margin, self._y + self.margin,
@@ -46,67 +61,48 @@ class Popup(WidgetBase):
                            self._width - self.margin * 2, self._height // 2 - self.margin * 2)
 
     def listen(self, events):
-        if not self._hidden:
-            pass
+        if self.trigger():
+            self.show()
+            messagebox.showinfo(self.title, self.text)
 
     def draw(self):
-        if not self._hidden:
-            if pygame.version.vernum[0] < 2:
-                rects = [
-                    (self._x + self.radius, self._y, self._width - self.radius * 2, self._height),
-                    (self._x, self._y + self.radius, self._width, self._height - self.radius * 2)
-                ]
+        pass
 
-                circles = [
-                    (self._x + self.radius, self._y + self.radius),
-                    (self._x + self.radius, self._y + self._height - self.radius),
-                    (self._x + self._width - self.radius, self._y + self.radius),
-                    (self._x + self._width - self.radius, self._y + self._height - self.radius)
-                ]
+    def show(self):
+        super().show()
+        match self.popupType:
+            case PopupType.INFO:
+                messagebox.showinfo(self.title, self.text)
+            case PopupType.ERROR:
+                messagebox.showerror(self.title, self.text)
+            case PopupType.WARNING:
+                messagebox.showwarning(self.title, self.text)
+            case PopupType.QUESTION:
+                self.result = messagebox.askquestion(self.title, self.text)
+            case PopupType.OK_CANCEL:
+                self.result = messagebox.askokcancel(self.title, self.text)
+            case PopupType.YES_NO:
+                self.result = messagebox.askyesno(self.title, self.text)
+            case PopupType.YES_NO_CANCEL:
+                self.result = messagebox.askyesnocancel(self.title, self.text)
+            case PopupType.RETRY_CANCEL:
+                self.result = messagebox.askretrycancel(self.title, self.text)
 
-                for rect in rects:
-                    x, y, width, height = rect
-                    pygame.draw.rect(
-                        self.win, self.shadowColour, (x + self.shadowDistance, y + self.shadowDistance, width, height)
-                    )
-
-                for circle in circles:
-                    x, y = circle
-                    pygame.draw.circle(
-                        self.win, self.shadowColour, (x + self.shadowDistance, y + self.shadowDistance), self.radius
-                    )
-
-                for rect in rects:
-                    pygame.draw.rect(self.win, self.colour, rect)
-
-                for circle in circles:
-                    pygame.draw.circle(self.win, self.colour, circle, self.radius)
-            else:
-                pygame.draw.rect(
-                    self.win, self.shadowColour,
-                    (self._x + self.shadowDistance, self._y + self.shadowDistance, self._width, self._height),
-                    border_radius=self.radius
-                )
-
-                pygame.draw.rect(
-                    self.win, self.colour, (self._x, self._y, self._width, self._height),
-                    border_radius=self.radius
-                )
-
-        # pygame.draw.rect(self.win, (255, 0, 0), self.titleRect)
-        # pygame.draw.rect(self.win, (0, 255, 0), self.textRect)
-
-        drawText(win, self.text, self.textColour, self.textRect, self.textFont, 'centre')
-        drawText(win, self.title, self.titleColour, self.titleRect, self.titleFont, 'centre')
+    def getResult(self):
+        return self.result
 
 
 if __name__ == '__main__':
+    from pygame_widgets.button import Button
+
     pygame.init()
     win = pygame.display.set_mode((600, 600))
 
-    popup = Popup(win, 100, 100, 400, 400, 'Popup',
+    popup = Popup(win, 100, 100, 400, 400, PopupType.YES_NO, 'Popup',
                   'This is the text in the popup. Would you like to continue? The buttons below can be customised.',
                   radius=20, textSize=20)
+
+    button = Button(win, 100, 100, 400, 400, text='Popup', onClick=popup.show)
 
     run = True
     while run:
