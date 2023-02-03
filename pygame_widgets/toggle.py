@@ -37,20 +37,21 @@ class Toggle(WidgetBase):
                     self.toggle()
 
     def draw(self):
-        pygame.draw.rect(self.win, self.colour, (self._x, self._y, self._width, self._height))
+        if not self._hidden:
+            pygame.draw.rect(self.win, self.colour, (self._x, self._y, self._width, self._height))
 
-        pygame.draw.circle(self.win, self.colour, (self._x, self._y + self._height // 2), self.radius)
-        pygame.draw.circle(self.win, self.colour, (self._x + self._width, self._y + self._height // 2), self.radius)
+            pygame.draw.circle(self.win, self.colour, (self._x, self._y + self._height // 2), self.radius)
+            pygame.draw.circle(self.win, self.colour, (self._x + self._width, self._y + self._height // 2), self.radius)
 
-        circle = (
-            self._x + (
-                self._width - self.handleRadius + self.radius if self.value else self.handleRadius - self.radius
-            ),
-            self._y + self._height // 2
-        )
+            circle = (
+                self._x + (
+                    self._width - self.handleRadius + self.radius if self.value else self.handleRadius - self.radius
+                ),
+                self._y + self._height // 2
+            )
 
-        gfxdraw.filled_circle(self.win, *circle, self.handleRadius, self.handleColour)
-        gfxdraw.aacircle(self.win, *circle, self.handleRadius, self.handleColour)
+            gfxdraw.filled_circle(self.win, *circle, self.handleRadius, self.handleColour)
+            gfxdraw.aacircle(self.win, *circle, self.handleRadius, self.handleColour)
 
     def getValue(self):
         return self.value
