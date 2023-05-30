@@ -211,7 +211,10 @@ class WidgetHandler:
     def main(events: [Event]) -> None:
         blocked = False
 
-        for widget in WidgetHandler._widgets:
+        # Conversion is used to prevent errors when widgets are added/removed during iteration a.k.a safe iteration
+        widgets = list(WidgetHandler._widgets)
+
+        for widget in widgets[::-1]:
             if not blocked or not widget.contains(*Mouse.getMousePos()):
                 widget.listen(events)
 
@@ -219,13 +222,14 @@ class WidgetHandler:
             if widget.contains(*Mouse.getMousePos()):  # TODO: Unless 'transparent'
                 blocked = True
 
-        for widget in WidgetHandler._widgets:
+        for widget in widgets:
             widget.draw()
 
     @staticmethod
     def addWidget(widget: WidgetBase) -> None:
         if widget not in WidgetHandler._widgets:
             WidgetHandler._widgets.add(widget)
+            WidgetHandler.moveToTop(widget)
 
     @staticmethod
     def removeWidget(widget: WidgetBase) -> None:
@@ -237,14 +241,14 @@ class WidgetHandler:
     @staticmethod
     def moveToTop(widget: WidgetBase):
         try:
-            WidgetHandler._widgets.move_to_start(widget)
+            WidgetHandler._widgets.move_to_end(widget)
         except KeyError:
             print(f'Error: Tried to move {widget} to top when {widget} not in WidgetHandler.')
 
     @staticmethod
     def moveToBottom(widget: WidgetBase):
         try:
-            WidgetHandler._widgets.move_to_end(widget)
+            WidgetHandler._widgets.move_to_start(widget)
         except KeyError:
             print(f'Error: Tried to move {widget} to bottom when {widget} not in WidgetHandler.')
 
