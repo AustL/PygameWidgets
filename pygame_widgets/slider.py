@@ -55,10 +55,10 @@ class Slider(WidgetBase):
 
             if self.selected:
                 if self.vertical:
-                    self.value = self.max - self.round((y - self._y) / self._height * self.max)
+                    self.value = self.max - self.round((y - self._y) / self._height * (self.max - self.min))
                     self.value = max(min(self.value, self.max), self.min)
                 else:
-                    self.value = self.round((x - self._x) / self._width * self.max + self.min)
+                    self.value = self.round((x - self._x) / self._width * (self.max - self.min) + self.min)
                     self.value = max(min(self.value, self.max), self.min)
 
     def draw(self):
