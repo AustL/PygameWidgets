@@ -1,8 +1,59 @@
+import weakref
+
+from collections.abc import MutableSet
+from collections import OrderedDict
+
 from abc import abstractmethod, ABC
 
 from pygame.event import Event
 
 from pygame_widgets.mouse import Mouse
+
+
+# Implementation of an insertion-ordered set. Necessary to keep track of the order in which widgets are added.
+class OrderedSet(MutableSet):
+    def __init__(self, values=()):
+        self._od = OrderedDict().fromkeys(values)
+
+    def __len__(self):
+        return len(self._od)
+
+    def __iter__(self):
+        return iter(self._od)
+
+    def __contains__(self, value):
+        return value in self._od
+
+    def add(self, value):
+        self._od[value] = None
+
+    def discard(self, value):
+        self._od.pop(value, None)
+
+    def move_to_end(self, value):
+        self._od.move_to_end(value)
+
+    def move_to_start(self, value):
+        self._od.move_to_end(value, last=False)
+
+
+
+class OrderedWeakset(weakref.WeakSet):
+    _remove = ...  # Getting defined after the super().__init__() call
+
+    def __init__(self, values=()):
+        super(OrderedWeakset, self).__init__()
+
+        self.data = OrderedSet()
+        for elem in values:
+            self.add(elem)
+
+    def move_to_end(self, item):
+        self.data.move_to_end(weakref.ref(item, self._remove))
+
+    def move_to_start(self, item):
+        self.data.move_to_start(weakref.ref(item, self._remove))
+
 
 
 class WidgetBase(ABC):
@@ -154,13 +205,16 @@ class WidgetBase(ABC):
 
 
 class WidgetHandler:
-    _widgets: [WidgetBase] = []
+    _widgets: OrderedWeakset[weakref.ref] = OrderedWeakset()
 
     @staticmethod
     def main(events: [Event]) -> None:
         blocked = False
 
-        for widget in WidgetHandler._widgets[::-1]:
+        # Conversion is used to prevent errors when widgets are added/removed during iteration a.k.a safe iteration
+        widgets = list(WidgetHandler._widgets)
+
+        for widget in widgets[::-1]:
             if not blocked or not widget.contains(*Mouse.getMousePos()):
                 widget.listen(events)
 
@@ -168,13 +222,14 @@ class WidgetHandler:
             if widget.contains(*Mouse.getMousePos()):  # TODO: Unless 'transparent'
                 blocked = True
 
-        for widget in WidgetHandler._widgets:
+        for widget in widgets:
             widget.draw()
 
     @staticmethod
     def addWidget(widget: WidgetBase) -> None:
         if widget not in WidgetHandler._widgets:
-            WidgetHandler._widgets.append(widget)
+            WidgetHandler._widgets.add(widget)
+            WidgetHandler.moveToTop(widget)
 
     @staticmethod
     def removeWidget(widget: WidgetBase) -> None:
@@ -186,17 +241,15 @@ class WidgetHandler:
     @staticmethod
     def moveToTop(widget: WidgetBase):
         try:
-            WidgetHandler._widgets.remove(widget)
-            WidgetHandler.addWidget(widget)
-        except ValueError:
+            WidgetHandler._widgets.move_to_end(widget)
+        except KeyError:
             print(f'Error: Tried to move {widget} to top when {widget} not in WidgetHandler.')
 
     @staticmethod
     def moveToBottom(widget: WidgetBase):
         try:
-            WidgetHandler._widgets.remove(widget)
-            WidgetHandler._widgets.insert(0, widget)
-        except ValueError:
+            WidgetHandler._widgets.move_to_start(widget)
+        except KeyError:
             print(f'Error: Tried to move {widget} to bottom when {widget} not in WidgetHandler.')
 
     @staticmethod
