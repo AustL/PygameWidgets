@@ -5,7 +5,7 @@ with open('README.md', 'r') as f:
 
 setuptools.setup(
     name='pygame-widgets',
-    version='1.1.0',
+    version='1.1.2',
     author='AustL',
     author_email='21chydra@gmail.com',
     description='Widgets for use with Pygame',

@@ -57,7 +57,7 @@ class TextBox(WidgetBase):
         self.placeholderText = kwargs.get('placeholderText', '')
         self.textColour = kwargs.get('textColour', (0, 0, 0))
         self.fontSize = kwargs.get('fontSize', 20)
-        self.font = kwargs.get('font', pygame.font.SysFont('sans-serif', self.fontSize))
+        self.font = kwargs.get('font', pygame.font.SysFont('calibri', self.fontSize))
 
         self.textOffsetBottom = self.fontSize // 3
         self.textOffsetLeft = self.fontSize // 3
