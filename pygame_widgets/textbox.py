@@ -52,9 +52,11 @@ class TextBox(WidgetBase):
 
         # Colour
         self.colour = kwargs.get('colour', (220, 220, 220))
+        self.cursorColour = kwargs.get('cursorColour', (0, 0, 0))
 
         # Text
         self.placeholderText = kwargs.get('placeholderText', '')
+        self.placeholderTextColour = kwargs.get('placeholderTextColour', (10, 10, 10))
         self.textColour = kwargs.get('textColour', (0, 0, 0))
         self.fontSize = kwargs.get('fontSize', 20)
         self.font = kwargs.get('font', pygame.font.SysFont('calibri', self.fontSize))
@@ -207,9 +209,10 @@ class TextBox(WidgetBase):
             for circle in backgroundCircles:
                 pygame.draw.circle(self.win, self.colour, circle, self.radius)
 
+            # Display text or placeholder text
             x = [self._x + self.textOffsetLeft]
-            for c in self.text:
-                text = self.font.render(c, True, self.textColour)
+            for c in (self.text if len(self.text) > 0 else self.placeholderText):
+                text = self.font.render(c, True, (self.textColour if len(self.text) > 0 else self.placeholderTextColour))
                 textRect = text.get_rect(bottomleft=(x[-1], self._y + self._height - self.textOffsetBottom))
                 self.win.blit(text, textRect)
                 x.append(x[-1] + text.get_width())
@@ -217,7 +220,7 @@ class TextBox(WidgetBase):
             if self.showCursor:
                 try:
                     pygame.draw.line(
-                        self.win, (0, 0, 0),
+                        self.win, self.cursorColour,
                         (x[self.cursorPosition], self._y + self.cursorOffsetTop),
                         (x[self.cursorPosition], self._y + self._height - self.cursorOffsetTop)
                     )
@@ -277,7 +280,7 @@ if __name__ == '__main__':
 
     textbox = TextBox(win, 100, 100, 800, 80, fontSize=50, borderColour=(255, 0, 0),
                       textColour=(0, 200, 0), onSubmit=output, radius=10,
-                      borderThickness=5)
+                      borderThickness=5, placeholderText='Enter something:')
 
     run = True
     while run:
