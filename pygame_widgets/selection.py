@@ -52,7 +52,7 @@ class Checkbox(WidgetBase):
         # Text
         self.textColour = kwargs.get('textColour', (0, 0, 0))
         self.fontSize = kwargs.get('fontSize', 20)
-        self.font = kwargs.get('font', pygame.font.SysFont('sans-serif', self.fontSize))
+        self.font = kwargs.get('font', pygame.font.SysFont('calibri', self.fontSize))
         self.texts = [self.font.render(self.items[row], True, self.textColour) for row in range(self.rows)]
         self.textRects = self.createTextRects()
 

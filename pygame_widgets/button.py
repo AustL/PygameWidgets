@@ -43,7 +43,7 @@ class Button(WidgetBase):
         self.textColour = kwargs.get('textColour', (0, 0, 0))
         self.fontSize = kwargs.get('fontSize', 20)
         self.string = kwargs.get('text', '')
-        self.font = kwargs.get('font', pygame.font.SysFont('sans-serif', self.fontSize))
+        self.font = kwargs.get('font', pygame.font.SysFont('calibri', self.fontSize))
         self.text = self.font.render(self.string, True, self.textColour)
         self.textHAlign = kwargs.get('textHAlign', 'centre')
         self.textVAlign = kwargs.get('textVAlign', 'centre')
