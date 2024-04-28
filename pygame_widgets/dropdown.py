@@ -129,6 +129,58 @@ class Dropdown(WidgetBase):
         if drop != self._dropped:
             self.toggleDropped()
 
+    def setX(self, x):
+        self._x = x
+        for i, c in enumerate(self.__choices):
+            if c.direction == 'down':
+                c._x = 0
+            elif c.direction == 'up':
+                c._x = 0
+            elif c.direction == 'right':
+                c._x = (i + 1) * c.getWidth()
+            elif c.direction == 'left':
+                c._x = -(i + 1) * c.getWidth()
+
+    def setY(self, y):
+        self._y = y
+        for i, c in enumerate(self.__choices):
+            if c.direction == 'down':
+                c._y = (i + 1) * c.getHeight()
+            elif c.direction == 'up':
+                c._y = -(i + 1) * c.getHeight()
+            elif c.direction == 'right':
+                c._y = 0
+            elif c.direction == 'left':
+                c._y = 0
+
+    def setWidth(self, width):
+        self._width = width
+        for i, c in enumerate(self.__choices):
+            c.setWidth(width)
+            if c.direction == 'down':
+                c._x = 0
+            elif c.direction == 'up':
+                c._x = 0
+            elif c.direction == 'right':
+                c._x = (i + 1) * c.getWidth()
+            elif c.direction == 'left':
+                c._x = -(i + 1) * c.getWidth()
+        self.__main.setWidth(width)
+
+    def setHeight(self, height):
+        self._height = height
+        for i, c in enumerate(self.__choices):
+            c.setHeight(height)
+            if c.direction == 'down':
+                c._y = (i + 1) * c.getHeight()
+            elif c.direction == 'up':
+                c._y = -(i + 1) * c.getHeight()
+            elif c.direction == 'right':
+                c._y = 0
+            elif c.direction == 'left':
+                c._y = 0
+        self.__main.setHeight(height)
+
 
 class DropdownChoice(WidgetBase):
     def __init__(self, win, x, y, width, height, text: str, dropdown: Dropdown, last: bool, **kwargs):
