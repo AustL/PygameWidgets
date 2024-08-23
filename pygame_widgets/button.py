@@ -207,6 +207,7 @@ class Button(WidgetBase):
                 self.alignImageRect()
                 self.win.blit(self.image, self.imageRect)
 
+            self.text = self.font.render(self.string, True, self.textColour)
             self.textRect = self.text.get_rect()
             self.alignTextRect()
             self.win.blit(self.text, self.textRect)
