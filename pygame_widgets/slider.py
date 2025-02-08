@@ -12,6 +12,7 @@ class Slider(WidgetBase):
         super().__init__(win, x, y, width, height)
 
         self.selected = False
+        self.valueColour = kwargs.get('valueColour', (0, 35, 255))
 
         self.min = kwargs.get('min', 0)
         self.max = kwargs.get('max', 99)
@@ -72,6 +73,12 @@ class Slider(WidgetBase):
                                        self.radius)
                 circle = (self._x + self._width // 2,
                           int(self._y + (self.max - self.value) / (self.max - self.min) * self._height))
+                
+                pygame.draw.circle(self.win, self.valueColour, (self._x + self._width // 2, self._y + self._height),
+                                   self.radius)
+                pygame.draw.rect(self.win, self.valueColour,
+                                (self._x, self._y + int(self._height * (1 - self.value/self.max)), self._width, int(self._height * self.value/self.max)))
+                
             else:
                 if self.curved:
                     pygame.draw.circle(self.win, self.colour, (self._x, self._y + self._height // 2), self.radius)
@@ -79,6 +86,10 @@ class Slider(WidgetBase):
                                        self.radius)
                 circle = (int(self._x + (self.value - self.min) / (self.max - self.min) * self._width),
                           self._y + self._height // 2)
+                pygame.draw.circle(self.win, self.valueColour, (self._x, self._y + self._height // 2),
+                                       self.radius)
+                pygame.draw.rect(self.win, self.valueColour,
+                             (self._x, self._y, int(self._width * self.value/self.max)-self.radius, self._height))
 
             gfxdraw.filled_circle(self.win, *circle, self.handleRadius, self.handleColour)
             gfxdraw.aacircle(self.win, *circle, self.handleRadius, self.handleColour)
