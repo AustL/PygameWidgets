@@ -229,9 +229,11 @@ class TextBox(WidgetBase):
                                         else:
                                             self.text[self.selectedLine + 1].pop(0)
                                         self.shiftLines()
-                                        self.onTextChanged(*self.onTextChangedParams)
                                     else:
                                         self.text.pop(self.selectedLine + 1)
+
+                                    self.onTextChanged(*self.onTextChangedParams)
+
                                 except IndexError:
                                     pass
                             while self.selectedLine < self.firstVisibleLine:
@@ -321,6 +323,7 @@ class TextBox(WidgetBase):
                         ):
                             pyperclip.copy(self.getHighlightedText())
                             self.eraseHighlightedText()
+                            self.onTextChanged(*self.onTextChangedParams)
 
                         elif event.key == pygame.K_ESCAPE:
                             if not self.escape:
