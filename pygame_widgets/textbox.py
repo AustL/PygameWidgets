@@ -725,7 +725,9 @@ class TextBox(WidgetBase):
                                 self.cursorPosition = 0
 
                 self.cursorPosition += 1
-                self.onTextChanged(*self.onTextChangedParams)
+
+        self.onTextChanged(*self.onTextChangedParams)
+
         while len(self.text[self.firstVisibleLine:]) > self.maxVisibleLines:
             self.firstVisibleLine += 1
         while self.selectedLine < self.firstVisibleLine:
