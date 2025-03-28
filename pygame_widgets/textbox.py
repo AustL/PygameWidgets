@@ -642,7 +642,7 @@ class TextBox(WidgetBase):
         self.highlightedText = [[]]
 
     def updateCursorPosition(self, x: float, y: float) -> None:
-        _y = [self._y + self.borderThickness / 2 + self.textOffsetTop]
+        _y = [self._y + self.borderThickness + self.textOffsetTop]
 
         for lineIndex in range(len(self.text)):
             if _y[-1] <= y < _y[-1] + self.fontSize:
@@ -714,7 +714,7 @@ class TextBox(WidgetBase):
                     for charIndex in range(
                             len(self.text[lineIndex]) - self.getCountSpecChars(lineIndex)
                     ):
-                        if x[charIndex] >= self._x + self._width - self.textOffsetRight:
+                        if x[charIndex] >= self._x + self._width - self.textOffsetRight - self.borderThickness:
                             try:
                                 self.text[lineIndex + 1].insert(0, self.text[lineIndex].pop())
                             except IndexError:
@@ -746,7 +746,7 @@ class TextBox(WidgetBase):
         Returns:
             list[float]: A list of the x-coordinates of the end of each character in the line
         """
-        x = [self._x + self.textOffsetLeft]
+        x = [self._x + self.textOffsetLeft + self.borderThickness]
         for char in self.text[line]:
             if self.isSpecialChar(char):
                 continue
@@ -806,7 +806,7 @@ if __name__ == '__main__':
     pygame.init()
     window = pygame.display.set_mode((1000, 600))
 
-    textbox = MyTextBox(
+    textbox = TextBox(
         window,
         100,
         100,
