@@ -8,7 +8,7 @@ from typing import Literal
 from pygame_widgets.mouse import Mouse, MouseState
 
 
-class MyTextBox(WidgetBase):
+class TextBox(WidgetBase):
     # Times in ms
     REPEAT_DELAY = 400
     REPEAT_INTERVAL = 70
