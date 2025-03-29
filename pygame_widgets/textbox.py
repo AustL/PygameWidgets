@@ -150,7 +150,7 @@ class TextBox(WidgetBase):
                         self.repeatTime = time.time()
 
                         if event.key == pygame.K_BACKSPACE:
-                            if not self.isEmptyHighlightedText():
+                            if not self.isEmptyText(self.highlightedText):
                                 self.eraseHighlightedText()
                                 self.cursorPosition += 1
                                 self.onTextChanged(*self.onTextChangedParams)
@@ -188,7 +188,7 @@ class TextBox(WidgetBase):
                                 self.firstVisibleLine -= 1
 
                         elif event.key == pygame.K_DELETE:
-                            if not self.isEmptyHighlightedText():
+                            if not self.isEmptyText(self.highlightedText):
                                 self.eraseHighlightedText()
                                 self.onTextChanged(*self.onTextChangedParams)
 
@@ -217,7 +217,7 @@ class TextBox(WidgetBase):
 
                                     if self.text[self.selectedLine + 1]:
                                         if (
-                                                self.text[self.selectedLine][self.cursorPosition]
+                                                self.text[self.selectedLine][self.cursorPosition - 1]
                                                 == '\r'
                                         ):
                                             self.text[self.selectedLine].pop(
@@ -308,7 +308,7 @@ class TextBox(WidgetBase):
                         elif (
                                 event.key == pygame.K_c
                                 and event.mod & pygame.KMOD_CTRL
-                                and not self.isEmptyHighlightedText()
+                                and not self.isEmptyText(self.highlightedText)
                         ):
                             pyperclip.copy(self.getHighlightedText())
 
@@ -319,7 +319,7 @@ class TextBox(WidgetBase):
                         elif (
                                 event.key == pygame.K_x
                                 and event.mod & pygame.KMOD_CTRL
-                                and not self.isEmptyHighlightedText()
+                                and not self.isEmptyText(self.highlightedText)
                         ):
                             pyperclip.copy(self.getHighlightedText())
                             self.eraseHighlightedText()
@@ -436,7 +436,7 @@ class TextBox(WidgetBase):
             pygame.draw.circle(self.win, self.colour, circle, self.radius)
 
     def drawText(self) -> None:
-        if any(len(line) > 0 for line in self.text):
+        if not self.isEmptyText(self.text):
             text = self.text[
                    self.firstVisibleLine: self.firstVisibleLine + self.maxVisibleLines
                    ]
@@ -600,8 +600,9 @@ class TextBox(WidgetBase):
     def isSpecialChar(char: str) -> bool:
         return ord(char) < 32 or ord(char) == 127
 
-    def isEmptyHighlightedText(self) -> bool:
-        return all(len(line) == 0 for line in self.highlightedText)
+    @staticmethod
+    def isEmptyText(text: list[list[str]]) -> bool:
+        return all(len(line) == 0 for line in text)
 
     def eraseHighlightedText(self) -> None:
         startLine = min(self.highlightStartLine, self.highlightEndLine)
@@ -688,7 +689,7 @@ class TextBox(WidgetBase):
 
         for char in text:
             if len(char) > 0:
-                if not self.isEmptyHighlightedText():
+                if not self.isEmptyText(self.highlightedText):
                     self.eraseHighlightedText()
 
                 if self.isSpecialChar(char) and char != '\n':
@@ -714,7 +715,7 @@ class TextBox(WidgetBase):
                     for charIndex in range(
                             len(self.text[lineIndex]) - self.getCountSpecChars(lineIndex)
                     ):
-                        if x[charIndex] >= self._x + self._width - self.textOffsetRight - self.borderThickness:
+                        if x[charIndex] >= self._x + self._width - self.textOffsetRight - self.textOffsetLeft - self.borderThickness * 2:
                             try:
                                 self.text[lineIndex + 1].insert(0, self.text[lineIndex].pop())
                             except IndexError:
@@ -746,7 +747,7 @@ class TextBox(WidgetBase):
         Returns:
             list[float]: A list of the x-coordinates of the end of each character in the line
         """
-        x = [self._x + self.textOffsetLeft + self.borderThickness]
+        x = [self._x + self.textOffsetLeft]
         for char in self.text[line]:
             if self.isSpecialChar(char):
                 continue
@@ -768,11 +769,13 @@ class TextBox(WidgetBase):
 
             if len(self.text[line - shift]) > 0 and self.text[line - shift][-1] != '\n':
                 while (
-                        x[-1] < self._x + self._width - self.textOffsetRight
+                        x[-1] < self._x + self._width - self.textOffsetRight - self.textOffsetLeft - self.borderThickness * 2
                         and len(self.text[line + 1 - shift:]) > 0
                 ):
                     if len(self.text[line + 1 - shift]) != 0:
                         self.text[line - shift].append(self.text[line + 1 - shift].pop(0))
+                        if len(self.text[line + 1 - shift]) == 0:
+                            self.text.pop(line + 1 - shift)
                         x = self.getLineWidth(line - shift)
                     else:
                         self.text.pop(line + 1 - shift)
