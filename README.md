@@ -55,6 +55,7 @@ while run:
 
 * [Python 3](https://www.python.org/downloads) `>= 3.10`
 * [Pygame](https://www.pygame.org/wiki/GettingStarted) `>= 2.0.0`
+* [Pyperclip](https://github.com/asweigart/pyperclip) `>= 1.8.0`
 
 ## Installation
 
