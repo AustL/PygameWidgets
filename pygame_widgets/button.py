@@ -35,8 +35,10 @@ class Button(WidgetBase):
         # Function
         self.onClick = kwargs.get('onClick', lambda *args: None)
         self.onRelease = kwargs.get('onRelease', lambda *args: None)
+        self.onHover = kwargs.get('onHover', lambda *args: None)
         self.onClickParams = kwargs.get('onClickParams', ())
         self.onReleaseParams = kwargs.get('onReleaseParams', ())
+        self.onHoverParams = kwargs.get('onHoverParams', ())
         self.clicked = False
 
         # Text (Remove if using PyInstaller)
@@ -124,6 +126,7 @@ class Button(WidgetBase):
                 elif mouseState == MouseState.HOVER or mouseState == MouseState.DRAG:
                     self.colour = self.hoverColour
                     self.borderColour = self.hoverBorderColour
+                    self.onHover(*self.onHoverParams)
 
             else:
                 self.clicked = False
@@ -231,6 +234,10 @@ class Button(WidgetBase):
         self.onRelease = onRelease
         self.onReleaseParams = params
 
+    def setOnHover(self, onHover, params=()):
+        self.onHover = onHover
+        self.onHoverParams = params
+
     def setInactiveColour(self, colour):
         self.inactiveColour = colour
 
@@ -299,8 +306,10 @@ class ButtonArray(WidgetBase):
             # Function
             'onClick': kwargs.get('onClicks', None),
             'onRelease': kwargs.get('onReleases', None),
+            'onHover': kwargs.get('onHovers', None),
             'onClickParams': kwargs.get('onClickParams', None),
             'onReleaseParams': kwargs.get('onReleaseParams', None),
+            'onHoverParams': kwargs.get('onHoverParams', None),
 
             # Text
             'textColour': kwargs.get('textColours', None),
@@ -385,7 +394,7 @@ if __name__ == '__main__':
                     inactiveColour=(255, 0, 0), pressedColour=(0, 255, 0), radius=20,
                     onClick=lambda: print('Click'), font=pygame.font.SysFont('calibri', 10),
                     textVAlign='bottom', imageHAlign='centre', imageVAlign='centre', borderThickness=3,
-                    onRelease=lambda: print('Release'), shadowDistance=5, borderColour=(0, 0, 0))
+                    onRelease=lambda: print('Release'), shadowDistance=5, borderColour=(0, 0, 0), onHover=lambda: print('Hover'))
 
     buttonArray = ButtonArray(win, 50, 50, 500, 500, (2, 2), border=100, texts=('1', '2', '3', '4'),
                               onClicks=(lambda: print(1), lambda: print(2), lambda: print(3), lambda: print(4)))

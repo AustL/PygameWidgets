@@ -205,7 +205,7 @@ class TextBox(WidgetBase):
                         self.addText(' ' * self.tabSpaces)
 
                     elif event.key == pygame.K_INSERT:
-                        # TODO add logic for insert. I don't really know what it do (Trash)
+                        # TODO add logic for insert
                         pass
 
                     elif event.key == pygame.K_a and event.mod & pygame.KMOD_CTRL:
