@@ -87,7 +87,7 @@ class TextBox(WidgetBase):
         self.selectedLine = 0
 
         self.firstVisibleLine = 0
-        self.maxVisibleLines = (self._height - self.textOffsetTop - self.borderThickness * 2) // self.fontSize
+        self.maxVisibleLines = int((self._height - self.textOffsetTop - self.borderThickness * 2) / self.fontSize)
 
         # Functions
         self.onSubmit = kwargs.get('onSubmit', lambda *args: None)
