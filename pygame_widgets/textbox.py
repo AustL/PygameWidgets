@@ -99,8 +99,7 @@ class TextBox(WidgetBase):
         self.cursorWidth = kwargs.get('cursorWidth', 2)
 
         self._actual_width = (
-                self._x
-                + self._width
+                self._width
                 - self.textOffsetRight
                 - self.textOffsetLeft
                 - self.borderThickness * 2
@@ -664,7 +663,7 @@ class TextBox(WidgetBase):
                 lineWidth = self.getLineWidth(lineIndex)
 
                 for charIndex in range(len(self.text[lineIndex]) - self.getCountSpecChars(lineIndex)):
-                    if lineWidth[charIndex] >= self._actual_width:
+                    if lineWidth[charIndex] >= self._x + self._actual_width:
                         try:
                             self.text[lineIndex + 1].insert(0, self.text[lineIndex].pop())
                         except IndexError:
@@ -712,7 +711,7 @@ class TextBox(WidgetBase):
 
             while True:
                 lineWidth = self.getLineWidth(current_line)
-                if lineWidth[-1] >= self._actual_width:
+                if lineWidth[-1] >= self._x + self._actual_width:
                     break
 
                 if not self.text[current_line + 1]:
@@ -731,6 +730,8 @@ class TextBox(WidgetBase):
     def setText(self, text: str) -> None:
         self.text = [[]]
         self.resetHighlight()
+        self.selectedLine = 0
+        self.firstVisibleLine = 0
         self.cursorPosition = 0
         self.addText(text)
 
