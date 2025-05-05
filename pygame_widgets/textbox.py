@@ -70,6 +70,7 @@ class TextBox(WidgetBase):
         self.cursorColour = kwargs.get('cursorColour', (0, 0, 0))
 
         # Text
+        self.isLabel = kwargs.get('isLabel', False)
         self.placeholderText = kwargs.get('placeholderText', '')
         self.placeholderTextColour = kwargs.get('placeholderTextColour', (10, 10, 10))
         self.textColour = kwargs.get('textColour', (0, 0, 0))
@@ -153,13 +154,13 @@ class TextBox(WidgetBase):
                     self.repeatKey = event
                     self.repeatTime = time.time()
 
-                    if event.key == pygame.K_BACKSPACE:
+                    if event.key == pygame.K_BACKSPACE and not self.isLabel:
                         self.handleBackspace()
 
-                    elif event.key == pygame.K_DELETE:
+                    elif event.key == pygame.K_DELETE and not self.isLabel:
                         self.handleDelete()
 
-                    elif event.key == pygame.K_RETURN:
+                    elif event.key == pygame.K_RETURN and not self.isLabel:
                         if event.mod & pygame.KMOD_SHIFT:
                             if not self.isEmptyText(self.highlightedText):
                                 self.eraseHighlightedText()
@@ -201,11 +202,11 @@ class TextBox(WidgetBase):
                         self.resetHighlight()
                         self.cursorPosition = len(self.text[self.selectedLine])
 
-                    elif event.key == pygame.K_TAB:
+                    elif event.key == pygame.K_TAB and not self.isLabel:
                         self.addText(' ' * self.tabSpaces)
 
                     elif event.key == pygame.K_INSERT:
-                        # TODO add logic for insert. I don't really know what it do (Trash)
+                        # TODO add logic for insert
                         pass
 
                     elif event.key == pygame.K_a and event.mod & pygame.KMOD_CTRL:
@@ -221,13 +222,14 @@ class TextBox(WidgetBase):
                     ):
                         pyperclip.copy(self.getHighlightedText())
 
-                    elif event.key == pygame.K_v and event.mod & pygame.KMOD_CTRL:
+                    elif event.key == pygame.K_v and event.mod & pygame.KMOD_CTRL and not self.isLabel:
                         self.addText(pyperclip.paste())
 
                     elif (
                             event.key == pygame.K_x
                             and event.mod & pygame.KMOD_CTRL
                             and not self.isEmptyText(self.highlightedText)
+                            and not self.isLabel
                     ):
                         pyperclip.copy(self.getHighlightedText())
                         self.eraseHighlightedText()
@@ -244,7 +246,8 @@ class TextBox(WidgetBase):
                             self.firstRepeat = True
                             self.resetHighlight()
 
-                    self.addText(event.unicode)
+                    if not self.isLabel:
+                        self.addText(event.unicode)
 
                 elif event.type == pygame.KEYUP:
                     self.repeatKey = None
@@ -727,7 +730,7 @@ class TextBox(WidgetBase):
 
     def setText(self, text: str) -> None:
         self.text = [[]]
-        self.selectedLine = 0
+        self.resetHighlight()
         self.cursorPosition = 0
         self.addText(text)
 
