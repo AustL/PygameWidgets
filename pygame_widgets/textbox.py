@@ -163,7 +163,7 @@ class TextBox(WidgetBase):
                     if event.key == pygame.K_BACKSPACE and not self.isLabel:
                         self.handleBackspace()
 
-                    elif event.key == pygame.K_DELETE and not self.isLabel:
+                    elif event.key in [pygame.K_DELETE, pygame.K_KP_PERIOD if not event.mod & pygame.KMOD_NUM else -1] and not self.isLabel:
                         self.handleDelete()
 
                     elif event.key == pygame.K_RETURN and not self.isLabel:
@@ -180,7 +180,7 @@ class TextBox(WidgetBase):
                         else:
                             self.onSubmit(*self.onSubmitParams)
 
-                    elif event.key == pygame.K_UP:
+                    elif event.key in [pygame.K_UP, pygame.K_KP_8 if not event.mod & pygame.KMOD_NUM else -1]:
                         self.resetHighlight()
                         self.selectedLine = max(0, self.selectedLine - 1)
                         self.cursorPosition = min(
@@ -189,7 +189,7 @@ class TextBox(WidgetBase):
                         while self.selectedLine < self.firstVisibleLine:
                             self.firstVisibleLine -= 1
 
-                    elif event.key == pygame.K_DOWN:
+                    elif event.key in [pygame.K_DOWN, pygame.K_KP_2 if not event.mod & pygame.KMOD_NUM else -1]:
                         self.resetHighlight()
                         self.selectedLine = min(
                             len(self.text) - 1, self.selectedLine + 1
@@ -203,21 +203,21 @@ class TextBox(WidgetBase):
                         ):
                             self.firstVisibleLine += 1
 
-                    elif event.key == pygame.K_RIGHT:
+                    elif event.key in [pygame.K_RIGHT, pygame.K_KP_6 if not event.mod & pygame.KMOD_NUM else -1]:
                         self.resetHighlight()
                         self.cursorPosition = min(
                             self.cursorPosition + 1, len(self.text[self.selectedLine])
                         )
 
-                    elif event.key == pygame.K_LEFT:
+                    elif event.key in [pygame.K_LEFT, pygame.K_KP_4 if not event.mod & pygame.KMOD_NUM else -1]:
                         self.resetHighlight()
                         self.cursorPosition = max(self.cursorPosition - 1, 0)
 
-                    elif event.key == pygame.K_HOME:
+                    elif event.key in [pygame.K_HOME, pygame.K_KP_7 if not event.mod & pygame.KMOD_NUM else -1]:
                         self.resetHighlight()
                         self.cursorPosition = 0
 
-                    elif event.key == pygame.K_END:
+                    elif event.key in [pygame.K_END, pygame.K_KP_1 if not event.mod & pygame.KMOD_NUM else -1]:
                         self.resetHighlight()
                         self.cursorPosition = len(self.text[self.selectedLine])
 
@@ -269,7 +269,7 @@ class TextBox(WidgetBase):
                             self.firstRepeat = True
                             self.resetHighlight()
 
-                    if not self.isLabel:
+                    elif not self.isLabel:
                         self.addText(event.unicode)
 
                 elif event.type == pygame.KEYUP:
