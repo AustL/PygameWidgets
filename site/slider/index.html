@@ -130,7 +130,7 @@ pygame.init()
 win = pygame.display.set_mode((1000, 600))
 
 slider = Slider(win, 100, 100, 800, 40, min=0, max=99, step=1)
-output = TextBox(win, 475, 200, 50, 50, fontSize=30)
+output = TextBox(win, 475, 200, 60, 50, fontSize=30)
 
 run = True
 while run:
@@ -146,7 +146,7 @@ while run:
     slider.listen(events)
     slider.draw()
 
-    output.setText(slider.getValue())
+    output.setText(str(slider.getValue()))
 
     output.draw()
 
