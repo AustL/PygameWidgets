@@ -57,25 +57,29 @@ When clicked, the button will change colour from red to green and 'Click' will b
 
 ## Optional Parameters
 
-| Parameter | Description | Type | Default |
-| :---: | --- | :---: | :---: |
-| inactiveColour | Default colour when not pressed or hovered over. | (int, int, int) | (150, 150, 150) |
-| pressedColour | Colour when pressed. | (int, int, int) | (100, 100, 100) |
-| hoverColour | Colour when hovered over. | (int, int, int) | (125, 125, 125) |
-| shadowDistance | Distance to projected shadow. Set to 0 if no shadow desired. | int | 0 |
-| shadowColour | Colour of shadow | (int, int, int) | (210, 210, 180) |
-| onClick | Function to be called when clicked. | function | None |
-| onClickParams | Parameters to be fed into onClick function. | (*any) | () |
-| onRelease | Function to be called when released. | function | None |
-| onReleaseParams | Parameters to be fed into onRelease function. | (*any) | () |
-| textColour | Colour of text. | (int, int, int) | (0, 0, 0) |
-| fontSize | Size of text. | int | 20 |
-| text | String to be displayed. | str | '' |
-| font | Font of text. | pygame.font.Font | Calibri |
-| textHAlign | Horizontal alignment of text. Can be 'centre', 'left' or 'right'. | str | 'centre' |
-| textVAlign | Vertical alignment of text. Can be 'centre', 'top' or 'bottom'. | str | 'centre' |
-| margin | Minimum distance between text / image and edge. | int | 20 |
-| image | Image to be displayed. | pygame.Surface | None |
-| imageHAlign | Horizontal alignment of image. Can be 'centre', 'left' or 'right'. | str | 'centre' |
-| imageVAlign | Vertical alignment of image. Can be 'centre', 'top' or 'bottom'. | str | 'centre' |
-| radius | Border radius. Set to half of width for circular button. Set to 0 for no radius. | int | 0 |
+|      Parameter       | Description                                                                      |       Type       |     Default     |
+|:--------------------:|----------------------------------------------------------------------------------|:----------------:|:---------------:|
+|    inactiveColour    | Default colour when not pressed or hovered over.                                 | (int, int, int)  | (150, 150, 150) |
+|    pressedColour     | Colour when pressed.                                                             | (int, int, int)  | (100, 100, 100) |
+|     hoverColour      | Colour when hovered over.                                                        | (int, int, int)  | (125, 125, 125) |
+|    shadowDistance    | Distance to projected shadow. Set to 0 if no shadow desired.                     |       int        |        0        |
+|     shadowColour     | Colour of shadow                                                                 | (int, int, int)  | (210, 210, 180) |
+|       onClick        | Function to be called when clicked.                                              |     function     |      None       |
+|    onClickParams     | Parameters to be fed into onClick function.                                      |      (*any)      |       ()        |
+|      onRelease       | Function to be called when released.                                             |     function     |      None       |
+|   onReleaseParams    | Parameters to be fed into onRelease function.                                    |      (*any)      |       ()        |
+|    onHoverRelease    | Function to be continuously called when the mouse hovers over the button.        |     function     |      None       |
+| onHoverReleaseParams | Parameters to be fed into onHover function.                                      | (*any) | () |
+|       onHover        | Function to be called once when the mouse stops hovering over the button.        |     function     |      None       |
+|    onHoverParams     | Parameters to be fed into onHoverRelease function.                               | (*any) | () |
+|      textColour      | Colour of text.                                                                  | (int, int, int)  |    (0, 0, 0)    |
+|       fontSize       | Size of text.                                                                    |       int        |       20        |
+|         text         | String to be displayed.                                                          |       str        |       ''        |
+|         font         | Font of text.                                                                    | pygame.font.Font |     Calibri     |
+|      textHAlign      | Horizontal alignment of text. Can be 'centre', 'left' or 'right'.                |       str        |    'centre'     |
+|      textVAlign      | Vertical alignment of text. Can be 'centre', 'top' or 'bottom'.                  |       str        |    'centre'     |
+|        margin        | Minimum distance between text / image and edge.                                  |       int        |       20        |
+|        image         | Image to be displayed.                                                           |  pygame.Surface  |      None       |
+|     imageHAlign      | Horizontal alignment of image. Can be 'centre', 'left' or 'right'.               |       str        |    'centre'     |
+|     imageVAlign      | Vertical alignment of image. Can be 'centre', 'top' or 'bottom'.                 |       str        |    'centre'     |
+|        radius        | Border radius. Set to half of width for circular button. Set to 0 for no radius. |       int        |        0        |
