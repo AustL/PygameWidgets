@@ -10,7 +10,7 @@ version: 2
 #  configuration: mkdocs.yml
 mkdocs:
   configuration: mkdocs.yml
-  fail_on_warning: false
+  fail_on_warning: true
 build:
   os: ubuntu-lts-latest
   tools:
