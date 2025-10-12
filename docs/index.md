@@ -72,16 +72,16 @@ If you receive no errors, the installation was successful.
 
 For full documentation, see [pygamewidgets.readthedocs.io](https://pygamewidgets.readthedocs.io/en/latest/).
 
-* [Common](docs/widgets/common.md)
-* [Button](docs/widgets/button.md)
-* [ButtonArray](docs/widgets/buttonarray.md)
-* [TextBox](docs/widgets/textbox.md)
-* [Slider](docs/widgets/slider.md)
-* [Toggle](docs/widgets/toggle.md)
-* [ProgressBar](docs/widgets/progressbar.md)
-* [Dropdown](docs/widgets/dropdown.md)
-* [ComboBox](docs/widgets/combobox.md)
-* [Animations](docs/animations/animations.md)
+* [Common](widgets/common.md)
+* [Button](widgets/button.md)
+* [ButtonArray](widgets/buttonarray.md)
+* [TextBox](widgets/textbox.md)
+* [Slider](widgets/slider.md)
+* [Toggle](widgets/toggle.md)
+* [ProgressBar](widgets/progressbar.md)
+* [Dropdown](widgets/dropdown.md)
+* [ComboBox](widgets/combobox.md)
+* [Animations](animations/animations.md)
 
 ## How to Contribute
 
@@ -95,4 +95,4 @@ This can include:
 If applicable, you should make any changes in a forked repository and then create a pull
 request once the changes are ***complete*** and preferably tested if possible.
 
-_Note: If writing any code, please attempt to follow the [Code Style Guide](docs/CONTRIBUTING.md)_
+_Note: If writing any code, please attempt to follow the [Code Style Guide](CONTRIBUTING.md)_
