@@ -68,10 +68,10 @@ When clicked, the button will change colour from red to green and 'Click' will b
 |    onClickParams     | Parameters to be fed into onClick function.                                      |      (*any)      |       ()        |
 |      onRelease       | Function to be called when released.                                             |     function     |      None       |
 |   onReleaseParams    | Parameters to be fed into onRelease function.                                    |      (*any)      |       ()        |
-|    onHoverRelease    | Function to be continuously called when the mouse hovers over the button.        |     function     |      None       |
-| onHoverReleaseParams | Parameters to be fed into onHover function.                                      | (*any) | () |
-|       onHover        | Function to be called once when the mouse stops hovering over the button.        |     function     |      None       |
-|    onHoverParams     | Parameters to be fed into onHoverRelease function.                               | (*any) | () |
+|    onHover    | Function to be continuously called when the mouse hovers over the button.        |     function     |      None       |
+| onHoverParams | Parameters to be fed into onHover function.                                      | (*any) | () |
+|       onHoverRelease        | Function to be called once when the mouse stops hovering over the button.        |     function     |      None       |
+|    onHoverReleaseParams     | Parameters to be fed into onHoverRelease function.                               | (*any) | () |
 |      textColour      | Colour of text.                                                                  | (int, int, int)  |    (0, 0, 0)    |
 |       fontSize       | Size of text.                                                                    |       int        |       20        |
 |         text         | String to be displayed.                                                          |       str        |       ''        |
