@@ -12,6 +12,6 @@ mkdocs:
   configuration: mkdocs.yml
   fail_on_warning: false
 build:
-  os: ubuntu-latest
+  os: ubuntu-lts-latest
 # Optionally build your docs in additional formats such as PDF and ePub
 formats: all
