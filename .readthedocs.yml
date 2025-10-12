@@ -13,5 +13,7 @@ mkdocs:
   fail_on_warning: false
 build:
   os: ubuntu-lts-latest
+  tools:
+    python: "3.10"
 # Optionally build your docs in additional formats such as PDF and ePub
 formats: all
