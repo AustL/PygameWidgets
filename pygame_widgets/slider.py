@@ -31,7 +31,7 @@ class Slider(WidgetBase):
 
         self.vertical = kwargs.get('vertical', False)
 
-        self.allColideMod = kwargs.get('allColideMod', False)
+        self.draggableAnywhere = kwargs.get('draggableAnywhere', True)
 
         if self.curved:
             if self.vertical:
@@ -97,7 +97,7 @@ class Slider(WidgetBase):
             gfxdraw.aacircle(self.win, *circle, self.handleRadius, self.handleColour)
 
     def contains(self, x, y):
-        if self.allColideMod:
+        if self.draggableAnywhere:
             return pygame.rect.Rect(self._x, self._y, self._width, self._height).collidepoint(x, y)
 
         else:
