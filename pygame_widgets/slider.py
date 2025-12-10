@@ -31,6 +31,8 @@ class Slider(WidgetBase):
 
         self.vertical = kwargs.get('vertical', False)
 
+        self.draggableAnywhere = kwargs.get('draggableAnywhere', True)
+
         if self.curved:
             if self.vertical:
                 self.radius = self._width // 2
@@ -95,17 +97,22 @@ class Slider(WidgetBase):
             gfxdraw.aacircle(self.win, *circle, self.handleRadius, self.handleColour)
 
     def contains(self, x, y):
-        if self.vertical:
-            handleX = self._x + self._width // 2
-            handleY = int(self._y + (self.max - self.value) / (self.max - self.min) * self._height)
+        if self.draggableAnywhere:
+            return pygame.rect.Rect(self._x, self._y, self._width, self._height).collidepoint(x, y)
+
         else:
-            handleX = int(self._x + (self.value - self.min) / (self.max - self.min) * self._width)
-            handleY = self._y + self._height // 2
+            if self.vertical:
+                handleX = self._x + self._width // 2
+                handleY = int(self._y + (self.max - self.value) / (self.max - self.min) * self._height)
+            else:
+                handleX = int(self._x + (self.value - self.min) / (self.max - self.min) * self._width)
+                handleY = self._y + self._height // 2
 
-        if math.sqrt((handleX - x) ** 2 + (handleY - y) ** 2) <= self.handleRadius:
-            return True
+            if math.sqrt((handleX - x) ** 2 + (handleY - y) ** 2) <= self.handleRadius:
+                return True
 
-        return False
+            return False
+
 
     def round(self, value):
         return self.step * round(value / self.step)
