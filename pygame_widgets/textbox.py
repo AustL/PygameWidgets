@@ -704,7 +704,7 @@ class TextBox(WidgetBase):
         Args:
             text (str): The text to add to the text box
         """
-        text = list(text.replace('\t', ' ' * self.tabSpaces))
+        text = list(str(text).replace('\t', ' ' * self.tabSpaces))
 
         for char in text:
             if not char or self.isSpecialChar(char) and char != '\n':
