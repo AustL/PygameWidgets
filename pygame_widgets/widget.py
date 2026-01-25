@@ -36,6 +36,8 @@ class OrderedSet(MutableSet):
     def move_to_start(self, value):
         self._od.move_to_end(value, last=False)
 
+    def copy(self):
+        return OrderedSet(values=self._od.keys())
 
 
 class OrderedWeakset(weakref.WeakSet):
