@@ -54,7 +54,7 @@ while run:
 ## Prerequisites
 
 * [Python 3](https://www.python.org/downloads) `>= 3.10`
-* [Pygame](https://www.pygame.org/wiki/GettingStarted) `>= 2.0.0`
+* [Pygame](https://www.pygame.org/wiki/GettingStarted) `>= 2.0.0` **OR** [Pygame-CE](https://pyga.me/docs) `>= 2.5.6`
 * [Pyperclip](https://github.com/asweigart/pyperclip) `>= 1.8.0`
 
 ## Installation
@@ -68,6 +68,12 @@ Open a Python console and run the following command.
 ```import pygame_widgets```
 
 If you receive no errors, the installation was successful.
+
+If you do not already have [Pygame](https://www.pygame.org/wiki/GettingStarted) or [Pygame-CE](https://pyga.me/docs) installed, you will need to do so using **one** of the following commands.
+
+```python -m pip install pygame```
+
+```python -m pip install pygame-ce```
 
 ## Usage
 
