@@ -15,6 +15,8 @@ class Toggle(WidgetBase):
         self.offColour = kwargs.get('offColour', (150, 150, 150))
         self.handleOnColour = kwargs.get('handleOnColour', (26, 115, 232))
         self.handleOffColour = kwargs.get('handleOffColour', (200, 200, 200))
+        self.onClick = kwargs.get('onClick', lambda *args: None)
+        self.onClickParams = kwargs.get('onClickParams', ())
 
         self.handleRadius = kwargs.get('handleRadius', int(self._height / 1.3))
         self.radius = self._height // 2
@@ -35,6 +37,7 @@ class Toggle(WidgetBase):
             if self.contains(x, y):
                 if mouseState == MouseState.CLICK:
                     self.toggle()
+                    self.onClick(*self.onClickParams)
 
     def draw(self):
         if not self._hidden:
@@ -53,7 +56,7 @@ class Toggle(WidgetBase):
             gfxdraw.filled_circle(self.win, *circle, self.handleRadius, self.handleColour)
             gfxdraw.aacircle(self.win, *circle, self.handleRadius, self.handleColour)
 
-    def getValue(self):
+    def getValue(self) -> bool:
         return self.value
 
 
@@ -62,6 +65,7 @@ if __name__ == '__main__':
     win = pygame.display.set_mode((1000, 600))
 
     toggle = Toggle(win, 100, 100, 100, 40)
+    toggle.onClick = lambda: print(toggle.getValue())
 
     run = True
     while run:

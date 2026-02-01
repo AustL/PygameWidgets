@@ -210,7 +210,7 @@ class WidgetHandler:
     _widgets: OrderedWeakset[weakref.ref] = OrderedWeakset()
 
     @staticmethod
-    def main(events: [Event]) -> None:
+    def main(events: list[Event]) -> None:
         blocked = False
 
         # Conversion is used to prevent errors when widgets are added/removed during iteration a.k.a safe iteration

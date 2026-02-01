@@ -4,6 +4,6 @@ from pygame_widgets.widget import WidgetHandler
 from pygame.event import Event
 
 
-def update(events: [Event]):
+def update(events: list[Event]):
     Mouse.updateMouseState()
     WidgetHandler.main(events)
