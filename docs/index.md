@@ -53,8 +53,9 @@ while run:
 
 ## Prerequisites
 
-* [Python 3](https://www.python.org/downloads) `>= 3.7`
-* [Pygame](https://www.pygame.org/wiki/GettingStarted) `>= 2.0.0`
+* [Python 3](https://www.python.org/downloads) `>= 3.10`
+* [Pygame](https://www.pygame.org/wiki/GettingStarted) `>= 2.0.0` **OR** [Pygame-CE](https://pyga.me/docs) `>= 2.5.6`
+* [Pyperclip](https://github.com/asweigart/pyperclip) `>= 1.8.0`
 
 ## Installation
 
@@ -68,20 +69,26 @@ Open a Python console and run the following command.
 
 If you receive no errors, the installation was successful.
 
+If you do not already have [Pygame](https://www.pygame.org/wiki/GettingStarted) or [Pygame-CE](https://pyga.me/docs) installed, you will need to do so using **one** of the following commands.
+
+```python -m pip install pygame```
+
+```python -m pip install pygame-ce```
+
 ## Usage
 
 For full documentation, see [pygamewidgets.readthedocs.io](https://pygamewidgets.readthedocs.io/en/latest/).
 
-* [Common](widgets/common.md)
-* [Button](widgets/button.md)
-* [ButtonArray](widgets/buttonarray.md)
-* [TextBox](widgets/textbox.md)
-* [Slider](widgets/slider.md)
-* [Toggle](widgets/toggle.md)
-* [ProgressBar](widgets/progressbar.md)
-* [Dropdown](widgets/dropdown.md)
-* [ComboBox](widgets/combobox.md)
-* [Animations](animations/animations.md)
+* [Common](docs/widgets/common.md)
+* [Button](docs/widgets/button.md)
+* [ButtonArray](docs/widgets/buttonarray.md)
+* [TextBox](docs/widgets/textbox.md)
+* [Slider](docs/widgets/slider.md)
+* [Toggle](docs/widgets/toggle.md)
+* [ProgressBar](docs/widgets/progressbar.md)
+* [Dropdown](docs/widgets/dropdown.md)
+* [ComboBox](docs/widgets/combobox.md)
+* [Animations](docs/animations/animations.md)
 
 ## How to Contribute
 
@@ -95,4 +102,4 @@ This can include:
 If applicable, you should make any changes in a forked repository and then create a pull
 request once the changes are ***complete*** and preferably tested if possible.
 
-_Note: If writing any code, please attempt to follow the [Code Style Guide](CONTRIBUTING.md)_
+_Note: If writing any code, please attempt to follow the [Code Style Guide](docs/CONTRIBUTING.md)_
