@@ -79,7 +79,7 @@ class Slider(WidgetBase):
                 pygame.draw.circle(self.win, self.valueColour, (self._x + self._width // 2, self._y + self._height),
                                    self.radius)
                 pygame.draw.rect(self.win, self.valueColour,
-                                (self._x, self._y + int(self._height * (1 - self.value/self.max)), self._width, int(self._height * self.value/self.max)))
+                                (self._x, self._y + int(self._height * (self.max - self.value) / (self.max - self.min)), self._width, int((1 - (self.max - self.value) / (self.max - self.min)) * self._height)))
                 
             else:
                 if self.curved:
@@ -91,7 +91,7 @@ class Slider(WidgetBase):
                 pygame.draw.circle(self.win, self.valueColour, (self._x, self._y + self._height // 2),
                                        self.radius)
                 pygame.draw.rect(self.win, self.valueColour,
-                             (self._x, self._y, int(self._width * self.value/self.max)-self.radius, self._height))
+                             (self._x, self._y, int((self.value - self.min) / (self.max - self.min) * self._width)-self.radius, self._height))
 
             gfxdraw.filled_circle(self.win, *circle, self.handleRadius, self.handleColour)
             gfxdraw.aacircle(self.win, *circle, self.handleRadius, self.handleColour)
@@ -130,11 +130,11 @@ if __name__ == '__main__':
     pygame.init()
     win = pygame.display.set_mode((1000, 600))
 
-    slider = Slider(win, 100, 100, 800, 40, min=0, max=99, step=1)
-    output = TextBox(win, 475, 200, 50, 50, fontSize=30)
+    slider = Slider(win, 100, 100, 800, 40, min=100, max=200, step=1)
+    output = TextBox(win, 475, 200, 100, 50, fontSize=30)
 
-    v_slider = Slider(win, 900, 200, 40, 300, min=0, max=99, step=1, vertical=True)
-    v_output = TextBox(win, 800, 320, 50, 50, fontSize=30)
+    v_slider = Slider(win, 900, 200, 40, 300, min=100, max=200, step=1, vertical=True)
+    v_output = TextBox(win, 750, 320, 100, 50, fontSize=30)
 
     output.disable()
     v_output.disable()
