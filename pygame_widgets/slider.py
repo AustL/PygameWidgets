@@ -97,21 +97,20 @@ class Slider(WidgetBase):
             gfxdraw.aacircle(self.win, *circle, self.handleRadius, self.handleColour)
 
     def contains(self, x, y):
+        if self.vertical:
+            handleX = self._x + self._width // 2
+            handleY = int(self._y + (self.max - self.value) / (self.max - self.min) * self._height)
+        else:
+            handleX = int(self._x + (self.value - self.min) / (self.max - self.min) * self._width)
+            handleY = self._y + self._height // 2
+
+        if math.sqrt((handleX - x) ** 2 + (handleY - y) ** 2) <= self.handleRadius:
+            return True
+
         if self.draggableAnywhere:
             return pygame.rect.Rect(self._x, self._y, self._width, self._height).collidepoint(x, y)
 
-        else:
-            if self.vertical:
-                handleX = self._x + self._width // 2
-                handleY = int(self._y + (self.max - self.value) / (self.max - self.min) * self._height)
-            else:
-                handleX = int(self._x + (self.value - self.min) / (self.max - self.min) * self._width)
-                handleY = self._y + self._height // 2
-
-            if math.sqrt((handleX - x) ** 2 + (handleY - y) ** 2) <= self.handleRadius:
-                return True
-
-            return False
+        return False
 
 
     def round(self, value):
@@ -130,7 +129,7 @@ if __name__ == '__main__':
     pygame.init()
     win = pygame.display.set_mode((1000, 600))
 
-    slider = Slider(win, 100, 100, 800, 40, min=100, max=200, step=1)
+    slider = Slider(win, 100, 100, 800, 5, min=100, max=200, step=1, handleRadius=15)
     output = TextBox(win, 475, 200, 100, 50, fontSize=30)
 
     v_slider = Slider(win, 900, 200, 40, 300, min=100, max=200, step=1, vertical=True)
