@@ -205,7 +205,7 @@ class DropdownChoice(WidgetBase):
         # Text
         self.textColour = kwargs.get('textColour', (0, 0, 0))
         self.fontSize = kwargs.get('fontSize', 20)
-        self.font = kwargs.get('font', pygame.font.SysFont('sans-serif', self.fontSize))
+        self.font = pygame.font.SysFont(kwargs.get('font', 'calibri'), self.fontSize)
         self.textHAlign = kwargs.get('textHAlign', 'centre')
 
         self.textOffsetLeft = self.fontSize // 5

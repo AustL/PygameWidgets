@@ -78,21 +78,21 @@ _Note: Mandatory parameters must be supplied in order._
 
 ## Optional Parameters
 
-| Parameter | Description | Type | Default |
-| :---: | --- | :---: | :---: |
-| direction | Expansion direction. Can be 'down', 'up', 'left' or 'right'. | str | down |
-| values | optional return value corresponding to the choices. Must be the same length as `choices` |list|a copy of choices|
-| inactiveColour | Default colour when not pressed or hovered over. | (int, int, int) | (150, 150, 150) |
-| pressedColour | Colour when pressed. | (int, int, int) | (100, 100, 100) |
-| hoverColour | Colour when hovered over. | (int, int, int) | (125, 125, 125) |
-| onClick | Function to be called when clicked. | function | None |
-| onClickParams | Parameters to be fed into onClick function. | (*any) | () |
-| onRelease | Function to be called when released. | function | None |
-| onReleaseParams | Parameters to be fed into onRelease function. | (*any) | () |
-| textColour | Colour of text. | (int, int, int) | (0, 0, 0) |
-| fontSize | Size of text. | int | 20 |
-| font | Font of text. | pygame.font.Font | sans-serif |
-| textHAlign | Horizontal alignment of text. Can be 'centre', 'left' or 'right'. | str | 'centre' |
-| borderColour | Colour of border. | (int, int, int) | (0, 0, 0) |
-| borderThickness | Thickness of border. | int | 3 |
-| borderRadius | Border radius. Set to 0 for no radius. | int | 0 |
+| Parameter | Description |      Type       |      Default      |
+| :---: | --- |:---------------:|:-----------------:|
+| direction | Expansion direction. Can be 'down', 'up', 'left' or 'right'. |       str       |       down        |
+| values | optional return value corresponding to the choices. Must be the same length as `choices` |      list       | a copy of choices |
+| inactiveColour | Default colour when not pressed or hovered over. | (int, int, int) |  (150, 150, 150)  |
+| pressedColour | Colour when pressed. | (int, int, int) |  (100, 100, 100)  |
+| hoverColour | Colour when hovered over. | (int, int, int) |  (125, 125, 125)  |
+| onClick | Function to be called when clicked. |    function     |       None        |
+| onClickParams | Parameters to be fed into onClick function. |     (*any)      |        ()         |
+| onRelease | Function to be called when released. |    function     |       None        |
+| onReleaseParams | Parameters to be fed into onRelease function. |     (*any)      |        ()         |
+| textColour | Colour of text. | (int, int, int) |     (0, 0, 0)     |
+| fontSize | Size of text. |       int       |        20         |
+| font | Font of text. |       str       |     'calibri'      |
+| textHAlign | Horizontal alignment of text. Can be 'centre', 'left' or 'right'. |       str       |     'centre'      |
+| borderColour | Colour of border. | (int, int, int) |     (0, 0, 0)     |
+| borderThickness | Thickness of border. |       int       |         3         |
+| borderRadius | Border radius. Set to 0 for no radius. |       int       |         0         |

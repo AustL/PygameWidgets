@@ -2,6 +2,7 @@ import pygame
 import pygame_widgets
 import time
 import pyperclip
+import pygame.freetype
 
 from pygame_widgets.widget import WidgetBase
 from typing import Literal
@@ -78,13 +79,14 @@ class TextBox(WidgetBase):
         self.textColour = kwargs.get('textColour', (0, 0, 0))
         self.highlightColour = kwargs.get('highlightColour', (166, 210, 255))
         self.fontSize = kwargs.get('fontSize', 20)
-        self.font = kwargs.get('font', pygame.font.SysFont('calibri', self.fontSize))
+        self.font = pygame.freetype.SysFont(kwargs.get('font', 'calibri'), self.fontSize)
+        self.font.origin = True
         self.tabSpaces = kwargs.get('tabSpaces', 4)
 
-        self.textOffsetTop = self.fontSize // 3
+        self.textOffsetTop = self.borderThickness
         self.textOffsetLeft = self.fontSize // 3
         self.textOffsetRight = self.fontSize // 2
-        self.cursorOffsetTop = self._height // 6
+        self.cursorOffsetTop = 0
 
         # Index of the currently selected line
         self.selectedLine = 0
@@ -468,20 +470,9 @@ class TextBox(WidgetBase):
             for char in line:
                 if self.isSpecialChar(char):
                     continue
-                charRender = self.font.render(
-                    char,
-                    True,
-                    colour,
-                )
-                textRect = charRender.get_rect(
-                    bottomleft=(
-                        x[-1],
-                        self._y + self.fontSize * (lineIndex + 1) + self.textOffsetTop,
-                    )
-                )
 
-                self.win.blit(charRender, textRect)
-                x.append(x[-1] + charRender.get_width())
+                self.font.render_to(self.win, (x[-1], self._y + self.fontSize * (lineIndex + 1) + self.textOffsetTop), char, colour)
+                x.append(x[-1] + self.font.get_metrics(char)[0][4])
 
     def drawCursor(self) -> None:
         if (
@@ -492,25 +483,26 @@ class TextBox(WidgetBase):
 
         if self.showCursor:
             try:
+                fontAscender = self.font.get_sized_ascender()
+                fontDescender = self.font.get_sized_descender()
+
+                baselineY = self._y + self.fontSize * (
+                            self.selectedLine - self.firstVisibleLine + 1) + self.textOffsetTop
+
+                cursorTopY = baselineY - fontAscender + self.cursorOffsetTop
+                cursorBottomY = baselineY - fontDescender
+
                 lineWidth = self.getLineWidth(self.selectedLine)
+                cursorX = lineWidth[self.cursorPosition]
+
                 pygame.draw.line(
                     self.win,
                     self.cursorColour,
-                    (
-                        lineWidth[self.cursorPosition],
-                        self._y
-                        + self.textOffsetTop
-                        + self.fontSize * (self.selectedLine - self.firstVisibleLine),
-                    ),
-                    (
-                        lineWidth[self.cursorPosition],
-                        self._y
-                        + self.fontSize
-                        * (self.selectedLine - self.firstVisibleLine + 1)
-                        + self.textOffsetTop,
-                    ),
+                    (cursorX, cursorTopY),
+                    (cursorX, cursorBottomY),
                     width=self.cursorWidth,
                 )
+
             except IndexError:
                 self.cursorPosition -= 1
 
@@ -523,16 +515,28 @@ class TextBox(WidgetBase):
                 if self.isSpecialChar(char):
                     char = ' '
                     shift += 1
-                charRender = self.font.render(char, True, self.highlightColour)
-                rect = charRender.get_rect(
-                    bottomleft=(
-                        lineWidth[charIndex - shift],
-                        self._y
-                        + self.fontSize * (line - self.firstVisibleLine + 1)
-                        + self.textOffsetTop,
-                    )
+
+                fontAscender = self.font.get_sized_ascender()
+                fontDescender = self.font.get_sized_descender()
+
+                boxTop = (self._y + self.fontSize * (
+                            line + 1) + self.textOffsetTop) - fontAscender
+                boxHeight = fontAscender - fontDescender
+
+                metrics = self.font.get_metrics(char)
+                if metrics and metrics[0] is not None:
+                    advanceX = metrics[0][4]
+                else:
+                    advanceX = self.font.get_rect(char).width
+
+                highlightColour = pygame.Rect(
+                    lineWidth[charIndex - shift],
+                    boxTop,
+                    advanceX,
+                    boxHeight
                 )
-                pygame.draw.rect(self.win, self.highlightColour, rect)
+
+                pygame.draw.rect(self.win, self.highlightColour, highlightColour)
 
         startLine = min(self.highlightStartLine, self.highlightEndLine)
         endLine = max(self.highlightStartLine, self.highlightEndLine)
@@ -756,8 +760,8 @@ class TextBox(WidgetBase):
 
     def getCharWidth(self, char: str) -> int:
         if char not in self._charWidthCache:
-            charRender = self.font.render(char, True, self.textColour)
-            self._charWidthCache[char] = charRender.get_width()
+            _, charRect = self.font.render(char, True, self.textColour)
+            self._charWidthCache[char] = self.font.get_metrics(char)[0][4]
         return self._charWidthCache[char]
 
     def getLineWidth(self, line: int) -> list[float]:
@@ -868,13 +872,14 @@ if __name__ == '__main__':
         100,
         800,
         400,
-        fontSize=75,
         borderColour=(255, 0, 0),
         textColour=(0, 200, 0),
         onSubmit=output,
         radius=10,
         borderThickness=5,
         placeholderText='Enter something:',
+        fontSize=40,
+        font='calibri'
     )
 
     run = True

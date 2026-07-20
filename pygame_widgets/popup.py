@@ -39,8 +39,9 @@ class Popup(WidgetBase):
 
         self.textColour = kwargs.get('textColour', (0, 0, 0))
         self.textSize = kwargs.get('textSize', 18)
-        self.textFont = kwargs.get('textFont', pygame.font.SysFont('calibri', self.textSize))
+        self.textFont = pygame.font.SysFont(kwargs.get('textFont', 'calibri'), self.textSize)
         self.textRect = self.alignTextRect()
+        # TODO: Use the inputted font
 
         self.radius = kwargs.get('radius', 0)
 

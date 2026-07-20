@@ -72,25 +72,25 @@ _Note: Mandatory parameters must be supplied in order._
 
 ## Optional Parameters
 
-| Parameter | Description | Type | Default |
-| :---: | --- | :---: | :---: |
-| direction | Expansion direction. Can be 'down', 'up', 'left' or 'right'. | str | down |
-| inactiveColour | Default colour when not pressed or hovered over. | (int, int, int) | (150, 150, 150) |
-| pressedColour | Colour when pressed. | (int, int, int) | (100, 100, 100) |
-| hoverColour | Colour when hovered over. | (int, int, int) | (125, 125, 125) |
-| maxChoices | Maximum number of choices to display | int | len(choices) |
+| Parameter | Description |            Type             |         Default         |
+| :---: | --- |:---------------------------:|:-----------------------:|
+| direction | Expansion direction. Can be 'down', 'up', 'left' or 'right'. |             str             |          down           |
+| inactiveColour | Default colour when not pressed or hovered over. |       (int, int, int)       |     (150, 150, 150)     |
+| pressedColour | Colour when pressed. |       (int, int, int)       |     (100, 100, 100)     |
+| hoverColour | Colour when hovered over. |       (int, int, int)       |     (125, 125, 125)     |
+| maxChoices | Maximum number of choices to display |             int             |      len(choices)       |
 | searchAlgo | Algorithm to be used to search through choices. | function(str, list) -> list | ComboBox._defaultSearch |
-| onSelected | Function to be called when a search choice is selected. | function | None |
-| onSelectedParams | Parameters to be fed into onSelected function. | (*any) | () |
-| onStartSearch | Function to be called when a search is started by user (clicking on the search box). | function | None |
-| onStartSearchParams | Parameters to be fed into onStartSearch function. | (*any) | () |
-| onStopSearch | Function to be called when a search is stopped (clicking outside the search dropdown, or selecting a choice). | function | None |
-| onStopSearchParams | Parameters to be fed into onStopSearch function. | (*any) | () |
-| textColour | Colour of text. | (int, int, int) | (0, 0, 0) |
-| fontSize | Size of text. | int | 20 |
-| font | Font of text. | pygame.font.Font | sans-serif |
-| textHAlign | Horizontal alignment of text. Can be 'centre', 'left' or 'right'. | str | 'centre' |
-| borderColour | Colour of border. | (int, int, int) | (0, 0, 0) |
-| borderThickness | Thickness of border. | int | 3 |
-| borderRadius | Border radius. Set to 0 for no radius. | int | 0 |
-| textboxKwargs | Optional different parameters only for the `TextBox`. | dict | {} |
+| onSelected | Function to be called when a search choice is selected. |          function           |          None           |
+| onSelectedParams | Parameters to be fed into onSelected function. |           (*any)            |           ()            |
+| onStartSearch | Function to be called when a search is started by user (clicking on the search box). |          function           |          None           |
+| onStartSearchParams | Parameters to be fed into onStartSearch function. |           (*any)            |           ()            |
+| onStopSearch | Function to be called when a search is stopped (clicking outside the search dropdown, or selecting a choice). |          function           |          None           |
+| onStopSearchParams | Parameters to be fed into onStopSearch function. |           (*any)            |           ()            |
+| textColour | Colour of text. |       (int, int, int)       |        (0, 0, 0)        |
+| fontSize | Size of text. |             int             |           20            |
+| font | Font of text. |             str             |        'calibri'        |
+| textHAlign | Horizontal alignment of text. Can be 'centre', 'left' or 'right'. |             str             |        'centre'         |
+| borderColour | Colour of border. |       (int, int, int)       |        (0, 0, 0)        |
+| borderThickness | Thickness of border. |             int             |            3            |
+| borderRadius | Border radius. Set to 0 for no radius. |             int             |            0            |
+| textboxKwargs | Optional different parameters only for the `TextBox`. |            dict             |           {}            |
